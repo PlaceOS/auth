@@ -71,7 +71,10 @@ Rails.application.configure do
   # Custom logging
   STDOUT.sync = true
   STDERR.sync = true
-  config.logger = ActiveSupport::Logger.new(STDOUT)
+  logger = MonoLogger.new(STDOUT)
+  config.logger = logger
+  config.lograge.logger = logger
+  Lograge.logger = logger
   config.lograge.enabled = true
   config.lograge.base_controller_class = ['ActionController::API', 'ActionController::Base']
   config.lograge.custom_payload do |controller|
