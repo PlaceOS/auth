@@ -3,16 +3,24 @@ source 'https://rubygems.org'
 gem 'rails', '~> 5.0', '>= 5.0.0.1'
 
 # High performance web server
-gem 'agoo'
+gem 'puma'
 
 # Database
 gem 'nobrainer'
 
 # Authentication
-#gem 'doorkeeper'
-#gem 'doorkeeper-jwt'
-#gem 'doorkeeper-rethinkdb'
-#gem 'coauth', github: 'QuayPay/coauth', branch: 'couchbase-orm'
+gem 'doorkeeper'
+gem 'doorkeeper-jwt'
+gem 'doorkeeper-rethinkdb', git: 'https://github.com/aca-labs/doorkeeper-rethinkdb.git'
+
+gem 'email_validator'
+gem 'omniauth'
+gem 'omniauth-oauth2'
+gem 'omniauth-ldap2'
+gem 'omniauth-saml'
+gem 'addressable'
+gem 'scrypt'
+gem 'jwt'
 
 # Logging
 gem 'mono_logger'

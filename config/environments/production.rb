@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 # Remove the locks from the logger
 require 'mono_logger'
 require 'lograge'
+require 'omniauth'
 
 # Replace the default JSON parser
 require 'json'
@@ -75,12 +78,13 @@ Rails.application.configure do
   config.logger = logger
   config.lograge.logger = logger
   Lograge.logger = logger
+  OmniAuth.config.logger = logger
   config.lograge.enabled = true
   config.lograge.base_controller_class = ['ActionController::API', 'ActionController::Base']
   config.lograge.custom_payload do |controller|
     user = controller.respond_to?(:doorkeeper_token, true) ? controller.__send__(:doorkeeper_token) : "anonymous"
     {
-      user_id: user
+      user_id: (user || "anonymous")
     }
   end
 

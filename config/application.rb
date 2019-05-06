@@ -27,11 +27,20 @@ module EngineApp
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    # Fix 404 routing
+    # Selectively switch between API and full rails stacks
+    config.before_initialize do |app|
+      # Authentication stack is different
+      app.config.middleware.insert_after Rack::Runtime, SelectiveStack
+    end
+
     config.after_initialize do |app|
+      # Fix 404 routing for logging
       app.routes.append do
         match "*any", via: :all, to: 'errors#not_found'
       end
+
+      # Ensure indeses are synced
+      NoBrainer.sync_indexes
     end
   end
 end
