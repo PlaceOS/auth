@@ -51,7 +51,7 @@ Doorkeeper.configure do
 
   # username and password authentication for local auth
   resource_owner_from_credentials do |routes|
-    user = User.find_by_email(params[:authority], params[:username])
+    user = User.find_by_email(Authority.find_by_domain(request.host)&.id, params[:username])
     if user && user.authenticate(params[:password])
       user
     end
