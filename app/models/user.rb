@@ -8,6 +8,8 @@ class User
   include NoBrainer::Document
   include NoBrainer::Document::Timestamps
 
+  table_config :name => 'user'
+
   PUBLIC_DATA = {only: [
     :id, :email_digest, :nickname, :name, :first_name, :last_name,
     :country, :building, :created_at

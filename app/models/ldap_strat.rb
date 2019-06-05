@@ -4,6 +4,8 @@ class LdapStrat
   include NoBrainer::Document
   include NoBrainer::Document::Timestamps
 
+  table_config :name => 'ldap_strat'
+
   field :name,       type: String  # (used as title)
 
   belongs_to :authority

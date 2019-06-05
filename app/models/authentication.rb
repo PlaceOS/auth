@@ -4,6 +4,8 @@ class Authentication
   include NoBrainer::Document
   include NoBrainer::Document::Timestamps
 
+  table_config :name => 'authentication'
+
   field :uid,      type: String
   field :provider, type: String
   field :user_id,  type: String, index: true

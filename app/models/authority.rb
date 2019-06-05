@@ -5,6 +5,7 @@ require 'addressable/uri'
 class Authority
   include NoBrainer::Document
   include NoBrainer::Document::Timestamps
+  table_config :name => 'authority'
 
   field :name,        type: String
   field :domain,      type: String, uniq: true, index: true

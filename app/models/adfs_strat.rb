@@ -4,7 +4,8 @@ class AdfsStrat
   include NoBrainer::Document
   include NoBrainer::Document::Timestamps
 
-  #attribute :created_at, type: Integer, default: lambda { Time.now }
+  table_config :name => 'adfs_strat'
+
   field :name, type: String
   belongs_to :authority
 
