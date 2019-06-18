@@ -69,3 +69,36 @@ Doorkeeper.configure do
   force_ssl_in_redirect_uri false
   grant_flows %w(authorization_code client_credentials implicit password)
 end
+
+Doorkeeper::JWT.configure do
+  token_payload do |opts|
+    user = User.find(opts[:resource_owner_id])
+
+    {
+      iss: 'ACA Engine',
+      iat: Time.current.utc.to_i,
+
+      # @see JWT reserved claims - https://tools.ietf.org/html/draft-jones-json-web-token-07#page-7
+      jti: SecureRandom.uuid,
+
+      user: {
+        id: user.id,
+        email_digest: user.email_digest,
+        sys_admin: user.sys_admin,
+        support: user.support,
+      }
+    }
+  end
+
+  # Use the application secret specified in the access grant token. Defaults to
+  # `false`. If you specify `use_application_secret true`, both `secret_key` and
+  # `secret_key_path` will be ignored.
+  use_application_secret true
+
+  # Set the encryption secret. This would be shared with any other applications
+  # that should be able to read the payload of the token. Defaults to "secret".
+  secret_key (ENV['JWT_SECRET'] || '9Bv6g5HJT5IN2mHehGF17pyorvd4gGfmXzrbEvg4VlZq411ECqXgjHtLJy3vb8Zc07Ao3HFdZ42kDsNZdLZbz07GH9vv2XcQh16Ua8JpuxD8HigR0VzJ1cEJLt+pyD0atOrWf9vfiRoPThXK69AOv9aSVmXagccwzTJ7WDm383k')
+
+  # Specify encryption type (https://github.com/progrium/ruby-jwt)
+  encryption_method :hs512
+end
