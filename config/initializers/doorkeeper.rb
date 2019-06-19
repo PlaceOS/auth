@@ -58,7 +58,7 @@ Doorkeeper.configure do
   end
 
   # Issue access tokens with refresh token (disabled by default)
-  access_token_expires_in 2.weeks
+  access_token_expires_in 2.weeks.to_i
   use_refresh_token
 
   # Define access token scopes for your provider
