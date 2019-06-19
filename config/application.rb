@@ -25,12 +25,15 @@ module EngineApp
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
-    config.api_only = true
+    config.api_only = false
 
     # Selectively switch between API and full rails stacks
     config.before_initialize do |app|
       # Authentication stack is different
-      app.config.middleware.insert_after Rack::Runtime, SelectiveStack
+      # app.config.middleware.insert_after Rack::Runtime, ::ActionDispatch::Flash
+      # app.config.middleware.insert_after Rack::Runtime, ::OmniAuth::Builder, &OmniAuthConfig
+      # app.config.middleware.insert_after Rack::Runtime, ::Rails.application.config.session_options
+      # app.config.middleware.insert_after Rack::Runtime, ::ActionDispatch::Cookies
     end
 
     config.after_initialize do |app|
