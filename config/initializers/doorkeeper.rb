@@ -66,6 +66,8 @@ Doorkeeper.configure do
   default_scopes  :public
   optional_scopes :admin
 
+  access_token_generator '::Doorkeeper::JWT'
+
   force_ssl_in_redirect_uri false
   grant_flows %w(authorization_code client_credentials implicit password)
 end
@@ -75,7 +77,7 @@ Doorkeeper::JWT.configure do
     user = User.find(opts[:resource_owner_id])
 
     {
-      iss: 'ACA Engine',
+      iss: 'ACAE',
       iat: Time.current.utc.to_i,
 
       # @see JWT reserved claims - https://tools.ietf.org/html/draft-jones-json-web-token-07#page-7
@@ -83,8 +85,8 @@ Doorkeeper::JWT.configure do
 
       user: {
         id: user.id,
-        email_digest: user.email_digest,
-        sys_admin: user.sys_admin,
+        email: user.email,
+        admin: user.sys_admin,
         support: user.support,
       }
     }
