@@ -3,7 +3,7 @@ FROM ruby:2.6-alpine
 RUN apk update && \
     apk add tzdata git && \
     cp /usr/share/zoneinfo/Australia/Sydney /etc/localtime && \
-    echo "Australia/Sydney" >  /etc/timezone
+    echo "Australia/Sydney" > /etc/timezone
 
 RUN apk add --no-cache libxml2 libxslt && \
     apk add --no-cache --virtual .gem-installdeps build-base libxml2-dev libxslt-dev
@@ -22,5 +22,4 @@ RUN rm -rf $GEM_HOME/cache && \
 
 
 EXPOSE 8080
-ENTRYPOINT ["rails", "c"]
-CMD ["rails", "s", "-p", "8080"]
+ENTRYPOINT rails s -p 8080
