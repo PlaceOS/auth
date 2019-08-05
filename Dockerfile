@@ -22,4 +22,4 @@ RUN rm -rf $GEM_HOME/cache && \
 
 
 EXPOSE 8080
-ENTRYPOINT rails s -p 8080
+ENTRYPOINT rails s -b 0.0.0.0 -p 8080
