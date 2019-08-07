@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/aca-labs/doorkeeper-rethinkdb.git
-  revision: cbc1ba0b9a84e0391ebabdf18ce58ed0711eb897
+  revision: a440fcb62bb579ecc943f1a3bdb7eab85d66f47e
   specs:
     doorkeeper-rethinkdb (1.1.0)
       doorkeeper (>= 4.0.0, < 6)
