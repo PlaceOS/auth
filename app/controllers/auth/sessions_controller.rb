@@ -39,7 +39,7 @@ module Auth
           head :accepted
         end
 
-        self.instance_exec user, &Authentication.after_login_block
+        self.instance_exec user, "internal", nil, &Authentication.after_login_block
       else
         login_failure(details)
       end
