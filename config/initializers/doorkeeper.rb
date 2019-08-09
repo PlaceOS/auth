@@ -1,4 +1,5 @@
 require 'set'
+require 'base64'
 
 Doorkeeper.configure do
   orm :rethinkdb
@@ -78,13 +79,22 @@ Doorkeeper::JWT.configure do
 
     {
       iss: 'ACAE',
-      iat: Time.current.utc.to_i,
+      iat: Time.now.to_i,
+
+      # Match the access token expiry time
+      exp: 2.weeks.from_now.to_i,
 
       # @see JWT reserved claims - https://tools.ietf.org/html/draft-jones-json-web-token-07#page-7
       jti: SecureRandom.uuid,
 
+      # The domain on which the token is valid (Audience)
+      aud: user.authority.domain,
+
+      # The subject of the token (User)
+      sub: user.id,
+
       user: {
-        id: user.id,
+        name: user.name,
         email: user.email,
         admin: user.sys_admin,
         support: user.support,
@@ -94,7 +104,8 @@ Doorkeeper::JWT.configure do
 
   # Set the encryption secret. This would be shared with any other applications
   # that should be able to read the payload of the token. Defaults to "secret".
-  secret_key (ENV['JWT_SECRET'] || <<~KEY
+  key = ENV['JWT_SECRET']
+  key = key.try { |k| Base64.decode64(k) } || <<~KEY
     -----BEGIN RSA PRIVATE KEY-----
     MIIEpAIBAAKCAQEAt01C9NBQrA6Y7wyIZtsyur191SwSL3MjR58RIjZ5SEbSyzMG
     3r9v12qka4UtpB2FmON2vwn0fl/7i3Jgh1Xth/s+TqgYXMebdd123wodrbex5pi3
@@ -123,7 +134,7 @@ Doorkeeper::JWT.configure do
     4n455vizig2c4/sxU5yu9AF9Dv+qNsGCx2e9uUOTDUlHM9NXwxU9rQ==
     -----END RSA PRIVATE KEY-----
     KEY
-    )
+  secret_key key
 
   # Specify encryption type (https://github.com/progrium/ruby-jwt)
   encryption_method :rs256
