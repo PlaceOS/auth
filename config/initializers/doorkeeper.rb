@@ -85,7 +85,8 @@ Doorkeeper::JWT.configure do
       exp: 2.weeks.from_now.to_i,
 
       # @see JWT reserved claims - https://tools.ietf.org/html/draft-jones-json-web-token-07#page-7
-      jti: SecureRandom.uuid,
+      # We don't currently use this, but could enable it in the future
+      # jti: SecureRandom.uuid,
 
       # The domain on which the token is valid (Audience)
       aud: user.authority.domain,
