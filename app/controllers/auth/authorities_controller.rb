@@ -9,7 +9,7 @@ module Auth
       authority = current_authority
       if authority
         auth = authority.as_json(except: [:created_at, :internals])
-        auth[:version] = "c1"
+        auth[:version] = "v2.0.0"
         begin
           auth[:session] = signed_in?
         rescue
