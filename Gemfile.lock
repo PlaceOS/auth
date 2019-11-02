@@ -112,7 +112,7 @@ GEM
       middleware (~> 0.1.0)
       rethinkdb (>= 2.3.0)
       symbol_decoration (~> 1.1)
-    nokogiri (1.10.3)
+    nokogiri (1.10.5)
       mini_portile2 (~> 2.4.0)
     oauth2 (1.4.1)
       faraday (>= 0.8, < 0.16.0)
