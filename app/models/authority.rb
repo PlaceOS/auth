@@ -4,7 +4,7 @@ require 'addressable/uri'
 
 class Authority
   include NoBrainer::Document
-  include NoBrainer::Document::Timestamps
+  include AuthTimestamps
 
   table_config :name => 'authority'
 
