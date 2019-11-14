@@ -1,5 +1,8 @@
 require 'set'
 require 'base64'
+require 'doorkeeper'
+require 'doorkeeper/jwt'
+require 'doorkeeper-rethinkdb'
 
 Doorkeeper.configure do
   orm :rethinkdb
