@@ -77,6 +77,11 @@ Doorkeeper::JWT.configure do
   token_payload do |opts|
     user = User.find(opts[:resource_owner_id])
 
+    # Generate permissions bitflags
+    permissions = 0
+    permissions |= 1 if user.support
+    permissions |= 2 if user.admin
+
     {
       iss: 'ACAE',
       iat: Time.now.to_i,
@@ -94,11 +99,14 @@ Doorkeeper::JWT.configure do
       # The subject of the token (User)
       sub: user.id,
 
-      user: {
-        name: user.name,
-        email: user.email,
-        admin: user.sys_admin,
-        support: user.support,
+      # User metadata
+      u: {
+        # Name
+        n: user.name,
+        # Email
+        e: user.email,
+        # Permissions bitflags
+        p: permissions
       }
     }
   end
