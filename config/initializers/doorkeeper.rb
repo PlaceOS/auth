@@ -83,7 +83,7 @@ Doorkeeper::JWT.configure do
     # Generate permissions bitflags
     permissions = 0
     permissions |= 1 if user.support
-    permissions |= 2 if user.admin
+    permissions |= 2 if user.sys_admin
 
     {
       iss: 'ACAE',
