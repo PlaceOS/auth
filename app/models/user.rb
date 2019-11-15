@@ -6,7 +6,7 @@ require 'scrypt'
 
 class User
   include NoBrainer::Document
-  include NoBrainer::Document::Timestamps
+  include AuthTimestamps
 
   table_config :name => 'user'
 
