@@ -2,6 +2,14 @@
 
 require 'omniauth-saml'
 
+::OneLogin::RubySaml::Attributes.single_value_compatibility = false
+class ::OneLogin::RubySaml::Attributes
+  @@single_value_compatibility = false
+  def multi(name)
+    attributes[canonize_name(name)].try { |attr| attr.length == 1 ? attr.first : attr.join(",") }
+  end
+end
+
 module OmniAuth
   module Strategies
     class GenericAdfs < OmniAuth::Strategies::SAML
