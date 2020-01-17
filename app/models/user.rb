@@ -2,11 +2,12 @@
 
 require 'email_validator'
 require 'digest/md5'
-require 'scrypt'
+require 'bcrypt'
 
 class User
   include NoBrainer::Document
   include AuthTimestamps
+  include BCrypt
 
   table_config :name => 'user'
 
@@ -58,23 +59,26 @@ class User
   end
 
   def authenticate(unencrypted_password)
-    if ::SCrypt::Password.new(password_digest || '') == unencrypted_password
-      self
-    else
-      false
-    end
-  rescue ::SCrypt::Errors::InvalidHash
+    self.password == unencrypted_password ? self : false
+  rescue
     # accounts created with social logins will have an empty password_digest
-    # which causes SCrypt to raise an InvalidHash exception
+    # which causes BCrypt to raise an InvalidHash exception
     false
   end
 
   # Encrypts the password into the password_digest attribute.
-  def password=(unencrypted_password)
-    @password = unencrypted_password
-    unless unencrypted_password.empty?
-      self.password_digest = ::SCrypt::Password.create(unencrypted_password)
+  def password
+    @password ||= Password.new(self.password_digest)
+  end
+
+  def password=(new_password)
+    if !new_password.present?
+      @password = nil
+      self.password_digest = ""
+      return new_password
     end
+    @password = Password.create(new_password)
+    self.password_digest = @password
   end
   # --------------------
   # END PASSWORD METHODS
