@@ -19,7 +19,7 @@ gem 'omniauth-oauth2'
 gem 'omniauth-ldap2'
 gem 'omniauth-saml'
 gem 'addressable'
-gem 'scrypt'
+gem 'bcrypt'
 gem 'jwt'
 
 # Logging
