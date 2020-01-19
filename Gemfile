@@ -12,26 +12,31 @@ gem 'nobrainer'
 gem 'doorkeeper'
 gem 'doorkeeper-jwt'
 gem 'doorkeeper-rethinkdb', git: 'https://github.com/aca-labs/doorkeeper-rethinkdb.git'
-
-gem 'email_validator'
 gem 'omniauth'
 gem 'omniauth-oauth2'
 gem 'omniauth-ldap2'
 gem 'omniauth-saml'
-gem 'addressable'
-gem 'bcrypt'
 gem 'jwt'
 
+# Uploads
+gem 'condo', git: 'https://github.com/cotag/Condominios.git', branch: 'rethink-update'
+gem 'condo-rethinkdb', git: 'https://github.com/acaengine/condo-rethinkdb.git'
+
+# Model support
+gem 'email_validator'
+gem 'addressable'
+gem 'bcrypt'
+
 # Logging
+gem 'sentry-raven'
 gem 'mono_logger'
 gem 'lograge'
-
-# Fast JSON parsing
-gem 'yajl-ruby'
 
 # Runtime debugging
 gem 'rbtrace'
 
+# Fast JSON parsing
+gem 'yajl-ruby'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
