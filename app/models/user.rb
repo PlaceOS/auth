@@ -77,8 +77,9 @@ class User
       self.password_digest = ""
       return new_password
     end
-    @password = Password.create(new_password)
-    self.password_digest = @password
+
+    self.password_digest = Password.create(new_password)
+    @password = new_password
   end
   # --------------------
   # END PASSWORD METHODS
