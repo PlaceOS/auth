@@ -17,7 +17,7 @@ class User
   ]}
 
   field :name,            type: String
-  field :email,           type: String, uniq: {scope: :authority}
+  field :email,           type: String, uniq: {scope: :authority_id}
   field :nickname,        type: String
   field :phone,           type: String
   field :country,         type: String
