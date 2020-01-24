@@ -22,7 +22,7 @@ namespace :domain do
             user.authority_id = auth.id
             user.email = 'support@aca.im'
             user.password = support_pass
-            user.password_confirmation = user.password
+            user.password_confirmation = support_pass
             user.save!
 
             puts "Authority created!\n#{site_name} = #{auth.id}\n#{user.email} : #{support_pass} = #{user.id}"
@@ -69,5 +69,4 @@ namespace :domain do
             end
         end
     end
-
 end
