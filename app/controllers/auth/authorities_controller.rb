@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Auth
-  class AuthoritiesController < ActionController::Base
+  class AuthoritiesController < ApplicationController
     include UserHelper
     include CurrentAuthorityHelper
 
