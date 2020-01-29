@@ -1,7 +1,29 @@
+require 'jwt'
+
 class ApplicationController < ActionController::Base
   SENTRY_CONFIGURED = !!ENV["SENTRY_DSN"]
   if SENTRY_CONFIGURED
     before_action :set_raven_context
+  end
+
+  protected
+
+  def get_jwt
+    return @jwt_token if @jwt_token
+
+    token = request.headers["Authorization"]
+    if token
+      token = token.lchop("Bearer ").rstrip
+      token = nil if token.empty?
+    else
+      token = params["bearer_token"]
+      token.strip if token
+      token = nil if token.empty?
+    end
+
+    if token
+      @jwt_token = JWT.decode token, get_public_key, true, { algorithm: 'RS256' }
+    end
   end
 
   private
@@ -10,5 +32,11 @@ class ApplicationController < ActionController::Base
     user = cookies.encrypted[:user]
     Raven.user_context(id: user[:id] || user['id']) if user
     Raven.extra_context(url: request.original_url, remote_ip: request.remote_ip)
+  end
+
+  def get_public_key
+    return @@public_key if @@public_key
+    private_key = OpenSSL::PKey::RSA.new(Doorkeeper::JWT.configuration.secret_key)
+    @@public_key = private_key.public_key
   end
 end

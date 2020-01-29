@@ -4,33 +4,29 @@ require 'set'
 
 class UploadsController < ApplicationController
   include Condo
+  include CurrentAuthorityHelper
 
-  SUPPORTED_VIDEOS ||= Set.new(['.avi', '.mpg', '.mov', '.wmv', '.mpeg', '.webm', '.ogv', '.ogg', '.m4v', '.mp4', '.mkv', '.flv'])
-  SUPPORTED_IMAGES ||= Set.new(['.jpg', '.jpeg', '.jpe', '.jif', '.jfif', '.jfi', '.webp', '.gif', '.png', '.bmp', '.tiff', '.tif'])
-  SUPPORTED ||= Set.new
-  SUPPORTED.merge(SUPPORTED_VIDEOS)
-  SUPPORTED.merge(SUPPORTED_IMAGES)
-
-  #
-  # These are not defined by Condo
-  #
-  def index
-    @@elastic ||= Elastic.new(condo_backend)
-    # Index shouldn't need authorization as we will filter on
-    # the user_id of the uploads we are collecting (eventually)
-    query = @@elastic.query(params)
-    results = @@elastic.search(query)
-    # respond_with results
-    render json: results
-  end
+  before_action :check_authenticated
 
   protected
+
+  # before filter auth checks
+  # See ./config/initializers/doorkeeper for JWT format
+  def check_authenticated
+    payload, header = get_jwt
+    if payload
+      head(:forbidden) if (request.host != payload["aud"]) && Rails.env.production?
+    else
+      head(:unauthorized)
+    end
+  end
 
   #
   # This is a request for the current user_id
   # We forward it to our current user method
   condo_callback :resident_id do
-    current_user.id
+    payload, header = get_jwt
+    payload["sub"]
   end
 
   #
@@ -57,16 +53,25 @@ class UploadsController < ApplicationController
     true
   end
 
+  # If we want to filter certain file types in the future
+  # SUPPORTED = Set.new(['.png'])
+  # condo_callback :pre_validation do
+  #   if SUPPORTED.include? File.extname(@upload[:file_name]).downcase
+  #     true
+  #   else
+  #     [false, {errors: {file_name: 'is not a supported file type'}}]
+  #   end
+  # end
+
   # #
   # # Should return the bucket name for the current user
   # # Bucket should be created as a background user
   condo_callback :bucket_name do
-    # 'tonsley' or 'hw-cotag' or 'acasignage'
-    ENV['DEFAULT_BUCKET']
+    current_authority.get_bucket
   end
 
   condo_callback :select_residence do |config, resident_id, upload|
-    ::Condo::Configuration.residencies[0]
+    current_authority.get_storage
   end
 
   #

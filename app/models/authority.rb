@@ -25,13 +25,34 @@ class Authority
   end
 
   def self.find_by_domain(name)
-    Authority.where(domain: name).first
+    Authority.where(domain: name.downcase).first
   end
 
   def as_json(options = {})
     super.tap do |json|
       json[:login_url] = self.login_url
       json[:logout_url] = self.logout_url
+    end
+  end
+
+  # ==========================
+  # Uploads controller helpers:
+  # ==========================
+  DEFAULT_BUCKET ||= ENV['DEFAULT_BUCKET']
+
+  def get_bucket
+    self.internals["storage_bucket"] || DEFAULT_BUCKET
+  end
+
+  def get_storage
+    config = ::Condo::Configuration
+
+    if self.internals["storage"]
+      storage = self.internals["storage"].with_indifferent_access
+      config.dynamic_residence(storage[:name], storage)
+    else
+      # Default storage service
+      config.residencies[0]
     end
   end
 end
