@@ -17,6 +17,7 @@ RUN bundle install
 
 ADD . $APP_DIR
 
+RUN rm -rf /app/tmp/pids/
 RUN rm -rf $GEM_HOME/cache && \
     apk del .gem-installdeps
 
