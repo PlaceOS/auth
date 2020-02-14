@@ -68,8 +68,14 @@ module OmniAuth
           options.__send__(:"#{param}=", value) if value.present?
         end
 
-        options.allowed_clock_drift = 5.seconds
-        options.idp_cert_fingerprint_validator = DEFAULT_CERT_VALIDATOR
+        options.allowed_clock_drift = 10.seconds
+
+        fprint = strat.idp_cert_fingerprint
+        if fprint && !fprint.empty?
+          options.idp_cert_fingerprint_validator = DEFAULT_CERT_VALIDATOR
+        else
+          options.idp_cert_fingerprint_validator = nil
+        end
       end
     end
   end
