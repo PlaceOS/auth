@@ -21,7 +21,7 @@ require 'omniauth/strategies/generic_adfs'
 # This allows us to use omniauth with Rails API stack
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :developer unless Rails.env.production?
-  # provider :generic_adfs,  name: 'adfs'
+  provider :generic_adfs,  name: 'adfs'
   provider :generic_ldap,  name: 'ldap'
   provider :generic_oauth, name: 'oauth2'
 end
