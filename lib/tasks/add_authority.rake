@@ -1,10 +1,13 @@
 namespace :domain do
-    # Usage: rake "domain:add_authority[Name of Site,https://domain]"
+    # Usage: rake "domain:add_authority[Name of Site,https://domain, support email, support pass]"
     desc 'Generates an authority for the current domain'
-    task :add_authority, [:site_name, :site_origin, :support_pass] => [:environment] do |task, args|
+    task :add_authority, [:site_name, :site_origin, :support_email, :support_pass] => [:environment] do |task, args|
         site_name = args[:site_name]
         site_origin = args[:site_origin]  # i.e. https://domain.com
+        support_email = args[:support_email]
         support_pass = args[:support_pass]
+
+        support_email = support_email.present? ? support_email : 'support@aca.im'
         support_pass = support_pass.present? ? support_pass : SecureRandom.alphanumeric(8)
 
         auth = Authority.new
@@ -20,7 +23,7 @@ namespace :domain do
             user.name = "ACA Support (#{auth.name})"
             user.sys_admin = true
             user.authority_id = auth.id
-            user.email = 'support@aca.im'
+            user.email = support_email
             user.password = support_pass
             user.password_confirmation = support_pass
             user.save!
