@@ -9,7 +9,7 @@ class User
   include AuthTimestamps
   include BCrypt
 
-  table_config :name => 'user'
+  table_config name: 'user'
 
   PUBLIC_DATA = {only: [
     :id, :email_digest, :nickname, :name, :first_name, :last_name,

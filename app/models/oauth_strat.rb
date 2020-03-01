@@ -4,7 +4,7 @@ class OauthStrat
   include NoBrainer::Document
   include AuthTimestamps
 
-  table_config :name => 'oauth_strat'
+  table_config name: 'oauth_strat'
 
   field :name,           type: String
 

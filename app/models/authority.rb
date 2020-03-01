@@ -6,7 +6,7 @@ class Authority
   include NoBrainer::Document
   include AuthTimestamps
 
-  table_config :name => 'authority'
+  table_config name: 'authority'
 
   field :name,        type: String
   field :domain,      type: String, uniq: true, index: true

@@ -4,7 +4,7 @@ class Authentication
   include NoBrainer::Document
   include AuthTimestamps
 
-  table_config :name => 'authentication'
+  table_config name: 'authentication'
 
   field :uid,      type: String
   field :provider, type: String

@@ -4,7 +4,7 @@ class AdfsStrat
   include NoBrainer::Document
   include AuthTimestamps
 
-  table_config :name => 'adfs_strat'
+  table_config name: 'adfs_strat'
 
   field :name, type: String
   belongs_to :authority

@@ -4,7 +4,7 @@ class LdapStrat
   include NoBrainer::Document
   include AuthTimestamps
 
-  table_config :name => 'ldap_strat'
+  table_config name: 'ldap_strat'
 
   field :name,       type: String  # (used as title)
 
