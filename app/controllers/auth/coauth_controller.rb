@@ -49,6 +49,11 @@ module Auth
     end
 
     def set_continue(path)
+      if path.include?("://")
+        uri = Addressable::URI.parse(path)
+        path = "#{uri.request_uri}#{uri.fragment ? "##{uri.fragment}" : nil}"
+      end
+
       value = {
         value: path,
         httponly: true,
