@@ -86,7 +86,7 @@ Doorkeeper::JWT.configure do
     permissions |= 2 if user.sys_admin
 
     {
-      iss: 'ACAE',
+      iss: 'POS',
       iat: Time.now.to_i,
 
       # Match the access token expiry time
