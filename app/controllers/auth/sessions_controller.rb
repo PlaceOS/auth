@@ -157,7 +157,22 @@ module Auth
     # Log off
     def destroy
       remove_session
-      redirect_to (params.permit(:continue)[:continue] || '/')
+
+      # do we want to redirect externally?
+      path = params.permit(:continue)[:continue] || '/'
+
+      if path.include?("://")
+          authority = current_authority
+          uri = Addressable::URI.parse(path)
+
+          if uri.domain == authority.domain
+            path = "#{uri.request_uri}#{uri.fragment ? "##{uri.fragment}" : nil}"
+          else
+            path = authority.logout_url
+          end
+      end
+
+      redirect_to path
     end
 
 
