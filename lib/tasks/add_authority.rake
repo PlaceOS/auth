@@ -7,7 +7,7 @@ namespace :domain do
         support_email = args[:support_email]
         support_pass = args[:support_pass]
 
-        support_email = support_email.present? ? support_email : 'support@aca.im'
+        support_email = support_email.present? ? support_email : 'support@place.tech'
         support_pass = support_pass.present? ? support_pass : SecureRandom.alphanumeric(8)
 
         auth = Authority.new
@@ -20,7 +20,7 @@ namespace :domain do
             auth.save!
 
             user = User.new
-            user.name = "ACA Support (#{auth.name})"
+            user.name = "PlaceOS Support (#{auth.name})"
             user.sys_admin = true
             user.authority_id = auth.id
             user.email = support_email
