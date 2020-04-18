@@ -25,7 +25,7 @@ module Auth
         value = {
           value: {
             id: user.id,
-            salt: SecureRandom.hex[0..(1 + rand(31))]   # Variable length 1->32
+            expires: 1.day.from_now.to_i
           },
           httponly: true,
           path: '/auth'   # only sent to calls at this path
@@ -39,7 +39,7 @@ module Auth
         value: {
           uid: uid,
           provider: provider,
-          salt: SecureRandom.hex[0..(1 + rand(15))]   # Variable length
+          expires: 1.hour.from_now.to_i
         },
         httponly: true,
         path: '/auth'   # only sent to calls at this path

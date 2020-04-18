@@ -8,7 +8,9 @@ class Authentication
 
   field :uid,      type: String
   field :provider, type: String
-  field :user_id,  type: String, index: true
+
+  belongs_to :user
+  belongs_to :authority
 
   def self.by_user(user)
     Authentication.where(user_id: user.id).to_a
@@ -18,12 +20,15 @@ class Authentication
     Authentication.where(user_id: user_id).to_a
   end
 
-  def self.from_omniauth(auth)
-    self.find("auth-#{auth['provider']}-#{auth['uid']}")
+  # Where auth is https://github.com/omniauth/omniauth/wiki/Auth-Hash-Schema
+  def self.from_omniauth(authority_id, auth)
+    self.find("auth-#{authority_id}-#{auth['provider']}-#{auth['uid']}")
   end
 
-  def self.create_with_omniauth(auth, user_id)
+  #
+  def self.create_with_omniauth(authority_id, auth, user_id)
     authen = Authentication.new
+    authen.authority_id = authority_id
     authen.provider = auth['provider']
     authen.uid = auth['uid']
     authen.user_id = user_id

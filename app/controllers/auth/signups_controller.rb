@@ -8,7 +8,7 @@ module Auth
 
     def create
       # Can't create a user if you are already logged in.
-      if cookies.encrypted[:user]
+      if signed_in?
         head :forbidden
 
       # No user logged in check if they are signing in using a social auth
@@ -17,10 +17,11 @@ module Auth
         path = session[:continue] || success_path
         social = cookies.signed[:social]
 
-        if social    # UID == social auth
+        # UID == social auth
+        if social && social['expires'] > Time.now.to_i
           # Grab data from cookie and prevent session fixation
-          uid = social[:uid]
-          provider = social[:provider]
+          uid = social['uid']
+          provider = social['provider']
 
           # Create the user
           # TODO:: in case of crash, we need to check if user can't be created due to
@@ -48,25 +49,11 @@ module Auth
             head :conflict
           end
         else
-          # This is manual sign up form
-          # If a user uses this, they should have a password
-
-          if !safe_params.key?('password')
-            render json: { password: ["must be present"]}, status: 406
-            return
-          end
-          user = User.new(safe_params)
-          if user.save
-            remove_session
-            new_session(user)
-            redirect_to path
-          else
-            # Email address taken
-            render json: user.errors , status: :conflict
-          end
+          # No tokens
+          head :forbidden
         end
       end
-    end
+    end # def create
 
     protected
 
