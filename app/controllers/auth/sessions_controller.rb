@@ -52,13 +52,11 @@ module Auth
 
       # Get auth hash from omniauth
       auth = request.env['omniauth.auth']
-
-      if auth.nil?
-        return login_failure({})
-      end
+      return login_failure({}) if auth.nil?
 
       # Find an authentication or create an authentication
-      auth_model = Authentication.from_omniauth(auth)
+      authority = current_authority
+      auth_model = Authentication.from_omniauth(authority.id, auth)
       args = safe_params(auth.info)
 
       # adding a new auth to existing user
@@ -67,7 +65,7 @@ module Auth
         user.assign_attributes(args)
         user.save
 
-        Authentication.create_with_omniauth(auth, user.id)
+        Authentication.create_with_omniauth(authority.id, auth, user.id)
         redirect_to path
         self.instance_exec user, auth['provider'], auth, &Authentication.after_login_block
 
@@ -81,7 +79,6 @@ module Auth
           user.name = "#{fn} #{args[:last_name]}"
         end
 
-        authority = current_authority
         user.authority_id = authority.id
 
         # This fixes issues where users change their UID
@@ -98,7 +95,6 @@ module Auth
         # the installation the opportunity to modify the user record or
         # reject the signup outright
         result = self.instance_exec user, auth['provider'], auth, &Authentication.before_signup_block
-
         logger.info "Creating new user: #{result.inspect}\n#{user.inspect}"
 
         if result != false && user.save

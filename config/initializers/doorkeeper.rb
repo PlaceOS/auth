@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'set'
 require 'base64'
 require 'doorkeeper'
@@ -14,7 +16,7 @@ Doorkeeper.configure do
     # the cookie to particular paths (i.e. /auth)
     begin
       cookie = cookies.encrypted[:user]
-      user = User.find?(cookie[:id]) if cookie
+      user = User.find?(cookie['id']) if cookie && Time.now.to_i < cookie['expires']
       user || redirect_to('/login_required.html')
     rescue TypeError
       cookies.delete(:user,   path: '/auth')
@@ -29,7 +31,7 @@ Doorkeeper.configure do
   if Rails.env.production?
     admin_authenticator do |routes|
       admin = begin
-        user = User.find(cookies.encrypted[:user][:id])
+        user = User.find(cookies.encrypted[:user]['id'])
         user.sys_admin == true
       rescue
         false
@@ -79,6 +81,8 @@ end
 Doorkeeper::JWT.configure do
   token_payload do |opts|
     user = User.find(opts[:resource_owner_id])
+    created_at = opts[:created_at].to_i
+    expires = created_at + opts[:expires_in]
 
     # Generate permissions bitflags
     permissions = 0
@@ -87,17 +91,19 @@ Doorkeeper::JWT.configure do
 
     {
       iss: 'POS',
-      iat: Time.now.to_i,
+      iat: created_at,
 
       # Match the access token expiry time
-      exp: 2.weeks.from_now.to_i,
+      exp: expires,
 
       # @see JWT reserved claims - https://tools.ietf.org/html/draft-jones-json-web-token-07#page-7
       # We don't currently use this, but could enable it in the future
       # jti: SecureRandom.uuid,
 
       # The domain on which the token is valid (Audience)
+      # TODO:: change this to `authority.id`
       aud: user.authority.domain,
+      scope: Array(opts[:scopes]),
 
       # The subject of the token (User)
       sub: user.id,

@@ -9,8 +9,10 @@ module UserHelper
   end
 
   def current_user
+    return @current_user if @current_user
     user = cookies.encrypted[:user]
-    @current_user ||= User.find((user[:id] || user['id'])) if user
+    return remove_session if Time.now.to_i > user['expires']
+    @current_user = User.find(user['id']) if user
   end
 
   def signed_in?
