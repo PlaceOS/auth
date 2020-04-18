@@ -11,7 +11,7 @@ gem 'nobrainer'
 # Authentication
 gem 'doorkeeper'
 gem 'doorkeeper-jwt'
-gem 'doorkeeper-rethinkdb', git: 'https://github.com/aca-labs/doorkeeper-rethinkdb.git'
+gem 'doorkeeper-rethinkdb', git: 'https://github.com/place-labs/doorkeeper-rethinkdb.git'
 gem 'omniauth'
 gem 'omniauth-oauth2'
 gem 'omniauth-ldap2'
@@ -20,7 +20,7 @@ gem 'jwt'
 
 # Uploads
 gem 'condo', git: 'https://github.com/cotag/Condominios.git', branch: 'rethink-update'
-gem 'condo-rethinkdb', git: 'https://github.com/acaengine/condo-rethinkdb.git'
+gem 'condo-rethinkdb', git: 'https://github.com/place-labs/condo-rethinkdb.git'
 
 # Model support
 gem 'email_validator'
