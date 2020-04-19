@@ -61,6 +61,6 @@ class Authentication
 
   before_create :generate_id
   def generate_id
-    self.id = "auth-#{self.provider}-#{self.uid}"
+    self.id = "auth-#{self.authority_id}-#{self.provider}-#{self.uid}"
   end
 end
