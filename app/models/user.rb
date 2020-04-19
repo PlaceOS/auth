@@ -34,6 +34,7 @@ class User
   field :deleted,         type: Boolean, default: false
 
   belongs_to :authority
+  has_many :authentications, dependent: :destroy
 
   def self.find_by_email(authority, email)
     User.where(authority_id: authority, email: email).first
