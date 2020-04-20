@@ -24,7 +24,7 @@ Bundler.require(*Rails.groups)
 module EngineApp
   class Application < Rails::Application
     config.load_defaults "6.0"
-    
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -33,6 +33,7 @@ module EngineApp
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = false
+    config.action_dispatch.use_cookies_with_metadata = false
 
     # Selectively switch between API and full rails stacks
     config.before_initialize do |app|
