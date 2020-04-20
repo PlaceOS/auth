@@ -35,8 +35,8 @@ class User
 
   belongs_to :authority
   has_many :authentications, dependent: :destroy
-  has_many :access_tokens, class_name: 'Doorkeeper::AccessToken', dependent: :destroy
-  has_many :access_grants, class_name: 'Doorkeeper::AccessGrant', dependent: :destroy
+  has_many :access_tokens, class_name: 'Doorkeeper::AccessToken', dependent: :destroy, foreign_key: :resource_owner_id
+  has_many :access_grants, class_name: 'Doorkeeper::AccessGrant', dependent: :destroy, foreign_key: :resource_owner_id
 
   def self.find_by_email(authority, email)
     User.where(authority_id: authority, email: email).first
