@@ -1,21 +1,4 @@
 GIT
-  remote: https://github.com/aca-labs/doorkeeper-rethinkdb.git
-  revision: bc08bd7250f70d1db9b16b5bca89b92044132973
-  specs:
-    doorkeeper-rethinkdb (1.1.0)
-      doorkeeper (>= 4.0.0, < 6)
-      nobrainer (>= 0.33.0, < 1)
-
-GIT
-  remote: https://github.com/acaengine/condo-rethinkdb.git
-  revision: 4f20f06e9b893da3ecbb2262157bbc6e08fa34e6
-  specs:
-    condo-rethinkdb (1.0.0)
-      condo
-      nobrainer
-      rails (>= 4.0.0)
-
-GIT
   remote: https://github.com/cotag/Condominios.git
   revision: bd15c388d76688464710a33b15e07c1eeb0b55c6
   branch: rethink-update
@@ -27,6 +10,23 @@ GIT
       fog-openstack
       rails
       unf
+
+GIT
+  remote: https://github.com/place-labs/condo-rethinkdb.git
+  revision: 4f20f06e9b893da3ecbb2262157bbc6e08fa34e6
+  specs:
+    condo-rethinkdb (1.0.0)
+      condo
+      nobrainer
+      rails (>= 4.0.0)
+
+GIT
+  remote: https://github.com/place-labs/doorkeeper-rethinkdb.git
+  revision: bc08bd7250f70d1db9b16b5bca89b92044132973
+  specs:
+    doorkeeper-rethinkdb (1.1.0)
+      doorkeeper (>= 4.0.0, < 6)
+      nobrainer (>= 0.33.0, < 1)
 
 GEM
   remote: https://rubygems.org/
