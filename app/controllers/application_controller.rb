@@ -1,6 +1,8 @@
 require 'jwt'
 
 class ApplicationController < ActionController::Base
+  skip_before_action :verify_authenticity_token
+
   SENTRY_CONFIGURED = !!ENV["SENTRY_DSN"]
   if SENTRY_CONFIGURED
     before_action :set_raven_context
