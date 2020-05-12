@@ -21,6 +21,19 @@ RUN rm -rf /app/tmp/pids/
 RUN rm -rf $GEM_HOME/cache && \
     apk del .gem-installdeps
 
+# Create a non-privileged user
+# defaults are appuser:10001
+ARG IMAGE_UID="10001"
+ENV UID=$IMAGE_UID
+ENV USER=appuser
+
+# See https://stackoverflow.com/a/55757473/12429735RUN
+RUN adduser -D -g "" -h "/nonexistent" -s "/sbin/nologin" -H -u "${UID}" "${USER}"
+
+RUN chown appuser:appuser -R /app/tmp
+
+# Use an unprivileged user.
+USER appuser:appuser
 
 EXPOSE 8080
 ENTRYPOINT rm -rf /app/tmp/pids/server.pid && rails s -b 0.0.0.0 -p 8080

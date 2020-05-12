@@ -11,6 +11,7 @@ module UserHelper
   def current_user
     return @current_user if @current_user
     user = cookies.encrypted[:user]
+    return nil unless user
     return remove_session if Time.now.to_i > user['expires']
     @current_user = User.find(user['id']) if user
   end
