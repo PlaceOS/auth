@@ -10,11 +10,7 @@ module Auth
       if authority
         auth = authority.as_json(except: [:created_at, :internals])
         auth[:version] = "v2.0.0"
-        begin
-          auth[:session] = signed_in?
-        rescue
-          auth[:session] = false
-        end
+        auth[:session] = signed_in?
         auth[:production] = Rails.env.production?
         render json: auth
       else
