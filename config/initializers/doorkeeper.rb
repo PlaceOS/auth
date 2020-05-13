@@ -9,6 +9,7 @@ require 'doorkeeper-rethinkdb'
 Doorkeeper.configure do
   orm :rethinkdb
   hash_token_secrets
+  reuse_access_token
 
   # This block will be called to check whether the
   # resource owner is authenticated or not
