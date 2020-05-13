@@ -14,9 +14,6 @@ Rails.application.routes.draw do
 
       get  '/failure', to: 'auth/signups#show'     # Auth failure message
 
-      # Refresh tokens for web apps
-      post '/token', to: 'auth/trusts#create'
-
       get  '/authority', to: 'auth/authorities#current'
   end
 
