@@ -7,13 +7,12 @@
 require "oauth2"
 
 client_id = "0149d1efb4f4efb5b6f80e907da979c7"
-client_secret = "216de7d1f963592845d7d502efa3e88b614479f08c594f775103c084e008fc0e371e276e93a5898f28f413bb3f1e12a0"
 redirect_uri = "http://localhost:8080/backoffice/oauth-resp.html"
 
 # Create oauth client, optionally pass custom URIs if needed,
 # if the authorize or token URIs are not the standard ones
 # (they can also be absolute URLs)
-oauth2_client = OAuth2::Client.new("localhost:8080", client_id, client_secret,
+oauth2_client = OAuth2::Client.new("localhost:8080", client_id, "",
   redirect_uri: redirect_uri,
     authorize_uri: "http://localhost:8080/auth/oauth/authorize",
     token_uri: "http://localhost:8080/auth/oauth/token")
@@ -92,7 +91,6 @@ new_access_token = oauth2_client.get_access_token_using_refresh_token(access_tok
 require "oauth2"
 
 client_id = "0149d1efb4f4efb5b6f80e907da979c7"
-client_secret = "216de7d1f963592845d7d502efa3e88b614479f08c594f775103c084e008fc0e371e276e93a5898f28f413bb3f1e12a0"
 redirect_uri = "http://localhost:8080/backoffice/oauth-resp.html"
 
 auth_cookie = "user=y1GTR1Xf7ZuhoYGYtOuQVyY8hwUhbwnRoh%2FEuuB%2F7frquxI14zpCUqQqJZs%3D--QxluRWU9NngkNOA3--bTqBdZlpiGoOsBtRVV3Tnw%3D%3D"
@@ -107,7 +105,7 @@ loc = response.headers["Location"]
 code = loc.split("code=")[1]
 
 
-token_uri = "http://localhost:8080/auth/oauth/token?grant_type=authorization_code&code=#{code}&code_verifier=#{challenge}&client_id=#{client_id}&client_secret=#{client_secret}&redirect_uri=#{redirect_uri}"
+token_uri = "http://localhost:8080/auth/oauth/token?grant_type=authorization_code&code=#{code}&code_verifier=#{challenge}&client_id=#{client_id}&redirect_uri=#{redirect_uri}"
 token_resp = HTTP::Client.post token_uri
 
 
