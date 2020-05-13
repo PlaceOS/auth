@@ -22,7 +22,7 @@ GIT
 
 GIT
   remote: https://github.com/place-labs/doorkeeper-rethinkdb.git
-  revision: 9e0ff63fb5c4acbbe3f450810056552fc50f9aa4
+  revision: eb99848f031f4f0e68a3d3c4fb681a5a1efd9ed6
   specs:
     doorkeeper-rethinkdb (1.1.0)
       doorkeeper (>= 4.0.0, < 6)
@@ -192,7 +192,7 @@ GEM
     middleware (0.1.0)
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2020.0425)
+    mime-types-data (3.2020.0512)
     mimemagic (0.3.5)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
@@ -337,7 +337,7 @@ DEPENDENCIES
   byebug
   condo!
   condo-rethinkdb!
-  doorkeeper
+  doorkeeper (~> 5.4)
   doorkeeper-jwt
   doorkeeper-rethinkdb!
   email_validator

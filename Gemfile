@@ -9,7 +9,7 @@ gem 'puma'
 gem 'nobrainer'
 
 # Authentication
-gem 'doorkeeper'
+gem 'doorkeeper', '~> 5.4'
 gem 'doorkeeper-jwt'
 gem 'doorkeeper-rethinkdb', git: 'https://github.com/place-labs/doorkeeper-rethinkdb.git'
 gem 'omniauth'
