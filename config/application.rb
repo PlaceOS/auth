@@ -13,6 +13,7 @@ require "action_view/railtie"
 require "rails/test_unit/railtie"
 
 require "nobrainer"
+require_relative 'nobrainer_monkey_patch'
 require_relative "../app/models/concerns/auth_timestamps"
 require_relative "../app/models/authority"
 require_relative "../app/models/user"
