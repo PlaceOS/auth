@@ -17,21 +17,28 @@ class User
   ]}
 
   field :name,            type: String
-  field :email,           type: String, uniq: {scope: :authority_id}
   field :nickname,        type: String
+  field :email,           type: String, uniq: {scope: :authority_id}
   field :phone,           type: String
   field :country,         type: String
   field :image,           type: String
+  field :ui_theme,        type: String
   field :metadata,        type: String
+
   field :login_name,      type: String
   field :staff_id,        type: String
   field :first_name,      type: String
   field :last_name,       type: String
   field :building,        type: String
+
   field :password_digest, type: String
   field :email_digest,    type: String
+
   field :card_number,     type: String
   field :deleted,         type: Boolean, default: false
+
+  # typically LDAP groups
+  field :groups,          type: Array, default: ->{ [] }
 
   belongs_to :authority
   has_many :authentications, dependent: :destroy
