@@ -7,6 +7,7 @@ gem 'puma'
 
 # Database
 gem 'nobrainer'
+gem 'redis'
 
 # Authentication
 gem 'doorkeeper', '~> 5.4'

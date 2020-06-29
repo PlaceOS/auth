@@ -25,3 +25,14 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   provider :generic_ldap,  name: 'ldap'
   provider :generic_oauth, name: 'oauth2'
 end
+
+require 'redis'
+
+# Notify PlaceOS of the recent authentication
+# Allows drivers to implement custom `after_login` actions like obtaining LDAP groups etc
+AUTH_REDIS_URL = ENV["REDIS_URL"]
+REDIS_CLIENT = AUTH_REDIS_URL ? Redis.new(url: AUTH_REDIS_URL) : nil
+
+Authentication.after_login do |user, provider, auth|
+  REDIS_CLIENT.publish("placeos/auth/login", {user_id: user.id, provider: provider}.to_json) if REDIS_CLIENT
+end
