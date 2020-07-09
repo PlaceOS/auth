@@ -116,7 +116,7 @@ Doorkeeper::JWT.configure do
         # Email
         e: user.email,
         # Permissions bitflags
-        p: permissions
+        p: permissions,
         # Roles
         r: user.groups
       }
