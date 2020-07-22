@@ -34,5 +34,11 @@ AUTH_REDIS_URL = ENV["REDIS_URL"]
 REDIS_CLIENT = AUTH_REDIS_URL ? Redis.new(url: AUTH_REDIS_URL) : nil
 
 Authentication.after_login do |user, provider, auth|
-  REDIS_CLIENT.publish("placeos/auth/login", {user_id: user.id, provider: provider}.to_json) if REDIS_CLIENT
+  if REDIS_CLIENT
+    begin
+      REDIS_CLIENT.publish("placeos/auth/login", {user_id: user.id, provider: provider}.to_json)
+    rescue => error
+      puts "error signalling login: #{error.message}"
+    end
+  end
 end
