@@ -22,7 +22,7 @@ class Authentication
 
   # Where auth is https://github.com/omniauth/omniauth/wiki/Auth-Hash-Schema
   def self.from_omniauth(authority_id, auth)
-    self.find("auth-#{authority_id}-#{auth['provider']}-#{auth['uid']}")
+    self.find?("auth-#{authority_id}-#{auth['provider']}-#{auth['uid']}")
   end
 
   #
