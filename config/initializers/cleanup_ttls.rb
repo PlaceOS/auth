@@ -15,7 +15,7 @@ Thread.new do
           r.table(table).between(past, expired, index: 'ttl').delete
         }
       end
-    rescue error
+    rescue => error
       puts "error clearing expired ttl: #{error.message}"
     end
   end
