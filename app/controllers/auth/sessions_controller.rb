@@ -99,7 +99,7 @@ module Auth
 
         if result != false && user.save
           # user is created, associate an auth record or raise exception
-          Authentication.create_with_omniauth(auth, user.id)
+          Authentication.create_with_omniauth(authority.id, auth, user.id)
 
           # make the new user the currently logged in user
           remove_session
