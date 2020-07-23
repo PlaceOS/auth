@@ -78,6 +78,7 @@ class User
 
   # Encrypts the password into the password_digest attribute.
   def password
+    return nil unless @password.present? || self.password_digest.present?
     @password ||= Password.new(self.password_digest)
   end
 
