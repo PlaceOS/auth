@@ -9,8 +9,8 @@ class Authentication
   field :uid,      type: String
   field :provider, type: String
 
-  belongs_to :user
-  belongs_to :authority
+  belongs_to :user, index: true
+  belongs_to :authority, index: true
 
   def self.by_user(user)
     Authentication.where(user_id: user.id).to_a
