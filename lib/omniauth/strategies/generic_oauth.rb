@@ -55,8 +55,11 @@ module OmniAuth
         # options.client_options.authorize_path = strat.authorize_path  if strat.authorize_path (renamed to authorize_url)
         options.client_options.raw_info_url = strat.raw_info_url if strat.raw_info_url
         options.client_options.info_mappings = strat.info_mappings if strat.info_mappings
+        options.client_options.ensure_matching = strat.ensure_matching || {}
 
-        options.authorize_params.scope = strat.scope
+        auth_params = strat.authorize_params || {}
+        auth_params[:scope] = strat.scope
+        options.authorize_params = auth_params
 
         options.client_id = strat.client_id
         options.client_secret = strat.client_secret
@@ -73,7 +76,20 @@ module OmniAuth
       end
 
       def raw_info
-        @raw_info ||= access_token.get(options.client_options.raw_info_url).parsed
+        return @raw_info if @raw_info
+        inf = access_token.get(options.client_options.raw_info_url).parsed
+        required_matches = options.client_options.ensure_matching
+        match = true
+        required_matches.each do |field, options|
+          checking = Array(inf[field.to_s])
+          matches = checking.intersection(options)
+          if matches.length == 0
+            match = false
+            break
+          end
+        end
+        raise "Invalid Hosted Domain" unless match
+        @raw_info = inf
       end
 
       def prune!(hash)
