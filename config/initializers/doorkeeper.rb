@@ -2,6 +2,7 @@
 
 require 'set'
 require 'base64'
+require 'securerandom'
 require 'doorkeeper'
 require 'doorkeeper/jwt'
 require 'doorkeeper-rethinkdb'
@@ -98,8 +99,9 @@ Doorkeeper::JWT.configure do
       exp: expires,
 
       # @see JWT reserved claims - https://tools.ietf.org/html/draft-jones-json-web-token-07#page-7
-      # We don't currently use this, but could enable it in the future
-      # jti: SecureRandom.uuid,
+      # Currently we only use this add some randomness to the token
+      # This avoids database clashes when refreshed straight away
+      jti: SecureRandom.uuid,
 
       # The domain on which the token is valid (Audience)
       # TODO:: change this to `authority.id`
