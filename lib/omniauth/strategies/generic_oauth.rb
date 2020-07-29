@@ -14,11 +14,12 @@ module OmniAuth
       end
 
       info do
+        creds = credentials
         data = {}
         options.client_options.info_mappings.each do |key, value|
-          data[key] = raw_info[value]
+          data[key] = raw_info[value] || creds[value]
         end
-        data.merge(credentials)
+        data
       end
 
       def request_phase
