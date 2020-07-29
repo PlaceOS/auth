@@ -44,7 +44,7 @@ class User
   field :access_token,    type: String
   field :refresh_token,   type: String
   field :expires_at,      type: Integer
-  field :expires,         type: Bool
+  field :expires,         type: Boolean
 
   belongs_to :authority
   has_many :authentications, dependent: :destroy
