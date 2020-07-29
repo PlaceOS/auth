@@ -82,7 +82,7 @@ module OmniAuth
         match = true
         required_matches.each do |field, options|
           checking = Array(inf[field.to_s])
-          matches = checking.intersection(options)
+          matches = checking & options
           if matches.length == 0
             match = false
             break
