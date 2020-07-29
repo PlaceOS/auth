@@ -18,7 +18,7 @@ module OmniAuth
         options.client_options.info_mappings.each do |key, value|
           data[key] = raw_info[value]
         end
-        data
+        data.merge(credentials)
       end
 
       def request_phase

@@ -40,6 +40,12 @@ class User
   # typically LDAP groups
   field :groups,          type: Array, default: ->{ [] }
 
+  # User credentials
+  field :access_token,    type: String
+  field :refresh_token,   type: String
+  field :expires_at,      type: Integer
+  field :expires,         type: Bool
+
   belongs_to :authority
   has_many :authentications, dependent: :destroy
   has_many :access_tokens, class_name: 'Doorkeeper::AccessToken', dependent: :destroy, foreign_key: :resource_owner_id
