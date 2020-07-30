@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
 
     token = request.headers["Authorization"]
     if token
-      token = token.lchop("Bearer ").rstrip
+      token = token.split("Bearer ")[1].rstrip
       token = nil if token.empty?
     else
       token = params["bearer_token"]
