@@ -48,7 +48,7 @@ class Authority
     config = ::Condo::Configuration
 
     if self.internals["storage"]
-      storage = self.internals["storage"].with_indifferent_access
+      storage = self.internals["storage"].deep_symbolize_keys
       config.dynamic_residence(storage[:name], storage)
     else
       # Default storage service
