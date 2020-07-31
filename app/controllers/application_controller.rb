@@ -3,7 +3,7 @@ require 'jwt'
 class ApplicationController < ActionController::Base
   skip_before_action :verify_authenticity_token
 
-  @@public_key = OpenSSL::PKey::RSA.new(Doorkeeper::JWT.configuration.secret_key).public_key
+  PUBLIC_KEY = OpenSSL::PKey::RSA.new(Doorkeeper::JWT.configuration.secret_key).public_key
 
   SENTRY_CONFIGURED = !!ENV["SENTRY_DSN"]
   if SENTRY_CONFIGURED
@@ -39,6 +39,6 @@ class ApplicationController < ActionController::Base
   end
 
   def get_public_key
-    @@public_key
+    PUBLIC_KEY
   end
 end
