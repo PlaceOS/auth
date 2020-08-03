@@ -70,11 +70,10 @@ module OmniAuth
 
         options.allowed_clock_drift = 10.seconds
 
-        fprint = strat.idp_cert_fingerprint
-        if fprint && !fprint.empty?
-          options.idp_cert_fingerprint_validator = DEFAULT_CERT_VALIDATOR
-        else
+        if strat.idp_cert.present?
           options.idp_cert_fingerprint_validator = nil
+        else
+          options.idp_cert_fingerprint_validator = DEFAULT_CERT_VALIDATOR
         end
       end
     end
