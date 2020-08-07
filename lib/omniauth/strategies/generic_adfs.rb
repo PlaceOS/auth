@@ -38,6 +38,8 @@ module OmniAuth
       end
 
       def other_phase
+        # Allow redirect to be handled in AJAX land for inline auth
+        response.headers['Access-Control-Expose-Headers'] = 'Location'
         if current_path.start_with?(request_path)
           aca_configure_opts
           super
