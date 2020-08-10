@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 %w(
   .ruby-version
   .rbenv-vars

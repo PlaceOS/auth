@@ -1,3 +1,4 @@
+# encoding: UTF-8
 
 #
 # Define the various storage providers you would like to upload to here.

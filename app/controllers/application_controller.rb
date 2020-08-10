@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'jwt'
 
 class ApplicationController < ActionController::Base

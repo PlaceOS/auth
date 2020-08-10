@@ -1,3 +1,4 @@
+# encoding: UTF-8
 
 # This is to prevent duplicate tables
 # remove once https://github.com/nviennot/nobrainer/pull/260 is accepted

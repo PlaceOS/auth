@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# encoding: UTF-8
 
 # Remove the locks from the logger
 require 'mono_logger'

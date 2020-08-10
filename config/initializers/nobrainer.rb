@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 # Here is the place to configure NoBrainer.
 # We are using the default connection settings.
 # NoBrainer.configure do |config|
