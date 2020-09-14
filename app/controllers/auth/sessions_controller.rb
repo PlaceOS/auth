@@ -120,8 +120,8 @@ module Auth
           # page, where /signup is a required client side path.
           store_social(auth['uid'], auth['provider'])
 
-          response.headers['x-aca-user-info'] = auth.inspect
-          response.headers['x-aca-user-errors'] = errors.inspect
+          response.headers['x-place-user-info'] = auth.inspect
+          response.headers['x-place-user-errors'] = errors.inspect
           redirect_to "#{authority.internals[:signup_path] || '/signup/index.html'}?#{auth_params_string(auth.info)}"
         end
 
