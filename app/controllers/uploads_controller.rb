@@ -76,11 +76,9 @@ class UploadsController < ApplicationController
 
   #
   # The name of the file when saved on the cloud storage system
-  def self.generate_file_name(upload)
-    "#{Time.now.to_f.to_s.sub('.', '')}#{rand(1000)}#{File.extname(upload[:file_name])}"
+  condo_callback :object_key do |upload|
+    "#{request.host}/#{Time.now.to_f.to_s.sub('.', '')}#{rand(1000)}#{File.extname(upload[:file_name])}"
   end
-
-  condo_callback :object_key, method(:generate_file_name)
 
   condo_callback :object_options do
     { permissions: :public }
