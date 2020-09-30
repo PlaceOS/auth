@@ -23,7 +23,7 @@ class User
   field :country,         type: String
   field :image,           type: String
   field :ui_theme,        type: String
-  field :metadata,        type: String
+  field :misc,            type: String
 
   field :login_name,      type: String
   field :staff_id,        type: String
