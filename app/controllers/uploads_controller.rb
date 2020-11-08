@@ -80,7 +80,20 @@ class UploadsController < ApplicationController
     "#{request.host}/#{Time.now.to_f.to_s.sub('.', '')}#{rand(1000)}#{File.extname(upload[:file_name])}"
   end
 
-  condo_callback :object_options do
-    { permissions: :public }
+  # Defined here: https://github.com/cotag/Condominios/blob/5d1b297853e89c91afadcfeb48ab3f09ccff28b5/lib/condo.rb#L111
+  # Mime types set here: https://github.com/cotag/Condominios/blob/5d1b297853e89c91afadcfeb48ab3f09ccff28b5/lib/condo/strata/amazon_s3.rb#L101
+  # and https://github.com/cotag/Condominios/blob/5d1b297853e89c91afadcfeb48ab3f09ccff28b5/lib/condo/strata/open_stack_swift.rb#L122
+  condo_callback :object_options do |upload_object|
+    file_mime = params[:file_mime].presence
+    if file_mime
+      {
+        permissions: :public,
+        headers: {
+          'Content-Type' => file_mime
+        }
+      }
+    else
+      { permissions: :public }
+    end
   end
 end
