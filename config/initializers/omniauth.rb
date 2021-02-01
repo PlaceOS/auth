@@ -33,14 +33,23 @@ require 'redis'
 # Notify PlaceOS of the recent authentication
 # Allows drivers to implement custom `after_login` actions like obtaining LDAP groups etc
 AUTH_REDIS_URL = ENV["REDIS_URL"]
-REDIS_CLIENT = AUTH_REDIS_URL ? Redis.new(url: AUTH_REDIS_URL) : nil
+REDIS_CLIENT = if AUTH_REDIS_URL
+                 Redis.new(url: AUTH_REDIS_URL)
+               else
+                 puts "WARN: redis client not configured, login events will not be sent"
+                 nil
+               end
+
 
 Authentication.after_login do |user, provider, auth|
   if REDIS_CLIENT
     begin
+      puts "INFO: sending login event"
       REDIS_CLIENT.publish("placeos/auth/login", {user_id: user.id, provider: provider}.to_json)
     rescue => error
       puts "error signalling login: #{error.message}"
     end
+  else
+    puts "\n\nWARN: redis client not configured, login event ignored\n"
   end
 end
