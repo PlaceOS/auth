@@ -25,7 +25,9 @@ module Auth
         auth[:production] = Rails.env.production?
         render json: auth
       else
-        head :not_found
+        # so we can use this route as a health check it will always return 200
+        # if `?health` param is set and fail if the database connection is down
+        head(params.has_key?(:health) ? :ok : :not_found)
       end
     end
   end
