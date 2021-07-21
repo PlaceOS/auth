@@ -57,4 +57,5 @@ RUN chown appuser:appuser -R /app/tmp
 USER appuser:appuser
 
 EXPOSE 8080
+HEALTHCHECK CMD wget --no-verbose -q --spider http://0.0.0.0:8080/auth/authority?health=true
 ENTRYPOINT rm -rf /app/tmp/pids/server.pid && ./bin/rails s -b 0.0.0.0 -p 8080
