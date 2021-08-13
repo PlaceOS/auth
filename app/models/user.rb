@@ -18,7 +18,7 @@ class User
 
   field :name,            type: String
   field :nickname,        type: String
-  field :email,           type: String, uniq: {scope: :authority_id}
+  field :email,           type: String
   field :phone,           type: String
   field :country,         type: String
   field :image,           type: String
@@ -52,7 +52,7 @@ class User
   has_many :access_grants, class_name: 'Doorkeeper::AccessGrant', dependent: :destroy, foreign_key: :resource_owner_id
 
   def self.find_by_email(authority, email)
-    User.where(authority_id: authority, email: email).first
+    User.where(authority_id: authority, email: /#{email}/i).first
   end
 
   field :sys_admin, default: false
@@ -107,7 +107,7 @@ class User
     super(new_email)
 
     # For looking up user pictures without making the email public
-    self.email_digest = new_email ? Digest::MD5.hexdigest(new_email) : nil
+    self.email_digest = new_email ? Digest::MD5.hexdigest(new_email.downcase) : nil
   end
 
   protected
@@ -115,4 +115,8 @@ class User
   # Validations
   validates :email, :email => true
   validates :password, length: { minimum: 6, message: 'must be at least 6 characters' }, allow_blank: true
+  validates_each :email do |record, attr_name, value|
+    user = User.find_by_email(record.authority_id, value)
+    record.errors.add(attr_name, 'already exists, it must be unique') if user && user.id != record.id
+  end
 end
