@@ -23,7 +23,7 @@ Doorkeeper.configure do
       unless user
         current_authority = Authority.find_by_domain(request.host)
         login_url = current_authority.login_url
-        redirect_to(login_url.gsub("{{url}}", URI.encode_www_form_component request.original_fullpath))
+        redirect_to(login_url.gsub("{{url}}", URI.encode_www_form_component(request.original_fullpath)))
       end
       user
     rescue TypeError
@@ -32,7 +32,7 @@ Doorkeeper.configure do
       cookies.delete(:continue, path: '/auth')
       current_authority = Authority.find_by_domain(request.host)
       login_url = current_authority.login_url
-      redirect_to(login_url.gsub("{{url}}", URI.encode_www_form_component request.original_fullpath))
+      redirect_to(login_url.gsub("{{url}}", URI.encode_www_form_component(request.original_fullpath)))
     end
   end
 
