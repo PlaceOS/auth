@@ -82,13 +82,11 @@ module Auth
         user.authority_id = authority.id
 
         # This fixes issues where users change their UID
-        if authority.internals[:trusted_authsource]
-          existing = ::User.find_by_email(authority.id, user.email)
-          if existing
-            user = existing
-            user.deleted = false
-            user.assign_attributes(args)
-          end
+        existing = ::User.find_by_email(authority.id, user.email)
+        if existing
+          user = existing
+          user.deleted = false
+          user.assign_attributes(args)
         end
 
         # now the user record is initialised (but not yet saved), give
