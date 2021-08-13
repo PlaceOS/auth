@@ -19,12 +19,19 @@ Doorkeeper.configure do
     begin
       cookie = cookies.encrypted[:user]
       user = User.find?(cookie['id']) if cookie && Time.now.to_i < cookie['expires']
-      user || redirect_to('/login_required.html')
+      unless user
+        current_authority = Authority.find_by_domain(request.host)
+        login_url = current_authority.login_url
+        redirect_to(login_url.gsub("{{url}}", request.original_fullpath))
+      end
+      user
     rescue TypeError
       cookies.delete(:user,   path: '/auth')
       cookies.delete(:social, path: '/auth')
       cookies.delete(:continue, path: '/auth')
-      redirect_to('/login_required.html')
+      current_authority = Authority.find_by_domain(request.host)
+      login_url = current_authority.login_url
+      redirect_to(login_url.gsub("{{url}}", request.original_fullpath))
     end
   end
 
