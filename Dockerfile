@@ -1,4 +1,5 @@
-FROM ruby:2.7-alpine AS build-env
+ARG RUBY_VER="2.7"
+FROM ruby:$RUBY_VER-alpine AS build-env
 
 ARG PACKAGES="git libxml2 libxslt build-base curl-dev libxml2-dev libxslt-dev zlib-dev tzdata"
 
@@ -15,12 +16,13 @@ WORKDIR $APP_DIR
 ENV BUNDLE_APP_CONFIG="$APP_DIR/.bundle"
 
 COPY Gemfile* $APP_DIR/
+RUN bundle config set without 'test:assets'
 RUN bundle config --global frozen 1 \
-    && bundle install --without test:assets -j4 --retry 3 --path=vendor/bundle \
+    && bundle install -j4 --retry 3 --path=vendor/bundle \
     # Remove unneeded files (cached *.gem, *.o, *.c)
-    && rm -rf vendor/bundle/ruby/2.6.0/cache/*.gem \
-    && find vendor/bundle/ruby/2.6.0/gems/ -name "*.c" -delete \
-    && find vendor/bundle/ruby/2.6.0/gems/ -name "*.o" -delete
+    && rm -rf vendor/bundle/ruby/2.7.0/cache/*.gem \
+    && find vendor/bundle/ruby/2.7.0/gems/ -name "*.c" -delete \
+    && find vendor/bundle/ruby/2.7.0/gems/ -name "*.o" -delete
 
 COPY . .
 
@@ -28,7 +30,7 @@ RUN rm -rf /app/tmp/pids/ && rm -rf /app/spec
 
 ############### Build step done ###############
 
-FROM ruby:2.7-alpine
+FROM ruby:$RUBY_VER-alpine
 
 # Copy just the application to this new image
 ENV APP_DIR /app
