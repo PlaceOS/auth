@@ -1,4 +1,4 @@
-FROM ruby:2.6-alpine AS build-env
+FROM ruby:2.7-alpine AS build-env
 
 ARG PACKAGES="git libxml2 libxslt build-base curl-dev libxml2-dev libxslt-dev zlib-dev tzdata"
 
@@ -28,7 +28,7 @@ RUN rm -rf /app/tmp/pids/ && rm -rf /app/spec
 
 ############### Build step done ###############
 
-FROM ruby:2.6-alpine
+FROM ruby:2.7-alpine
 
 # Copy just the application to this new image
 ENV APP_DIR /app
