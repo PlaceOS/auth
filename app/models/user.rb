@@ -18,21 +18,21 @@ class User
 
   field :name,            type: String
   field :nickname,        type: String
-  field :email,           type: String
+  field :email,           type: String, index: true
   field :phone,           type: String
   field :country,         type: String
   field :image,           type: String
   field :ui_theme,        type: String
   field :misc,            type: String
 
-  field :login_name,      type: String
-  field :staff_id,        type: String
+  field :login_name,      type: String, index: true
+  field :staff_id,        type: String, index: true
   field :first_name,      type: String
   field :last_name,       type: String
   field :building,        type: String
 
   field :password_digest, type: String
-  field :email_digest,    type: String
+  field :email_digest,    type: String, index: true
 
   field :card_number,     type: String
   field :deleted,         type: Boolean, default: false
@@ -52,15 +52,21 @@ class User
   has_many :access_grants, class_name: 'Doorkeeper::AccessGrant', dependent: :destroy, foreign_key: :resource_owner_id
 
   def self.find_by_email(authority, email)
-    User.where(authority_id: authority, email: /#{email}/i).first
+    email_digest = Digest::MD5.hexdigest(email.downcase)
+    User.where(authority_id: authority, email_digest: email_digest).first
   end
 
-  field :sys_admin, default: false
+  field :sys_admin, default: false, index: true
   field :support,   default: false
 
   before_save :build_name, if: ->(model) { model.first_name.present? }
   def build_name
     self.name = "#{self.first_name} #{self.last_name}"
+  end
+
+  before_save :hash_email, if: ->(model) { model.email.present? }
+  def hash_email
+    self.email_digest = Digest::MD5.hexdigest(model.email.downcase)
   end
 
   # PASSWORD ENCRYPTION::
