@@ -66,7 +66,7 @@ class User
 
   before_save :hash_email, if: ->(model) { model.email.present? }
   def hash_email
-    self.email_digest = Digest::MD5.hexdigest(model.email.downcase)
+    self.email_digest = Digest::MD5.hexdigest(self.email.downcase)
   end
 
   # PASSWORD ENCRYPTION::
