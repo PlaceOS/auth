@@ -32,6 +32,7 @@ gem 'bcrypt'
 gem 'sentry-raven'
 gem 'mono_logger'
 gem 'lograge'
+gem 'logstash-event'
 
 # Runtime debugging
 gem 'rbtrace'
