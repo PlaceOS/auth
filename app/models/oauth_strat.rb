@@ -8,7 +8,7 @@ class OauthStrat
 
   field :name,           type: String
 
-  belongs_to :authority
+  belongs_to :authority, index: true
 
   field :client_id,        type: String
   field :client_secret,    type: String

@@ -8,7 +8,7 @@ class LdapStrat
 
   field :name,       type: String  # (used as title)
 
-  belongs_to :authority
+  belongs_to :authority, index: true
 
   field :port,        type: Integer, default: 636
   field :auth_method, type: String,  default: :ssl

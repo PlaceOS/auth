@@ -46,7 +46,7 @@ class User
   field :expires_at,      type: Integer
   field :expires,         type: Boolean
 
-  belongs_to :authority
+  belongs_to :authority, index: true
   has_many :authentications, dependent: :destroy
   has_many :access_tokens, class_name: 'Doorkeeper::AccessToken', dependent: :destroy, foreign_key: :resource_owner_id
   has_many :access_grants, class_name: 'Doorkeeper::AccessGrant', dependent: :destroy, foreign_key: :resource_owner_id

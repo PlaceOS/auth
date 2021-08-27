@@ -7,7 +7,7 @@ class AdfsStrat
   table_config name: 'adfs_strat'
 
   field :name, type: String
-  belongs_to :authority
+  belongs_to :authority, index: true
 
   field :issuer, type: String, default: :aca
   field :idp_sso_target_url_runtime_params, type: Hash
