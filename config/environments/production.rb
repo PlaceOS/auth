@@ -4,10 +4,15 @@
 require 'mono_logger'
 require 'lograge'
 require 'omniauth'
+require 'multiio'
+require 'socket'
 
 # Replace the default JSON parser
 require 'json'
 require 'yajl/json_gem'
+
+UDP_LOG_HOST = ENV["UDP_LOG_HOST"] || ENV["LOGSTASH_HOST"]
+UDP_LOG_PORT = ENV["UDP_LOG_PORT"] || ENV["LOGSTASH_PORT"]
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -74,8 +79,21 @@ Rails.application.configure do
   # Custom logging
   STDOUT.sync = true
   STDERR.sync = true
-  logger = MonoLogger.new(STDOUT)
+
+  # Output to both UDP and STDOUT
+  outputs = [STDOUT]
+  if UDP_LOG_HOST && UDP_LOG_PORT
+    socket = UDPSocket.new
+    socket.connect(UDP_LOG_HOST, UDP_LOG_PORT.to_i)
+    outputs << socket
+  end
+
+  # Only output the message (in logstash format)
+  logger = MonoLogger.new(MultiIO.new(*outputs))
   logger.level = MonoLogger::INFO
+  logger.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n" }
+
+  # configure lograge and logstash
   config.logger = logger
   config.lograge.logger = logger
   Lograge.logger = logger
