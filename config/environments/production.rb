@@ -43,7 +43,7 @@ Rails.application.configure do
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
-  config.log_level = :debug
+  config.log_level = :info
 
   # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
@@ -75,6 +75,7 @@ Rails.application.configure do
   STDOUT.sync = true
   STDERR.sync = true
   logger = MonoLogger.new(STDOUT)
+  logger.level = MonoLogger::INFO
   config.logger = logger
   config.lograge.logger = logger
   Lograge.logger = logger
@@ -87,6 +88,7 @@ Rails.application.configure do
       user_id: (user || "anonymous")
     }
   end
+  config.lograge.formatter = Lograge::Formatters::Logstash.new
 
   # Ensures only our lograge error is logged
   module ActionDispatch
