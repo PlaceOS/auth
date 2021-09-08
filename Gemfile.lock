@@ -22,9 +22,9 @@ GIT
 
 GIT
   remote: https://github.com/place-labs/doorkeeper-rethinkdb.git
-  revision: 208df2a8d665cd22f009d9153e304cc0f06176d7
+  revision: 863b80d5b5d7a47f3a9d4a9766fe0999d8bc66e9
   specs:
-    doorkeeper-rethinkdb (1.1.4)
+    doorkeeper-rethinkdb (1.1.5)
       doorkeeper (>= 4.0.0, < 6)
       nobrainer (>= 0.33.0, < 1)
 
