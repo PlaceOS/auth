@@ -145,3 +145,10 @@ This will return
    "refresh_token": "8257e65c97202ed1726cf9571600918f3bffb2544b26e00a61df9897668c33a1"
   }
  ```
+
+## Revoking Refresh Tokens
+
+```
+POST /auth/oauth/revoke?client_id=<client_id>&client_secret=<secret>
+token=<refresh-token>
+```
