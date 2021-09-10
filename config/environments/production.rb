@@ -4,7 +4,6 @@
 require 'mono_logger'
 require 'lograge'
 require 'omniauth'
-require 'multiio'
 require 'socket'
 
 # Replace the default JSON parser
@@ -13,6 +12,24 @@ require 'yajl/json_gem'
 
 UDP_LOG_HOST = ENV["UDP_LOG_HOST"] || ENV["LOGSTASH_HOST"]
 UDP_LOG_PORT = ENV["UDP_LOG_PORT"] || ENV["LOGSTASH_PORT"]
+
+# So we can log to two places at once (STDOUT and Socket)
+class MultiIO
+  def self.delegate_all
+    IO.methods.each do |m|
+      define_method(m) do |*args|
+        ret = nil
+        @targets.each { |t| ret = t.__send__(m, *args) }
+        ret
+      end
+    end
+  end
+
+  def initialize(*targets)
+    @targets = targets
+    MultiIO.delegate_all
+  end
+end
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.

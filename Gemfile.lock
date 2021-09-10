@@ -203,11 +203,10 @@ GEM
     msgpack (1.4.2)
     multi_json (1.15.0)
     multi_xml (0.6.0)
-    multiio (0.1.0)
     multipart-post (2.1.1)
     net-ldap (0.17.0)
     nio4r (2.5.8)
-    nobrainer (0.34.1)
+    nobrainer (0.36.0)
       activemodel (>= 4.1.0)
       activesupport (>= 4.1.0)
       middleware (~> 0.1.0)
@@ -355,7 +354,6 @@ DEPENDENCIES
   lograge
   logstash-event
   mono_logger
-  multiio
   nobrainer
   omniauth (~> 1.9)
   omniauth-ldap2

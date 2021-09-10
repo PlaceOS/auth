@@ -33,7 +33,6 @@ gem 'sentry-raven'
 gem 'mono_logger'
 gem 'lograge'
 gem 'logstash-event'
-gem 'multiio'
 
 # Runtime debugging
 gem 'rbtrace'
