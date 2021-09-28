@@ -155,7 +155,7 @@ module Auth
       # do we want to redirect externally?
       path = params.permit(:continue)[:continue] || '/'
 
-      if path.include?("://")
+      if path.include?("//")
           authority = current_authority
           uri = Addressable::URI.parse(path)
 
