@@ -156,17 +156,17 @@ module Auth
       path = params.permit(:continue)[:continue] || '/'
 
       if !path.start_with?("/") || path.include?("//")
-          authority = current_authority
-          uri = Addressable::URI.parse(path)
+        authority = current_authority
+        uri = Addressable::URI.parse(path)
 
-          if uri.domain == authority.domain
-            path = "#{uri.request_uri}#{uri.fragment ? "##{uri.fragment}" : nil}"
-          else
-            path = authority.logout_url
-            if path.include?("continue=")
-              path = URI.decode_www_form_component(path.split("continue=", 2)[-1])
-            end
+        if uri.domain == authority.domain
+          path = "#{uri.request_uri}#{uri.fragment ? "##{uri.fragment}" : nil}"
+        else
+          path = authority.logout_url
+          if path.include?("continue=")
+            path = URI.decode_www_form_component(path.split("continue=", 2)[-1])
           end
+        end
       end
 
       redirect_to path
