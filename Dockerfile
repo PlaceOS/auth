@@ -19,6 +19,7 @@ COPY Gemfile* $APP_DIR/
 RUN bundle config set without 'test:assets'
 RUN bundle config --global frozen 1 \
     && bundle install -j4 --retry 3 --path=vendor/bundle \
+    && bundle binstubs puma --force \
     # Remove unneeded files (cached *.gem, *.o, *.c)
     && rm -rf vendor/bundle/ruby/2.7.0/cache/*.gem \
     && find vendor/bundle/ruby/2.7.0/gems/ -name "*.c" -delete \
@@ -54,10 +55,11 @@ ENV USER=appuser
 # See https://stackoverflow.com/a/55757473/12429735RUN
 RUN adduser -D -g "" -h "/nonexistent" -s "/sbin/nologin" -H -u "${UID}" "${USER}"
 RUN chown appuser:appuser -R /app/tmp
+RUN bundle binstubs bundler --force
 
 # Use an unprivileged user.
 USER appuser:appuser
 
 EXPOSE 8080
 HEALTHCHECK CMD wget --no-verbose -q --spider http://0.0.0.0:8080/auth/authority?health=true
-ENTRYPOINT rm -rf /app/tmp/pids/server.pid && ./bin/rails s -b 0.0.0.0 -p 8080
+ENTRYPOINT ./bin/puma -b tcp://0.0.0.0:8080
