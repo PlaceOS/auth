@@ -28,6 +28,7 @@ module Auth
             expires: 1.day.from_now.to_i
           },
           httponly: true,
+          same_site: :none,
           path: '/auth'   # only sent to calls at this path
         }
         value[:secure] = USE_SSL
