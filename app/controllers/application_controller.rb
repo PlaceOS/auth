@@ -1,9 +1,12 @@
 # encoding: UTF-8
 
 require 'jwt'
+require 'net/http'
 
 class ApplicationController < ActionController::Base
   skip_before_action :verify_authenticity_token
+
+  PLACE_URI = ENV["PLACE_URI"].presence || abort("PLACE_URI not in environment")
 
   PUBLIC_KEY = OpenSSL::PKey::RSA.new(Doorkeeper::JWT.configuration.secret_key).public_key
 
@@ -16,6 +19,23 @@ class ApplicationController < ActionController::Base
 
   def get_jwt
     return @jwt_token if @jwt_token
+
+    if (token = request.headers["X-API-Key"])
+      uri = URI(PLACE_URI)
+      uri.path = "/api/engine/v2/api_keys/inspect"
+
+      # build request
+      req = Net::HTTP::Get.new(uri)
+      req["Host"] = request.headers["Host"]
+      req["X-API-Key"] = request.headers["X-API-Key"]
+
+      # check API key
+      res = Net::HTTP.request(req)
+      if res.code == 200
+        @jwt_token = JSON.parse(res.body)
+        return @jwt_token
+      end
+    end
 
     token = request.headers["Authorization"]
     if token
