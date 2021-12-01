@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Define the various storage providers you would like to upload to here.
 #   Amazon S3 and Google are the only fully featured providers

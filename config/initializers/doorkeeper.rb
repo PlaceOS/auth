@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'set'
 require 'uri'
 require 'base64'
@@ -65,7 +67,7 @@ Doorkeeper.configure do
   # username and password authentication for local auth
   resource_owner_from_credentials do |_routes|
     user = User.find_by_email(Authority.find_by_domain(request.host)&.id, params[:username])
-    user if user && user.authenticate(params[:password])
+    user if user&.authenticate(params[:password])
   end
 
   # Issue access tokens with refresh token (disabled by default)

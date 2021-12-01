@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module UserHelper
   def remove_session
     cookies.delete(:user,   path: '/auth')

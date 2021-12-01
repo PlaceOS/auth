@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'multi_json'
 require 'jwt'
 require 'omniauth/strategies/oauth2'
@@ -69,9 +71,7 @@ module OmniAuth
       end
 
       def access_token_options
-        options.access_token_options.each_with_object({}) do |(k, v), h|
-          h[k.to_sym] = v
-        end
+        options.access_token_options.transform_keys(&:to_sym)
       end
 
       # https://github.com/omniauth/omniauth/blob/ef7f7c2349e5cc2da5eda8ab1b1308a46685a5f5/lib/omniauth/strategy.rb#L438
@@ -89,7 +89,7 @@ module OmniAuth
         required_matches.each do |field, options|
           checking = Array(inf[field.to_s])
           matches = checking & options
-          if matches.length == 0
+          if matches.length.zero?
             match = false
             break
           end

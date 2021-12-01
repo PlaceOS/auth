@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This removes any database entries that have a ttl column and have expired
 Thread.new do
   past = 30.years.ago.to_i

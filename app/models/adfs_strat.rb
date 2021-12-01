@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AdfsStrat
   include NoBrainer::Document
   include AuthTimestamps

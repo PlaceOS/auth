@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Auth
   class SignupsController < CoauthController
     def show
@@ -51,7 +53,7 @@ module Auth
           head :forbidden
         end
       end
-    end # def create
+    end
 
     protected
 

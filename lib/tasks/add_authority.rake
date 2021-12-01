@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :domain do
   # Usage: rake "domain:add_authority[Name of Site,https://domain, support email, support pass]"
   desc 'Generates an authority for the current domain'

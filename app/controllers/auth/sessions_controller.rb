@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'net/http'
 require 'uri'
 require 'set'
@@ -25,7 +27,7 @@ module Auth
 
       user = User.find_by_email(authority.id, details[:email])
 
-      if user && user.authenticate(details[:password])
+      if user&.authenticate(details[:password])
         path = details[:continue] || cookies.encrypted[:continue]
         remove_session
         new_session(user)

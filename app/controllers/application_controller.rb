@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'jwt'
 require 'net/http'
 
@@ -8,7 +10,7 @@ class ApplicationController < ActionController::Base
 
   PUBLIC_KEY = OpenSSL::PKey::RSA.new(Doorkeeper::JWT.configuration.secret_key).public_key
 
-  SENTRY_CONFIGURED = !!ENV['SENTRY_DSN']
+  SENTRY_CONFIGURED = !ENV['SENTRY_DSN'].nil?
   before_action :set_raven_context if SENTRY_CONFIGURED
 
   protected
@@ -39,12 +41,11 @@ class ApplicationController < ActionController::Base
     token = request.headers['Authorization']
     if token
       token = token.split('Bearer ')[1].rstrip
-      token = nil unless token.presence
     else
       token = params['bearer_token']
-      token.strip if token
-      token = nil unless token.presence
+      token&.strip
     end
+    token = nil unless token.presence
 
     @jwt_token = JWT.decode token, get_public_key, true, { algorithm: 'RS256' } if token
   end

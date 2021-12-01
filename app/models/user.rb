@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'email_validator'
 require 'digest/md5'
 require 'bcrypt'
@@ -12,7 +14,7 @@ class User
   PUBLIC_DATA = { only: %i[
     id email_digest nickname name first_name last_name
     country building created_at
-  ] }
+  ] }.freeze
 
   field :name,            type: String
   field :nickname,        type: String

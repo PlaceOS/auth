@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Remove the locks from the logger
 require 'mono_logger'
 require 'lograge'
@@ -90,11 +92,11 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
 
   # Custom logging
-  STDOUT.sync = true
-  STDERR.sync = true
+  $stdout.sync = true
+  $stderr.sync = true
 
   # Output to both UDP and STDOUT
-  outputs = [STDOUT]
+  outputs = [$stdout]
   if UDP_LOG_HOST && UDP_LOG_PORT
     socket = UDPSocket.new
     socket.connect(UDP_LOG_HOST, UDP_LOG_PORT.to_i)

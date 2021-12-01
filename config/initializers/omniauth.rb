@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'omniauth'
 
 Rails.application.config.session_store :cookie_store, key: '_coauth_session'

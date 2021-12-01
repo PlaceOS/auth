@@ -1,10 +1,16 @@
+# frozen_string_literal: true
+
 require 'omniauth-saml'
 
 ::OneLogin::RubySaml::Attributes.single_value_compatibility = false
-class ::OneLogin::RubySaml::Attributes
-  @@single_value_compatibility = false
-  def multi(name)
-    attributes[canonize_name(name)].try { |attr| attr.length == 1 ? attr.first : attr.join(',') }
+module ::OneLogin
+  module RubySaml
+    class Attributes
+      @@single_value_compatibility = false
+      def multi(name)
+        attributes[canonize_name(name)].try { |attr| attr.length == 1 ? attr.first : attr.join(',') }
+      end
+    end
   end
 end
 
