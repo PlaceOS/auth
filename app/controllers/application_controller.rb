@@ -23,15 +23,18 @@ class ApplicationController < ActionController::Base
     if (token = request.headers["X-API-Key"])
       uri = URI(PLACE_URI)
       uri.path = "/api/engine/v2/api_keys/inspect"
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = uri.instance_of? URI::HTTPS
 
       # build request
-      req = Net::HTTP::Get.new(uri)
+      req = Net::HTTP::Get.new(uri.request_uri)
       req["Host"] = request.headers["Host"]
+      req["Accept"] = "application/json"
       req["X-API-Key"] = request.headers["X-API-Key"]
 
       # check API key
-      res = Net::HTTP.request(req)
-      if res.code == 200
+      res = http.request(req)
+      if res.is_a?(Net::HTTPSuccess)
         @jwt_token = JSON.parse(res.body)
         return @jwt_token
       end
@@ -40,11 +43,11 @@ class ApplicationController < ActionController::Base
     token = request.headers["Authorization"]
     if token
       token = token.split("Bearer ")[1].rstrip
-      token = nil if token.empty?
+      token = nil unless token.presence
     else
       token = params["bearer_token"]
       token.strip if token
-      token = nil if token.empty?
+      token = nil unless token.presence
     end
 
     if token
