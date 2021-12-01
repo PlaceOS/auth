@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 require 'set'
 require 'uri'
 require 'base64'
@@ -14,63 +12,60 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the
   # resource owner is authenticated or not
-  resource_owner_authenticator do |routes|
+  resource_owner_authenticator do |_routes|
     # We use cookies signed instead of session as then we can limit
     # the cookie to particular paths (i.e. /auth)
-    begin
-      cookie = cookies.encrypted[:user]
-      user = User.find?(cookie['id']) if cookie && Time.now.to_i < cookie['expires']
-      unless user
-        current_authority = Authority.find_by_domain(request.host)
-        login_url = current_authority.login_url
-        redirect_to(login_url.gsub("{{url}}", URI.encode_www_form_component(request.original_fullpath)))
-      end
-      user
-    rescue TypeError
-      cookies.delete(:user,   path: '/auth')
-      cookies.delete(:social, path: '/auth')
-      cookies.delete(:continue, path: '/auth')
+
+    cookie = cookies.encrypted[:user]
+    user = User.find?(cookie['id']) if cookie && Time.now.to_i < cookie['expires']
+    unless user
       current_authority = Authority.find_by_domain(request.host)
       login_url = current_authority.login_url
-      redirect_to(login_url.gsub("{{url}}", URI.encode_www_form_component(request.original_fullpath)))
+      redirect_to(login_url.gsub('{{url}}', URI.encode_www_form_component(request.original_fullpath)))
     end
+    user
+  rescue TypeError
+    cookies.delete(:user,   path: '/auth')
+    cookies.delete(:social, path: '/auth')
+    cookies.delete(:continue, path: '/auth')
+    current_authority = Authority.find_by_domain(request.host)
+    login_url = current_authority.login_url
+    redirect_to(login_url.gsub('{{url}}', URI.encode_www_form_component(request.original_fullpath)))
   end
 
   # restrict the access to the web interface for adding
   # oauth authorized applications
   if Rails.env.production?
-    admin_authenticator do |routes|
+    admin_authenticator do |_routes|
       admin = begin
         user = User.find(cookies.encrypted[:user]['id'])
         user.sys_admin == true
-      rescue
+      rescue StandardError
         false
       end
       render nothing: true, status: :not_found unless admin
     end
   else
-    admin_authenticator do |routes|
+    admin_authenticator do |_routes|
       true
     end
   end
 
   # Skip authorization only if the app is owned by us
   if Rails.env.production?
-    skip_authorization do |resource_owner, client|
+    skip_authorization do |_resource_owner, client|
       client.application.skip_authorization
     end
   else
-    skip_authorization do |resource_owner, client|
+    skip_authorization do |_resource_owner, _client|
       true
     end
   end
 
   # username and password authentication for local auth
-  resource_owner_from_credentials do |routes|
+  resource_owner_from_credentials do |_routes|
     user = User.find_by_email(Authority.find_by_domain(request.host)&.id, params[:username])
-    if user && user.authenticate(params[:password])
-      user
-    end
+    user if user && user.authenticate(params[:password])
   end
 
   # Issue access tokens with refresh token (disabled by default)
@@ -85,7 +80,7 @@ Doorkeeper.configure do
   access_token_generator '::Doorkeeper::JWT'
 
   force_ssl_in_redirect_uri false
-  grant_flows %w(authorization_code client_credentials implicit password)
+  grant_flows %w[authorization_code client_credentials implicit password]
 end
 
 Doorkeeper::JWT.configure do
@@ -164,7 +159,7 @@ Doorkeeper::JWT.configure do
     VjaMgjzVJqqYozNT/74pE/b9UjYyMzO/EhrjUmcwriMMan/vTbYoBMYWvGoy536r
     4n455vizig2c4/sxU5yu9AF9Dv+qNsGCx2e9uUOTDUlHM9NXwxU9rQ==
     -----END RSA PRIVATE KEY-----
-    KEY
+  KEY
   secret_key key
 
   # Specify encryption type (https://github.com/progrium/ruby-jwt)

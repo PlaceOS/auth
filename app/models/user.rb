@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 require 'email_validator'
 require 'digest/md5'
 require 'bcrypt'
@@ -11,10 +9,10 @@ class User
 
   table_config name: 'user'
 
-  PUBLIC_DATA = {only: [
-    :id, :email_digest, :nickname, :name, :first_name, :last_name,
-    :country, :building, :created_at
-  ]}
+  PUBLIC_DATA = { only: %i[
+    id email_digest nickname name first_name last_name
+    country building created_at
+  ] }
 
   field :name,            type: String
   field :nickname,        type: String
@@ -38,7 +36,7 @@ class User
   field :deleted,         type: Boolean, default: false
 
   # typically LDAP groups
-  field :groups,          type: Array, default: ->{ [] }
+  field :groups,          type: Array, default: -> { [] }
 
   # User credentials
   field :access_token,    type: String
@@ -61,17 +59,18 @@ class User
 
   before_save :build_name, if: ->(model) { model.first_name.present? }
   def build_name
-    self.name = "#{self.first_name} #{self.last_name}"
+    self.name = "#{first_name} #{last_name}"
   end
 
   before_save :hash_email, if: ->(model) { model.email.present? }
   def hash_email
-    self.email_digest = Digest::MD5.hexdigest(self.email.downcase)
+    self.email_digest = Digest::MD5.hexdigest(email.downcase)
   end
 
   # PASSWORD ENCRYPTION::
   # ---------------------
   attr_reader :password
+
   validates_confirmation_of :password
 
   if respond_to?(:attributes_protected_by_default)
@@ -81,8 +80,8 @@ class User
   end
 
   def authenticate(unencrypted_password)
-    self.password == unencrypted_password ? self : false
-  rescue
+    password == unencrypted_password ? self : false
+  rescue StandardError
     # accounts created with social logins will have an empty password_digest
     # which causes BCrypt to raise an InvalidHash exception
     false
@@ -90,14 +89,15 @@ class User
 
   # Encrypts the password into the password_digest attribute.
   def password
-    return nil unless @password.present? || self.password_digest.present?
-    @password ||= Password.new(self.password_digest)
+    return nil unless @password.present? || password_digest.present?
+
+    @password ||= Password.new(password_digest)
   end
 
   def password=(new_password)
-    if !new_password.present?
+    unless new_password.present?
       @password = nil
-      self.password_digest = ""
+      self.password_digest = ''
       return new_password
     end
 
@@ -108,7 +108,7 @@ class User
   # END PASSWORD METHODS
 
   # Make reference to the email= function of the model
-  alias_method :assign_email, :email=
+  alias assign_email email=
   def email=(new_email)
     super(new_email)
 
@@ -116,10 +116,8 @@ class User
     self.email_digest = new_email ? Digest::MD5.hexdigest(new_email.downcase) : nil
   end
 
-  protected
-
   # Validations
-  validates :email, :email => true
+  validates :email, email: true
   validates :password, length: { minimum: 6, message: 'must be at least 6 characters' }, allow_blank: true
   validates_each :email do |record, attr_name, value|
     user = User.find_by_email(record.authority_id, value)

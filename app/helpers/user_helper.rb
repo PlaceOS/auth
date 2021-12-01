@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 module UserHelper
   def remove_session
     cookies.delete(:user,   path: '/auth')
@@ -10,9 +8,11 @@ module UserHelper
 
   def current_user
     return @current_user if @current_user
+
     user = cookies.encrypted[:user]
     return nil unless user
     return remove_session if Time.now.to_i > user['expires']
+
     @current_user = User.find?(user['id']) || remove_session
   end
 

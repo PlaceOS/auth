@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 require 'addressable/uri'
 
 class Authority
@@ -13,10 +11,10 @@ class Authority
   field :description, type: String
   field :login_url,   type: String, default: '/login?continue={{url}}'
   field :logout_url,  type: String, default: '/auth/logout'
-  field :internals,   type: Hash,   default: ->{ {} }
-  field :config,      type: Hash,   default: ->{ {} }
+  field :internals,   type: Hash,   default: -> { {} }
+  field :config,      type: Hash,   default: -> { {} }
 
-  validates :name,   presence: true
+  validates :name, presence: true
 
   # Ensure we are only saving the host
   def domain=(dom)
@@ -30,8 +28,8 @@ class Authority
 
   def as_json(options = {})
     super.tap do |json|
-      json[:login_url] = self.login_url
-      json[:logout_url] = self.logout_url
+      json[:login_url] = login_url
+      json[:logout_url] = logout_url
     end
   end
 
@@ -41,14 +39,14 @@ class Authority
   DEFAULT_BUCKET ||= ENV['DEFAULT_BUCKET']
 
   def get_bucket
-    self.internals["storage_bucket"] || DEFAULT_BUCKET
+    internals['storage_bucket'] || DEFAULT_BUCKET
   end
 
   def get_storage
     config = ::Condo::Configuration
 
-    if self.internals["storage"]
-      storage = self.internals["storage"].deep_symbolize_keys
+    if internals['storage']
+      storage = internals['storage'].deep_symbolize_keys
       config.dynamic_residence(storage[:name], storage)
     else
       # Default storage service

@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 module Auth
   class SignupsController < CoauthController
     def show
@@ -34,7 +32,7 @@ module Auth
           end
 
           if user.save
-            auth = Authentication.new({provider: provider, uid: uid})
+            auth = Authentication.new({ provider: provider, uid: uid })
             auth.user_id = user.id
             auth.save
 

@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 require 'omniauth-ldap'
 require 'omniauth/strategies/ldap'
 
@@ -8,9 +6,7 @@ module OmniAuth
     class GenericLdap < OmniAuth::Strategies::LDAP
       include ::CurrentAuthorityHelper
 
-
       option :name, 'generic_ldap'
-
 
       def request_phase
         authid = request.params['id']

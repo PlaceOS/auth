@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-require "active_support/all"
+require 'active_support/all'
 
 module AuthTimestamps
   extend ActiveSupport::Concern
 
   included do
-    field :created_at, :type => Integer
-    field :updated_at, :type => Integer
+    field :created_at, type: Integer
+    field :updated_at, type: Integer
   end
 
-  def _create(options={})
+  def _create(options = {})
     now = Time.now.to_i
     self.created_at = now unless created_at_changed?
     self.updated_at = now unless updated_at_changed?
@@ -27,6 +27,6 @@ module AuthTimestamps
   end
 
   def touch
-    update!(:updated_at => Time.now.to_i)
+    update!(updated_at: Time.now.to_i)
   end
 end

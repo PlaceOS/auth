@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 require 'set'
 
 class UploadsController < ApplicationController
@@ -15,7 +13,7 @@ class UploadsController < ApplicationController
   def check_authenticated
     payload, header = get_jwt
     if payload
-      head(:forbidden) if (request.host != payload["aud"]) && Rails.env.production?
+      head(:forbidden) if (request.host != payload['aud']) && Rails.env.production?
     else
       head(:unauthorized)
     end
@@ -26,7 +24,7 @@ class UploadsController < ApplicationController
   # We forward it to our current user method
   condo_callback :resident_id do
     payload, header = get_jwt
-    payload["sub"]
+    payload['sub']
   end
 
   #
@@ -35,7 +33,7 @@ class UploadsController < ApplicationController
   condo_callback :upload_complete do |upload|
     upload.remove_entry
     true
-    # TODO:: We should mark the upload as complete and ready for processing
+    # TODO: : We should mark the upload as complete and ready for processing
     # We can time stamp with last processed to ensure processing
 
     # Remove if already converting
@@ -70,7 +68,7 @@ class UploadsController < ApplicationController
     current_authority.get_bucket
   end
 
-  condo_callback :select_residence do |config, resident_id, upload|
+  condo_callback :select_residence do |_config, _resident_id, _upload|
     current_authority.get_storage
   end
 
@@ -83,7 +81,7 @@ class UploadsController < ApplicationController
   # Defined here: https://github.com/cotag/Condominios/blob/5d1b297853e89c91afadcfeb48ab3f09ccff28b5/lib/condo.rb#L111
   # Mime types set here: https://github.com/cotag/Condominios/blob/5d1b297853e89c91afadcfeb48ab3f09ccff28b5/lib/condo/strata/amazon_s3.rb#L101
   # and https://github.com/cotag/Condominios/blob/5d1b297853e89c91afadcfeb48ab3f09ccff28b5/lib/condo/strata/open_stack_swift.rb#L122
-  condo_callback :object_options do |upload_object|
+  condo_callback :object_options do |_upload_object|
     file_mime = params[:file_mime].presence
     if file_mime
       {

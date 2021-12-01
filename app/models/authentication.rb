@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 class Authentication
   include NoBrainer::Document
   include AuthTimestamps
@@ -22,10 +20,9 @@ class Authentication
 
   # Where auth is https://github.com/omniauth/omniauth/wiki/Auth-Hash-Schema
   def self.from_omniauth(authority_id, auth)
-    self.find?("auth-#{authority_id}-#{auth['provider']}-#{auth['uid']}")
+    find?("auth-#{authority_id}-#{auth['provider']}-#{auth['uid']}")
   end
 
-  #
   def self.create_with_omniauth(authority_id, auth, user_id)
     authen = Authentication.new
     authen.authority_id = authority_id
@@ -44,7 +41,7 @@ class Authentication
   end
 
   def self.before_signup_block
-    @before_signup || (->(user, provider, auth) { true })
+    @before_signup || (->(_user, _provider, _auth) { true })
   end
 
   # the after_login block gives installations the ability to perform post
@@ -54,13 +51,13 @@ class Authentication
   end
 
   def self.after_login_block
-    @after_login || (->(user, provider, auth) { nil })
+    @after_login || (->(_user, _provider, _auth) { nil })
   end
 
   protected
 
   before_create :generate_id
   def generate_id
-    self.id = "auth-#{self.authority_id}-#{self.provider}-#{self.uid}"
+    self.id = "auth-#{authority_id}-#{provider}-#{uid}"
   end
 end

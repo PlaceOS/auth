@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -16,7 +14,6 @@ Rails.application.configure do
 
   # Show full error reports.
   config.consider_all_requests_local = true
-
 
   # Enable/disable caching. By default caching is disabled.
   if Rails.root.join('tmp/caching-dev.txt').exist?
@@ -39,7 +36,6 @@ Rails.application.configure do
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
-
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true

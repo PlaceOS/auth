@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 # Remove the locks from the logger
 require 'mono_logger'
 require 'lograge'
@@ -10,8 +8,8 @@ require 'socket'
 require 'json'
 require 'yajl/json_gem'
 
-UDP_LOG_HOST = ENV["UDP_LOG_HOST"] || ENV["LOGSTASH_HOST"]
-UDP_LOG_PORT = ENV["UDP_LOG_PORT"] || ENV["LOGSTASH_PORT"]
+UDP_LOG_HOST = ENV['UDP_LOG_HOST'] || ENV['LOGSTASH_HOST']
+UDP_LOG_PORT = ENV['UDP_LOG_PORT'] || ENV['LOGSTASH_PORT']
 
 # So we can log to two places at once (STDOUT and Socket)
 class MultiIO
@@ -51,14 +49,12 @@ Rails.application.configure do
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
-
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
-
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
@@ -68,7 +64,7 @@ Rails.application.configure do
   config.log_level = :info
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
+  config.log_tags = [:request_id]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -108,7 +104,7 @@ Rails.application.configure do
   # Only output the message (in logstash format)
   logger = MonoLogger.new(MultiIO.new(*outputs))
   logger.level = MonoLogger::INFO
-  logger.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n" }
+  logger.formatter = proc { |_severity, _datetime, _progname, msg| "#{msg}\n" }
 
   # configure lograge and logstash
   config.logger = logger
@@ -118,9 +114,9 @@ Rails.application.configure do
   config.lograge.enabled = true
   config.lograge.base_controller_class = ['ActionController::API', 'ActionController::Base']
   config.lograge.custom_payload do |controller|
-    user = controller.respond_to?(:doorkeeper_token, true) ? controller.__send__(:doorkeeper_token) : "anonymous"
+    user = controller.respond_to?(:doorkeeper_token, true) ? controller.__send__(:doorkeeper_token) : 'anonymous'
     {
-      user_id: (user || "anonymous")
+      user_id: (user || 'anonymous')
     }
   end
   config.lograge.formatter = Lograge::Formatters::Logstash.new
@@ -128,8 +124,7 @@ Rails.application.configure do
   # Ensures only our lograge error is logged
   module ActionDispatch
     class DebugExceptions
-      def log_error(request, wrapper)
-      end
+      def log_error(request, wrapper); end
     end
   end
 end

@@ -1,12 +1,10 @@
-# encoding: UTF-8
-
 require 'net/http'
 require 'uri'
 require 'set'
 
 module Auth
   class SessionsController < CoauthController
-    SKIP_PARAMS = Set.new(['urls', 'Website']) # Params we don't want to send to register
+    SKIP_PARAMS = Set.new(%w[urls Website]) # Params we don't want to send to register
 
     # Inline login
     def new
@@ -17,7 +15,7 @@ module Auth
 
       # Support generic auth sources
       uri = "#{uri}?id=#{details[:id]}" if details[:id]
-      redirect_to uri, :status => :see_other
+      redirect_to uri, status: :see_other
     end
 
     # Local login
@@ -39,7 +37,7 @@ module Auth
           head :accepted
         end
 
-        self.instance_exec user, "internal", nil, &Authentication.after_login_block
+        instance_exec user, 'internal', nil, &Authentication.after_login_block
       else
         login_failure(details)
       end
@@ -67,7 +65,7 @@ module Auth
 
         Authentication.create_with_omniauth(authority.id, auth, user.id)
         redirect_to path
-        self.instance_exec user, auth['provider'], auth, &Authentication.after_login_block
+        instance_exec user, auth['provider'], auth, &Authentication.after_login_block
 
       # new auth and new user
       elsif auth_model.nil?
@@ -75,9 +73,7 @@ module Auth
 
         # Use last name and first name by preference
         fn = args[:first_name]
-        if fn && !fn.empty?
-          user.name = "#{fn} #{args[:last_name]}"
-        end
+        user.name = "#{fn} #{args[:last_name]}" if fn && !fn.empty?
 
         user.authority_id = authority.id
 
@@ -92,7 +88,7 @@ module Auth
         # now the user record is initialised (but not yet saved), give
         # the installation the opportunity to modify the user record or
         # reject the signup outright
-        result = self.instance_exec user, auth['provider'], auth, &Authentication.before_signup_block
+        result = instance_exec user, auth['provider'], auth, &Authentication.before_signup_block
         logger.info "Creating new user: #{result.inspect}\n#{user.inspect}"
 
         if result != false && user.save
@@ -106,7 +102,7 @@ module Auth
           # redirect the user to the page they were trying to access and
           # run any custom post-login actions
           redirect_to path
-          self.instance_exec user, auth['provider'], auth, &Authentication.after_login_block
+          instance_exec user, auth['provider'], auth, &Authentication.after_login_block
         else
           info = "User creation failed with #{auth.inspect}"
           errors = "User model errors: #{user.errors.messages}"
@@ -140,8 +136,8 @@ module Auth
           user.save
           new_session(user)
           redirect_to path
-          self.instance_exec user, auth['provider'], auth, &Authentication.after_login_block
-        rescue => e
+          instance_exec user, auth['provider'], auth, &Authentication.after_login_block
+        rescue StandardError => e
           logger.error "Error with user account. Possibly due to a database failure:\nAuth model: #{auth_model.inspect}\n#{e.inspect}"
           raise e
         end
@@ -155,7 +151,7 @@ module Auth
       # do we want to redirect externally?
       path = params.permit(:continue)[:continue] || '/'
 
-      if !path.start_with?("/") || path.include?("//")
+      if !path.start_with?('/') || path.include?('//')
         authority = current_authority
         uri = Addressable::URI.parse(path)
 
@@ -163,18 +159,14 @@ module Auth
           path = "#{uri.request_uri}#{uri.fragment ? "##{uri.fragment}" : nil}"
         else
           path = authority.logout_url
-          if path.include?("continue=")
-            path = URI.decode_www_form_component(path.split("continue=", 2)[-1])
-          end
+          path = URI.decode_www_form_component(path.split('continue=', 2)[-1]) if path.include?('continue=')
         end
       end
 
       redirect_to path
     end
 
-
     protected
-
 
     def safe_params(authinfo)
       ::ActionController::Parameters.new(authinfo).permit(
@@ -185,13 +177,15 @@ module Auth
     end
 
     def auth_params_string(authinfo)
-      authinfo.map { |k,v| "#{k}=#{URI.encode_www_form_component(v)}" unless SKIP_PARAMS.include?(k)}.compact.join('&')
+      authinfo.map do |k, v|
+        "#{k}=#{URI.encode_www_form_component(v)}" unless SKIP_PARAMS.include?(k)
+      end.compact.join('&')
     end
 
     def login_failure(details)
       path = details[:continue]
       if path
-        # TODO:: need to add query component to indicate that the request was a failure
+        # TODO: : need to add query component to indicate that the request was a failure
         redirect_to request.referer || '/' # login failed, reload the page
       else
         head :unauthorized

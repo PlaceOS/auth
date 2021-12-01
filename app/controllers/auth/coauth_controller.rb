@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 require 'securerandom'
 
 module Auth
@@ -21,18 +19,18 @@ module Auth
     protected
 
     def new_session(user)
-        @current_user = user
-        value = {
-          value: {
-            id: user.id,
-            expires: 1.day.from_now.to_i
-          },
-          httponly: true,
-          same_site: :none,
-          path: '/auth'   # only sent to calls at this path
-        }
-        value[:secure] = USE_SSL
-        cookies.encrypted[:user] = value
+      @current_user = user
+      value = {
+        value: {
+          id: user.id,
+          expires: 1.day.from_now.to_i
+        },
+        httponly: true,
+        same_site: :none,
+        path: '/auth' # only sent to calls at this path
+      }
+      value[:secure] = USE_SSL
+      cookies.encrypted[:user] = value
     end
 
     def store_social(uid, provider)
@@ -50,7 +48,7 @@ module Auth
     end
 
     def set_continue(path)
-      if path.include?("://")
+      if path.include?('://')
         uri = Addressable::URI.parse(path)
         path = "#{uri.request_uri}#{uri.fragment ? "##{uri.fragment}" : nil}"
       end
