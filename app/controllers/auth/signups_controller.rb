@@ -3,7 +3,7 @@
 module Auth
   class SignupsController < CoauthController
     def show
-      render text: "Authentication Failed: #{params.permit(:message)[:message]}"
+      render text: "Authentication Failed"
     end
 
     def create
@@ -53,7 +53,7 @@ module Auth
           head :forbidden
         end
       end
-    end # def create
+    end
 
     protected
 
