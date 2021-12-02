@@ -1,12 +1,12 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 class Authentication
   include NoBrainer::Document
   include AuthTimestamps
 
-  table_config name: 'authentication'
+  table_config name: "authentication"
 
-  field :uid,      type: String
+  field :uid, type: String
   field :provider, type: String
 
   belongs_to :user, index: true
@@ -22,15 +22,14 @@ class Authentication
 
   # Where auth is https://github.com/omniauth/omniauth/wiki/Auth-Hash-Schema
   def self.from_omniauth(authority_id, auth)
-    self.find?("auth-#{authority_id}-#{auth['provider']}-#{auth['uid']}")
+    find?("auth-#{authority_id}-#{auth["provider"]}-#{auth["uid"]}")
   end
 
-  #
   def self.create_with_omniauth(authority_id, auth, user_id)
     authen = Authentication.new
     authen.authority_id = authority_id
-    authen.provider = auth['provider']
-    authen.uid = auth['uid']
+    authen.provider = auth["provider"]
+    authen.uid = auth["uid"]
     authen.user_id = user_id
     authen.save!
     authen
@@ -44,7 +43,7 @@ class Authentication
   end
 
   def self.before_signup_block
-    @before_signup || (->(user, provider, auth) { true })
+    @before_signup || (->(_user, _provider, _auth) { true })
   end
 
   # the after_login block gives installations the ability to perform post
@@ -54,13 +53,13 @@ class Authentication
   end
 
   def self.after_login_block
-    @after_login || (->(user, provider, auth) { nil })
+    @after_login || (->(_user, _provider, _auth) {})
   end
 
   protected
 
   before_create :generate_id
   def generate_id
-    self.id = "auth-#{self.authority_id}-#{self.provider}-#{self.uid}"
+    self.id = "auth-#{authority_id}-#{provider}-#{uid}"
   end
 end

@@ -1,14 +1,14 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 # Remove the locks from the logger
-require 'mono_logger'
-require 'lograge'
-require 'omniauth'
-require 'socket'
+require "mono_logger"
+require "lograge"
+require "omniauth"
+require "socket"
 
 # Replace the default JSON parser
-require 'json'
-require 'yajl/json_gem'
+require "json"
+require "yajl/json_gem"
 
 UDP_LOG_HOST = ENV["UDP_LOG_HOST"] || ENV["LOGSTASH_HOST"]
 UDP_LOG_PORT = ENV["UDP_LOG_PORT"] || ENV["LOGSTASH_PORT"]
@@ -44,13 +44,12 @@ Rails.application.configure do
   config.eager_load = true
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
-
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
@@ -58,7 +57,6 @@ Rails.application.configure do
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
-
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
@@ -68,7 +66,7 @@ Rails.application.configure do
   config.log_level = :info
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
+  config.log_tags = [:request_id]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -94,11 +92,11 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
 
   # Custom logging
-  STDOUT.sync = true
-  STDERR.sync = true
+  $stdout.sync = true
+  $stderr.sync = true
 
   # Output to both UDP and STDOUT
-  outputs = [STDOUT]
+  outputs = [$stdout]
   if UDP_LOG_HOST && UDP_LOG_PORT
     socket = UDPSocket.new
     socket.connect(UDP_LOG_HOST, UDP_LOG_PORT.to_i)
@@ -108,7 +106,7 @@ Rails.application.configure do
   # Only output the message (in logstash format)
   logger = MonoLogger.new(MultiIO.new(*outputs))
   logger.level = MonoLogger::INFO
-  logger.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n" }
+  logger.formatter = proc { |_severity, _datetime, _progname, msg| "#{msg}\n" }
 
   # configure lograge and logstash
   config.logger = logger
@@ -116,20 +114,23 @@ Rails.application.configure do
   Lograge.logger = logger
   OmniAuth.config.logger = logger
   config.lograge.enabled = true
-  config.lograge.base_controller_class = ['ActionController::API', 'ActionController::Base']
+  config.lograge.base_controller_class = ["ActionController::API", "ActionController::Base"]
   config.lograge.custom_payload do |controller|
     user = controller.respond_to?(:doorkeeper_token, true) ? controller.__send__(:doorkeeper_token) : "anonymous"
     {
       user_id: (user || "anonymous")
     }
   end
+
   config.lograge.formatter = Lograge::Formatters::Logstash.new
 
   # Ensures only our lograge error is logged
+  # standard:disable Lint/ConstantDefinitionInBlock
   module ActionDispatch
     class DebugExceptions
       def log_error(request, wrapper)
       end
     end
   end
+  # standard:enable Lint/ConstantDefinitionInBlock
 end

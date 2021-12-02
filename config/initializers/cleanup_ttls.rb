@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 # This removes any database entries that have a ttl column and have expired
 Thread.new do
@@ -9,15 +9,15 @@ Thread.new do
     begin
       expired = 10.minutes.ago.to_i
 
-      NoBrainer.run(:db => 'rethinkdb') { |r|
-        r.table('table_config').filter { |sys| sys["indexes"].contains('ttl') }
-      }.map { |table| table['name'] }.each do |table|
-        NoBrainer.run { |r|
-          r.table(table).between(past, expired, index: 'ttl').delete
-        }
+      NoBrainer.run(db: "rethinkdb") do |r|
+        r.table("table_config").filter { |sys| sys["indexes"].contains("ttl") }
+      end.map { |table| table["name"] }.each do |table|
+        NoBrainer.run do |r|
+          r.table(table).between(past, expired, index: "ttl").delete
+        end
       end
-    rescue => error
-      puts "error clearing expired ttl: #{error.message}"
+    rescue => e
+      puts "error clearing expired ttl: #{e.message}"
     end
   end
 end

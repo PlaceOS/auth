@@ -1,38 +1,38 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
-require 'securerandom'
+require "securerandom"
 
 module Auth
   class CoauthController < ApplicationController
     include UserHelper
     include CurrentAuthorityHelper
 
-    Rails.application.config.force_ssl = Rails.env.production? && (ENV['COAUTH_NO_SSL'].nil? || ENV['COAUTH_NO_SSL'] == 'false')
+    Rails.application.config.force_ssl = Rails.env.production? && (ENV["COAUTH_NO_SSL"].nil? || ENV["COAUTH_NO_SSL"] == "false")
     USE_SSL = Rails.application.config.force_ssl
 
     def success_path
-      '/login_success.html'
+      "/login_success.html"
     end
 
     def login_path
-      '/login'
+      "/login"
     end
 
     protected
 
     def new_session(user)
-        @current_user = user
-        value = {
-          value: {
-            id: user.id,
-            expires: 1.day.from_now.to_i
-          },
-          httponly: true,
-          same_site: :none,
-          path: '/auth'   # only sent to calls at this path
-        }
-        value[:secure] = USE_SSL
-        cookies.encrypted[:user] = value
+      @current_user = user
+      value = {
+        value: {
+          id: user.id,
+          expires: 1.day.from_now.to_i
+        },
+        secure: USE_SSL,
+        httponly: true,
+        same_site: :none,
+        path: "/auth" # only sent to calls at this path
+      }
+      cookies.encrypted[:user] = value
     end
 
     def store_social(uid, provider)
@@ -42,10 +42,10 @@ module Auth
           provider: provider,
           expires: 1.hour.from_now.to_i
         },
+        secure: USE_SSL,
         httponly: true,
-        path: '/auth'   # only sent to calls at this path
+        path: "/auth" # only sent to calls at this path
       }
-      value[:secure] = USE_SSL
       cookies.encrypted[:social] = value
     end
 
@@ -58,9 +58,9 @@ module Auth
       value = {
         value: path,
         httponly: true,
-        path: '/auth'   # only sent to calls at this path
+        secure: USE_SSL,
+        path: "/auth" # only sent to calls at this path
       }
-      value[:secure] = USE_SSL
       cookies.encrypted[:continue] = value
     end
   end

@@ -1,37 +1,35 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
-require 'omniauth-ldap'
-require 'omniauth/strategies/ldap'
+require "omniauth-ldap"
+require "omniauth/strategies/ldap"
 
 module OmniAuth
   module Strategies
     class GenericLdap < OmniAuth::Strategies::LDAP
       include ::CurrentAuthorityHelper
 
-
-      option :name, 'generic_ldap'
-
+      option :name, "generic_ldap"
 
       def request_phase
-        authid = request.params['id']
+        authid = request.params["id"]
         if authid.nil?
-          raise 'no auth definition ID provided'
+          raise "no auth definition ID provided"
         else
           set_options(authid)
         end
 
         session.clear
-        session['omniauth.auth_id'] = authid
+        session["omniauth.auth_id"] = authid
 
         super
       end
 
       def callback_phase
-        authid = session.delete 'omniauth.auth_id'
+        authid = session.delete "omniauth.auth_id"
 
         # Set out details once again
         if authid.nil?
-          raise 'no auth definition ID provided'
+          raise "no auth definition ID provided"
         else
           set_options(authid)
         end
@@ -43,7 +41,7 @@ module OmniAuth
         strat = LdapStrat.find(id)
 
         authority = current_authority.try(:id)
-        raise 'invalid authentication source' unless authority == strat.authority_id
+        raise "invalid authentication source" unless authority == strat.authority_id
 
         options.title = strat.name
         options.port = strat.port

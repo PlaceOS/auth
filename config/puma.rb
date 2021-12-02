@@ -1,9 +1,9 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
-threads_count = (ENV.fetch("RAILS_WORKER_THREADS") { 32 }).to_i
+threads_count = ENV.fetch("RAILS_WORKER_THREADS", 32).to_i
 threads threads_count, threads_count
 
-worker_count = (ENV.fetch("RAILS_WORKER_COUNT") { 4 }).to_i
+worker_count = ENV.fetch("RAILS_WORKER_COUNT", 4).to_i
 workers worker_count
 
 # We need to prevent these threads from launching until after the fork if we are

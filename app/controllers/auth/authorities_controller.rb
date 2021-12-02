@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Auth
   class AuthoritiesController < ApplicationController
@@ -8,7 +8,7 @@ module Auth
     def current
       authority = current_authority
       if authority
-        auth = authority.as_json(except: [:created_at, :internals])
+        auth = authority.as_json(except: %i[created_at internals])
         auth[:version] = "v2.0.0"
         auth[:session] = signed_in?
         begin
@@ -27,7 +27,7 @@ module Auth
       else
         # so we can use this route as a health check it will always return 200
         # if `?health` param is set and fail if the database connection is down
-        head(params.has_key?(:health) ? :ok : :not_found)
+        head(params.key?(:health) ? :ok : :not_found)
       end
     end
   end

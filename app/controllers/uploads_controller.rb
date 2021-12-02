@@ -1,6 +1,6 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
-require 'set'
+require "set"
 
 class UploadsController < ApplicationController
   include Condo
@@ -13,7 +13,7 @@ class UploadsController < ApplicationController
   # before filter auth checks
   # See ./config/initializers/doorkeeper for JWT format
   def check_authenticated
-    payload, header = get_jwt
+    payload, _header = get_jwt
     if payload
       head(:forbidden) if (request.host != payload["aud"]) && Rails.env.production?
     else
@@ -25,7 +25,7 @@ class UploadsController < ApplicationController
   # This is a request for the current user_id
   # We forward it to our current user method
   condo_callback :resident_id do
-    payload, header = get_jwt
+    payload, _header = get_jwt
     payload["sub"]
   end
 
@@ -35,7 +35,7 @@ class UploadsController < ApplicationController
   condo_callback :upload_complete do |upload|
     upload.remove_entry
     true
-    # TODO:: We should mark the upload as complete and ready for processing
+    # TODO: We should mark the upload as complete and ready for processing
     # We can time stamp with last processed to ensure processing
 
     # Remove if already converting
@@ -70,30 +70,30 @@ class UploadsController < ApplicationController
     current_authority.get_bucket
   end
 
-  condo_callback :select_residence do |config, resident_id, upload|
+  condo_callback :select_residence do |_config, _resident_id, _upload|
     current_authority.get_storage
   end
 
   #
   # The name of the file when saved on the cloud storage system
   condo_callback :object_key do |upload|
-    "#{request.host}/#{Time.now.to_f.to_s.sub('.', '')}#{rand(1000)}#{File.extname(upload[:file_name])}"
+    "#{request.host}/#{Time.now.to_f.to_s.sub(".", "")}#{rand(1000)}#{File.extname(upload[:file_name])}"
   end
 
   # Defined here: https://github.com/cotag/Condominios/blob/5d1b297853e89c91afadcfeb48ab3f09ccff28b5/lib/condo.rb#L111
   # Mime types set here: https://github.com/cotag/Condominios/blob/5d1b297853e89c91afadcfeb48ab3f09ccff28b5/lib/condo/strata/amazon_s3.rb#L101
   # and https://github.com/cotag/Condominios/blob/5d1b297853e89c91afadcfeb48ab3f09ccff28b5/lib/condo/strata/open_stack_swift.rb#L122
-  condo_callback :object_options do |upload_object|
+  condo_callback :object_options do |_upload_object|
     file_mime = params[:file_mime].presence
     if file_mime
       {
         permissions: :public,
         headers: {
-          'Content-Type' => file_mime
+          "Content-Type" => file_mime
         }
       }
     else
-      { permissions: :public }
+      {permissions: :public}
     end
   end
 end

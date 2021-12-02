@@ -1,16 +1,16 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
-require 'multi_json'
-require 'jwt'
-require 'omniauth/strategies/oauth2'
+require "multi_json"
+require "jwt"
+require "omniauth/strategies/oauth2"
 
 module OmniAuth
   module Strategies
     class GenericOauth < OmniAuth::Strategies::OAuth2
-      option :name, 'generic_oauth'
+      option :name, "generic_oauth"
 
       uid do
-        raw_info[options.client_options.info_mappings['uid']].to_s
+        raw_info[options.client_options.info_mappings["uid"]].to_s
       end
 
       info do
@@ -23,21 +23,22 @@ module OmniAuth
       end
 
       def request_phase
-        authid = request.params['id']
+        authid = request.params["id"]
         if authid.nil?
-          raise 'no auth definition ID provided'
+          raise "no auth definition ID provided"
         else
           set_options(authid)
         end
+
         super
       end
 
       def callback_phase
-        authid = request.params['id']
+        authid = request.params["id"]
 
         # Set out details once again
         if authid.nil?
-          raise 'no auth definition ID provided'
+          raise "no auth definition ID provided"
         else
           set_options(authid)
         end
@@ -50,7 +51,7 @@ module OmniAuth
 
         options.client_options.site = strat.site if strat.site
         options.client_options.authorize_url = strat.authorize_url if strat.authorize_url
-        options.client_options.token_url = strat.token_url  if strat.token_url
+        options.client_options.token_url = strat.token_url if strat.token_url
         options.client_options.token_method = strat.token_method.downcase.to_sym if strat.token_method
         options.client_options.auth_scheme = strat.auth_scheme.downcase.to_sym if strat.auth_scheme
         # options.client_options.authorize_path = strat.authorize_path  if strat.authorize_path (renamed to authorize_url)
@@ -70,29 +71,31 @@ module OmniAuth
       end
 
       def access_token_options
-        options.access_token_options.inject({}) { |h,(k,v)| h[k.to_sym] = v; h }
+        options.access_token_options.transform_keys(&:to_sym)
       end
 
       # https://github.com/omniauth/omniauth/blob/ef7f7c2349e5cc2da5eda8ab1b1308a46685a5f5/lib/omniauth/strategy.rb#L438
       # https://github.com/zquestz/omniauth-google-oauth2/blob/414c43ef3ffec37d473321f262e80f1e46dda89f/lib/omniauth/strategies/google_oauth2.rb#L104
       def callback_url
-        full_host + script_name + callback_path + "?id=#{request.params['id']}"
+        full_host + script_name + callback_path + "?id=#{request.params["id"]}"
       end
 
       def raw_info
         return @raw_info if @raw_info
+
         inf = access_token.get(options.client_options.raw_info_url).parsed
         required_matches = options.client_options.ensure_matching
         match = true
         required_matches.each do |field, options|
           checking = Array(inf[field.to_s])
           matches = checking & options
-          if matches.length == 0
+          if matches.length.zero?
             match = false
             break
           end
         end
         raise "Invalid Hosted Domain" unless match
+
         @raw_info = inf
       end
 
@@ -104,7 +107,7 @@ module OmniAuth
       end
 
       def query_string
-        request.query_string.empty? ? '' : "?#{request.query_string}"
+        request.query_string.empty? ? "" : "?#{request.query_string}"
       end
     end
   end

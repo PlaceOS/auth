@@ -1,6 +1,6 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
-require_relative 'boot'
+require_relative "boot"
 
 require "rails"
 # Pick the frameworks you want:
@@ -15,7 +15,7 @@ require "action_view/railtie"
 require "rails/test_unit/railtie"
 
 require "nobrainer"
-require_relative 'nobrainer_monkey_patch'
+require_relative "nobrainer_monkey_patch"
 require_relative "../app/models/concerns/auth_timestamps"
 require_relative "../app/models/authority"
 require_relative "../app/models/user"
@@ -50,7 +50,7 @@ module EngineApp
     config.after_initialize do |app|
       # Fix 404 routing for logging
       app.routes.append do
-        match "*any", via: :all, to: 'errors#not_found'
+        match "*any", via: :all, to: "errors#not_found"
       end
 
       # Ensure indeses are synced

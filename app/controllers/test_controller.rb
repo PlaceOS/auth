@@ -1,9 +1,8 @@
-# encoding: UTF-8
-
+# frozen_string_literal: true
 
 class TestController < ApplicationController
   def index
-    render json: { hello: "world" }
+    render json: {hello: "world"}
   end
 
   def show

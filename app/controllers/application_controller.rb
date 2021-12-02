@@ -1,7 +1,7 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
-require 'jwt'
-require 'net/http'
+require "jwt"
+require "net/http"
 
 class ApplicationController < ActionController::Base
   skip_before_action :verify_authenticity_token
@@ -10,10 +10,8 @@ class ApplicationController < ActionController::Base
 
   PUBLIC_KEY = OpenSSL::PKey::RSA.new(Doorkeeper::JWT.configuration.secret_key).public_key
 
-  SENTRY_CONFIGURED = !!ENV["SENTRY_DSN"]
-  if SENTRY_CONFIGURED
-    before_action :set_raven_context
-  end
+  SENTRY_CONFIGURED = !ENV["SENTRY_DSN"].nil?
+  before_action :set_raven_context if SENTRY_CONFIGURED
 
   protected
 
@@ -30,7 +28,7 @@ class ApplicationController < ActionController::Base
       req = Net::HTTP::Get.new(uri.request_uri)
       req["Host"] = request.headers["Host"]
       req["Accept"] = "application/json"
-      req["X-API-Key"] = request.headers["X-API-Key"]
+      req["X-API-Key"] = token
 
       # check API key
       res = http.request(req)
@@ -43,23 +41,20 @@ class ApplicationController < ActionController::Base
     token = request.headers["Authorization"]
     if token
       token = token.split("Bearer ")[1].rstrip
-      token = nil unless token.presence
     else
       token = params["bearer_token"]
-      token.strip if token
-      token = nil unless token.presence
+      token&.strip
     end
+    token = nil unless token.presence
 
-    if token
-      @jwt_token = JWT.decode token, get_public_key, true, { algorithm: 'RS256' }
-    end
+    @jwt_token = JWT.decode token, get_public_key, true, {algorithm: "RS256"} if token
   end
 
   private
 
   def set_raven_context
     user = cookies.encrypted[:user]
-    Raven.user_context(id: user[:id] || user['id']) if user
+    Raven.user_context(id: user[:id] || user["id"]) if user
     Raven.extra_context(url: request.original_url, remote_ip: request.remote_ip)
   end
 

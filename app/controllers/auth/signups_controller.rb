@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Auth
   class SignupsController < CoauthController
@@ -18,14 +18,14 @@ module Auth
         social = cookies.signed[:social]
 
         # UID == social auth
-        if social && social['expires'] > Time.now.to_i
+        if social && social["expires"] > Time.now.to_i
           # Grab data from cookie and prevent session fixation
-          uid = social['uid']
-          provider = social['provider']
+          uid = social["uid"]
+          provider = social["provider"]
 
           # Create the user
-          # TODO:: in case of crash, we need to check if user can't be created due to
-          #        existing user account with no authentications
+          # TODO: in case of crash, we need to check if user can't be created due to
+          #       existing user account with no authentications
           user = User.new(safe_params)
 
           unless Authority.nil?
