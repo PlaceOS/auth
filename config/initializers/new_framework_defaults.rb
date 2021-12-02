@@ -11,4 +11,4 @@
 ActiveSupport.to_time_preserves_timezone = true
 
 # Configure SSL options to enable HSTS with subdomains. Previous versions had false.
-Rails.application.config.ssl_options = { hsts: { subdomains: true } }
+Rails.application.config.ssl_options = {hsts: {subdomains: true}}

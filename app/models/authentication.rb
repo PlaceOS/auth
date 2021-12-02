@@ -4,9 +4,9 @@ class Authentication
   include NoBrainer::Document
   include AuthTimestamps
 
-  table_config name: 'authentication'
+  table_config name: "authentication"
 
-  field :uid,      type: String
+  field :uid, type: String
   field :provider, type: String
 
   belongs_to :user, index: true
@@ -22,14 +22,14 @@ class Authentication
 
   # Where auth is https://github.com/omniauth/omniauth/wiki/Auth-Hash-Schema
   def self.from_omniauth(authority_id, auth)
-    find?("auth-#{authority_id}-#{auth['provider']}-#{auth['uid']}")
+    find?("auth-#{authority_id}-#{auth["provider"]}-#{auth["uid"]}")
   end
 
   def self.create_with_omniauth(authority_id, auth, user_id)
     authen = Authentication.new
     authen.authority_id = authority_id
-    authen.provider = auth['provider']
-    authen.uid = auth['uid']
+    authen.provider = auth["provider"]
+    authen.uid = auth["uid"]
     authen.user_id = user_id
     authen.save!
     authen
@@ -53,7 +53,7 @@ class Authentication
   end
 
   def self.after_login_block
-    @after_login || (->(_user, _provider, _auth) { nil })
+    @after_login || (->(_user, _provider, _auth) {})
   end
 
   protected

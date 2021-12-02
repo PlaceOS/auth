@@ -9,7 +9,7 @@ module Auth
       authority = current_authority
       if authority
         auth = authority.as_json(except: %i[created_at internals])
-        auth[:version] = 'v2.0.0'
+        auth[:version] = "v2.0.0"
         auth[:session] = signed_in?
         begin
           access_token = doorkeeper_token
@@ -19,7 +19,7 @@ module Auth
           else
             auth[:token_valid] = false
           end
-        rescue StandardError
+        rescue
           auth[:token_valid] = false
         end
         auth[:production] = Rails.env.production?

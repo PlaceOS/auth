@@ -61,10 +61,10 @@
 # })
 
 # AWS S3 bucket permissions will need to be set: https://docs.google.com/document/d/1zd5kCB0QH7GmVSnyjVRscILn5l-r_Xp_hvV4Vv9v9Ig/edit#
-if ENV['S3_KEY']
+if ENV["S3_KEY"]
   Condo::Configuration.add_residence(:AmazonS3, {
-                                       access_id: ENV['S3_KEY'],
-                                       secret_key: ENV['S3_SECRET'],
-                                       location: ENV['S3_REGION'] || 'ap-southeast-2'
-                                     })
+    access_id: ENV["S3_KEY"],
+    secret_key: ENV["S3_SECRET"],
+    location: ENV["S3_REGION"] || "ap-southeast-2"
+  })
 end

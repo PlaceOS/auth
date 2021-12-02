@@ -2,14 +2,14 @@
 
 namespace :domain do
   # Usage: rake "domain:add_authority[Name of Site,https://domain, support email, support pass]"
-  desc 'Generates an authority for the current domain'
+  desc "Generates an authority for the current domain"
   task :add_authority, %i[site_name site_origin support_email support_pass] => [:environment] do |_task, args|
     site_name = args[:site_name]
     site_origin = args[:site_origin] # i.e. https://domain.com
     support_email = args[:support_email]
     support_pass = args[:support_pass]
 
-    support_email = support_email.present? ? support_email : 'support@place.tech'
+    support_email = support_email.present? ? support_email : "support@place.tech"
     support_pass = support_pass.present? ? support_pass : SecureRandom.alphanumeric(8)
 
     auth = Authority.new
@@ -31,8 +31,8 @@ namespace :domain do
       user.save!
 
       puts "Authority created!\n#{site_name} = #{auth.id}\n#{user.email} : #{support_pass} = #{user.id}"
-    rescue StandardError => e
-      puts 'Authority creation failed with:'
+    rescue => e
+      puts "Authority creation failed with:"
       if e.respond_to?(:record)
         puts e.record.errors.messages
       else
@@ -42,7 +42,7 @@ namespace :domain do
   end
 
   # Usage: rake "domain:add_app[Name of App,https://domain/path]"
-  desc 'Generates an application ID for an interface'
+  desc "Generates an application ID for an interface"
   task :add_app, %i[app_name app_base scope] => [:environment] do |_task, args|
     app_name = args[:app_name]
     app_base = args[:app_base]
@@ -59,17 +59,17 @@ namespace :domain do
     app.redirect_uri = redirect_uri
     app.id = app_id
     app.uid = app_id
-    app.scopes = scope.present? ? scope : 'public'
+    app.scopes = scope.present? ? scope : "public"
     app.skip_authorization = true
 
     begin
       app.save!
       puts "App '#{app_name}' added with ID #{app.id}"
-    rescue StandardError => e
+    rescue => e
       begin
         puts "App creation failed with: #{e.message}"
         puts app.errors.messages
-      rescue StandardError
+      rescue
         puts "#{e.message}\n#{e.backtrace.join("\n")}"
       end
     end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'set'
+require "set"
 
 class UploadsController < ApplicationController
   include Condo
@@ -15,7 +15,7 @@ class UploadsController < ApplicationController
   def check_authenticated
     payload, header = get_jwt
     if payload
-      head(:forbidden) if (request.host != payload['aud']) && Rails.env.production?
+      head(:forbidden) if (request.host != payload["aud"]) && Rails.env.production?
     else
       head(:unauthorized)
     end
@@ -26,7 +26,7 @@ class UploadsController < ApplicationController
   # We forward it to our current user method
   condo_callback :resident_id do
     payload, header = get_jwt
-    payload['sub']
+    payload["sub"]
   end
 
   #
@@ -77,7 +77,7 @@ class UploadsController < ApplicationController
   #
   # The name of the file when saved on the cloud storage system
   condo_callback :object_key do |upload|
-    "#{request.host}/#{Time.now.to_f.to_s.sub('.', '')}#{rand(1000)}#{File.extname(upload[:file_name])}"
+    "#{request.host}/#{Time.now.to_f.to_s.sub(".", "")}#{rand(1000)}#{File.extname(upload[:file_name])}"
   end
 
   # Defined here: https://github.com/cotag/Condominios/blob/5d1b297853e89c91afadcfeb48ab3f09ccff28b5/lib/condo.rb#L111
@@ -89,11 +89,11 @@ class UploadsController < ApplicationController
       {
         permissions: :public,
         headers: {
-          'Content-Type' => file_mime
+          "Content-Type" => file_mime
         }
       }
     else
-      { permissions: :public }
+      {permissions: :public}
     end
   end
 end

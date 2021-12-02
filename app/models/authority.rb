@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-require 'addressable/uri'
+require "addressable/uri"
 
 class Authority
   include NoBrainer::Document
   include AuthTimestamps
 
-  table_config name: 'authority'
+  table_config name: "authority"
 
-  field :name,        type: String
-  field :domain,      type: String, uniq: true, index: true
+  field :name, type: String
+  field :domain, type: String, uniq: true, index: true
   field :description, type: String
-  field :login_url,   type: String, default: '/login?continue={{url}}'
-  field :logout_url,  type: String, default: '/auth/logout'
-  field :internals,   type: Hash,   default: -> { {} }
-  field :config,      type: Hash,   default: -> { {} }
+  field :login_url, type: String, default: "/login?continue={{url}}"
+  field :logout_url, type: String, default: "/auth/logout"
+  field :internals, type: Hash, default: -> { {} }
+  field :config, type: Hash, default: -> { {} }
 
   validates :name, presence: true
 
@@ -38,17 +38,17 @@ class Authority
   # ==========================
   # Uploads controller helpers:
   # ==========================
-  DEFAULT_BUCKET ||= ENV['DEFAULT_BUCKET']
+  DEFAULT_BUCKET ||= ENV["DEFAULT_BUCKET"]
 
   def get_bucket
-    internals['storage_bucket'] || DEFAULT_BUCKET
+    internals["storage_bucket"] || DEFAULT_BUCKET
   end
 
   def get_storage
     config = ::Condo::Configuration
 
-    if internals['storage']
-      storage = internals['storage'].deep_symbolize_keys
+    if internals["storage"]
+      storage = internals["storage"].deep_symbolize_keys
       config.dynamic_residence(storage[:name], storage)
     else
       # Default storage service

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'omniauth-saml'
+require "omniauth-saml"
 
 ::OneLogin::RubySaml::Attributes.single_value_compatibility = false
 module ::OneLogin
@@ -8,7 +8,7 @@ module ::OneLogin
     class Attributes
       @@single_value_compatibility = false
       def multi(name)
-        attributes[canonize_name(name)].try { |attr| attr.length == 1 ? attr.first : attr.join(',') }
+        attributes[canonize_name(name)].try { |attr| attr.length == 1 ? attr.first : attr.join(",") }
       end
     end
   end
@@ -19,12 +19,12 @@ module OmniAuth
     class GenericAdfs < OmniAuth::Strategies::SAML
       include ::CurrentAuthorityHelper
 
-      option :name, 'generic_adfs'
+      option :name, "generic_adfs"
 
       def aca_configure_opts
-        authid = request.params['id']
+        authid = request.params["id"]
         if authid.nil?
-          raise 'no auth definition ID provided'
+          raise "no auth definition ID provided"
         else
           set_options(authid)
         end
@@ -56,7 +56,7 @@ module OmniAuth
 
         # Ensure this isn't some cross domain hacking attempt
         authority = current_authority.try(:id)
-        raise 'invalid authentication source' unless authority == strat.authority_id
+        raise "invalid authentication source" unless authority == strat.authority_id
 
         # Map the database model to the strategy settings
         options.title = strat.name
@@ -75,10 +75,10 @@ module OmniAuth
         options.allowed_clock_drift = 10.seconds
 
         options.idp_cert_fingerprint_validator = if strat.idp_cert.present?
-                                                   nil
-                                                 else
-                                                   DEFAULT_CERT_VALIDATOR
-                                                 end
+          nil
+        else
+          DEFAULT_CERT_VALIDATOR
+        end
       end
     end
   end

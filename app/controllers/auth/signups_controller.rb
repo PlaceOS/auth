@@ -18,10 +18,10 @@ module Auth
         social = cookies.signed[:social]
 
         # UID == social auth
-        if social && social['expires'] > Time.now.to_i
+        if social && social["expires"] > Time.now.to_i
           # Grab data from cookie and prevent session fixation
-          uid = social['uid']
-          provider = social['provider']
+          uid = social["uid"]
+          provider = social["provider"]
 
           # Create the user
           # TODO:: in case of crash, we need to check if user can't be created due to
@@ -34,7 +34,7 @@ module Auth
           end
 
           if user.save
-            auth = Authentication.new({ provider: provider, uid: uid })
+            auth = Authentication.new({provider: provider, uid: uid})
             auth.user_id = user.id
             auth.save
 

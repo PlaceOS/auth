@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'set'
-require 'uri'
-require 'base64'
-require 'securerandom'
-require 'doorkeeper'
-require 'doorkeeper/jwt'
-require 'doorkeeper-rethinkdb'
+require "set"
+require "uri"
+require "base64"
+require "securerandom"
+require "doorkeeper"
+require "doorkeeper/jwt"
+require "doorkeeper-rethinkdb"
 
 Doorkeeper.configure do
   orm :rethinkdb
@@ -19,20 +19,20 @@ Doorkeeper.configure do
     # the cookie to particular paths (i.e. /auth)
 
     cookie = cookies.encrypted[:user]
-    user = User.find?(cookie['id']) if cookie && Time.now.to_i < cookie['expires']
+    user = User.find?(cookie["id"]) if cookie && Time.now.to_i < cookie["expires"]
     unless user
       current_authority = Authority.find_by_domain(request.host)
       login_url = current_authority.login_url
-      redirect_to(login_url.gsub('{{url}}', URI.encode_www_form_component(request.original_fullpath)))
+      redirect_to(login_url.gsub("{{url}}", URI.encode_www_form_component(request.original_fullpath)))
     end
     user
   rescue TypeError
-    cookies.delete(:user,   path: '/auth')
-    cookies.delete(:social, path: '/auth')
-    cookies.delete(:continue, path: '/auth')
+    cookies.delete(:user, path: "/auth")
+    cookies.delete(:social, path: "/auth")
+    cookies.delete(:continue, path: "/auth")
     current_authority = Authority.find_by_domain(request.host)
     login_url = current_authority.login_url
-    redirect_to(login_url.gsub('{{url}}', URI.encode_www_form_component(request.original_fullpath)))
+    redirect_to(login_url.gsub("{{url}}", URI.encode_www_form_component(request.original_fullpath)))
   end
 
   # restrict the access to the web interface for adding
@@ -40,9 +40,9 @@ Doorkeeper.configure do
   if Rails.env.production?
     admin_authenticator do |_routes|
       admin = begin
-        user = User.find(cookies.encrypted[:user]['id'])
+        user = User.find(cookies.encrypted[:user]["id"])
         user.sys_admin == true
-      rescue StandardError
+      rescue
         false
       end
       render nothing: true, status: :not_found unless admin
@@ -76,10 +76,10 @@ Doorkeeper.configure do
 
   # Define access token scopes for your provider
   # For more information go to https://github.com/applicake/doorkeeper/wiki/Using-Scopes
-  default_scopes  :public
+  default_scopes :public
   optional_scopes :admin
 
-  access_token_generator '::Doorkeeper::JWT'
+  access_token_generator "::Doorkeeper::JWT"
 
   force_ssl_in_redirect_uri false
   grant_flows %w[authorization_code client_credentials implicit password]
@@ -97,7 +97,7 @@ Doorkeeper::JWT.configure do
     permissions |= 2 if user.sys_admin
 
     {
-      iss: 'POS',
+      iss: "POS",
       iat: created_at,
 
       # Match the access token expiry time
@@ -132,7 +132,7 @@ Doorkeeper::JWT.configure do
 
   # Set the encryption secret. This would be shared with any other applications
   # that should be able to read the payload of the token. Defaults to "secret".
-  key = ENV['JWT_SECRET']
+  key = ENV["JWT_SECRET"]
   key = key.try { |k| Base64.decode64(k) } || <<~KEY
     -----BEGIN RSA PRIVATE KEY-----
     MIIEpAIBAAKCAQEAt01C9NBQrA6Y7wyIZtsyur191SwSL3MjR58RIjZ5SEbSyzMG

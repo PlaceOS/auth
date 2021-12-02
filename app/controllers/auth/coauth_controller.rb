@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-require 'securerandom'
+require "securerandom"
 
 module Auth
   class CoauthController < ApplicationController
     include UserHelper
     include CurrentAuthorityHelper
 
-    Rails.application.config.force_ssl = Rails.env.production? && (ENV['COAUTH_NO_SSL'].nil? || ENV['COAUTH_NO_SSL'] == 'false')
+    Rails.application.config.force_ssl = Rails.env.production? && (ENV["COAUTH_NO_SSL"].nil? || ENV["COAUTH_NO_SSL"] == "false")
     USE_SSL = Rails.application.config.force_ssl
 
     def success_path
-      '/login_success.html'
+      "/login_success.html"
     end
 
     def login_path
-      '/login'
+      "/login"
     end
 
     protected
@@ -29,7 +29,7 @@ module Auth
         },
         httponly: true,
         same_site: :none,
-        path: '/auth' # only sent to calls at this path
+        path: "/auth" # only sent to calls at this path
       }
       value[:secure] = USE_SSL
       cookies.encrypted[:user] = value
@@ -43,14 +43,14 @@ module Auth
           expires: 1.hour.from_now.to_i
         },
         httponly: true,
-        path: '/auth'   # only sent to calls at this path
+        path: "/auth" # only sent to calls at this path
       }
       value[:secure] = USE_SSL
       cookies.encrypted[:social] = value
     end
 
     def set_continue(path)
-      if path.include?('://')
+      if path.include?("://")
         uri = Addressable::URI.parse(path)
         path = "#{uri.request_uri}#{uri.fragment ? "##{uri.fragment}" : nil}"
       end
@@ -58,7 +58,7 @@ module Auth
       value = {
         value: path,
         httponly: true,
-        path: '/auth'   # only sent to calls at this path
+        path: "/auth" # only sent to calls at this path
       }
       value[:secure] = USE_SSL
       cookies.encrypted[:continue] = value

@@ -4,27 +4,27 @@ class LdapStrat
   include NoBrainer::Document
   include AuthTimestamps
 
-  table_config name: 'ldap_strat'
+  table_config name: "ldap_strat"
 
-  field :name,       type: String # (used as title)
+  field :name, type: String # (used as title)
 
   belongs_to :authority, index: true
 
-  field :port,        type: Integer, default: 636
-  field :auth_method, type: String,  default: :ssl
-  field :uid,         type: String,  default: -> { 'sAMAccountName' }
-  field :host,        type: String
-  field :base,        type: String
-  field :bind_dn,     type: String
-  field :password,    type: String  # This should not be plain text
+  field :port, type: Integer, default: 636
+  field :auth_method, type: String, default: :ssl
+  field :uid, type: String, default: -> { "sAMAccountName" }
+  field :host, type: String
+  field :base, type: String
+  field :bind_dn, type: String
+  field :password, type: String # This should not be plain text
   field :filter
 
   def type
-    'ldaps'
+    "ldaps"
   end
 
   def type=(type)
-    raise 'bad type' unless type.to_s == 'ldaps'
+    raise "bad type" unless type.to_s == "ldaps"
   end
 
   def serializable_hash(**options)
@@ -35,7 +35,7 @@ class LdapStrat
   end
 
   validates :authority_id, presence: true
-  validates :name,         presence: true
-  validates :host,         presence: true
-  validates :base,         presence: true
+  validates :name, presence: true
+  validates :host, presence: true
+  validates :base, presence: true
 end

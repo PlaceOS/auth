@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 # Remove the locks from the logger
-require 'mono_logger'
-require 'lograge'
-require 'omniauth'
-require 'socket'
+require "mono_logger"
+require "lograge"
+require "omniauth"
+require "socket"
 
 # Replace the default JSON parser
-require 'json'
-require 'yajl/json_gem'
+require "json"
+require "yajl/json_gem"
 
-UDP_LOG_HOST = ENV['UDP_LOG_HOST'] || ENV['LOGSTASH_HOST']
-UDP_LOG_PORT = ENV['UDP_LOG_PORT'] || ENV['LOGSTASH_PORT']
+UDP_LOG_HOST = ENV["UDP_LOG_HOST"] || ENV["LOGSTASH_HOST"]
+UDP_LOG_PORT = ENV["UDP_LOG_PORT"] || ENV["LOGSTASH_PORT"]
 
 # So we can log to two places at once (STDOUT and Socket)
 class MultiIO
@@ -44,12 +44,12 @@ Rails.application.configure do
   config.eager_load = true
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
@@ -114,11 +114,11 @@ Rails.application.configure do
   Lograge.logger = logger
   OmniAuth.config.logger = logger
   config.lograge.enabled = true
-  config.lograge.base_controller_class = ['ActionController::API', 'ActionController::Base']
+  config.lograge.base_controller_class = ["ActionController::API", "ActionController::Base"]
   config.lograge.custom_payload do |controller|
-    user = controller.respond_to?(:doorkeeper_token, true) ? controller.__send__(:doorkeeper_token) : 'anonymous'
+    user = controller.respond_to?(:doorkeeper_token, true) ? controller.__send__(:doorkeeper_token) : "anonymous"
     {
-      user_id: (user || 'anonymous')
+      user_id: (user || "anonymous")
     }
   end
   config.lograge.formatter = Lograge::Formatters::Logstash.new
@@ -126,7 +126,8 @@ Rails.application.configure do
   # Ensures only our lograge error is logged
   module ActionDispatch
     class DebugExceptions
-      def log_error(request, wrapper); end
+      def log_error(request, wrapper)
+      end
     end
   end
 end

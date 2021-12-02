@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'active_support/all'
+require "active_support/all"
 
 module AuthTimestamps
   extend ActiveSupport::Concern
@@ -19,7 +19,7 @@ module AuthTimestamps
 
   def _update(attrs)
     self.updated_at = Time.now.to_i unless updated_at_changed?
-    super(attrs.merge('updated_at' => @_attributes['updated_at']))
+    super(attrs.merge("updated_at" => @_attributes["updated_at"]))
   end
 
   def cache_key

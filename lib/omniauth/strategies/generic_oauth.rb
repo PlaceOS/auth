@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-require 'multi_json'
-require 'jwt'
-require 'omniauth/strategies/oauth2'
+require "multi_json"
+require "jwt"
+require "omniauth/strategies/oauth2"
 
 module OmniAuth
   module Strategies
     class GenericOauth < OmniAuth::Strategies::OAuth2
-      option :name, 'generic_oauth'
+      option :name, "generic_oauth"
 
       uid do
-        raw_info[options.client_options.info_mappings['uid']].to_s
+        raw_info[options.client_options.info_mappings["uid"]].to_s
       end
 
       info do
@@ -23,9 +23,9 @@ module OmniAuth
       end
 
       def request_phase
-        authid = request.params['id']
+        authid = request.params["id"]
         if authid.nil?
-          raise 'no auth definition ID provided'
+          raise "no auth definition ID provided"
         else
           set_options(authid)
         end
@@ -34,11 +34,11 @@ module OmniAuth
       end
 
       def callback_phase
-        authid = request.params['id']
+        authid = request.params["id"]
 
         # Set out details once again
         if authid.nil?
-          raise 'no auth definition ID provided'
+          raise "no auth definition ID provided"
         else
           set_options(authid)
         end
@@ -77,7 +77,7 @@ module OmniAuth
       # https://github.com/omniauth/omniauth/blob/ef7f7c2349e5cc2da5eda8ab1b1308a46685a5f5/lib/omniauth/strategy.rb#L438
       # https://github.com/zquestz/omniauth-google-oauth2/blob/414c43ef3ffec37d473321f262e80f1e46dda89f/lib/omniauth/strategies/google_oauth2.rb#L104
       def callback_url
-        full_host + script_name + callback_path + "?id=#{request.params['id']}"
+        full_host + script_name + callback_path + "?id=#{request.params["id"]}"
       end
 
       def raw_info
@@ -94,7 +94,7 @@ module OmniAuth
             break
           end
         end
-        raise 'Invalid Hosted Domain' unless match
+        raise "Invalid Hosted Domain" unless match
 
         @raw_info = inf
       end
@@ -107,7 +107,7 @@ module OmniAuth
       end
 
       def query_string
-        request.query_string.empty? ? '' : "?#{request.query_string}"
+        request.query_string.empty? ? "" : "?#{request.query_string}"
       end
     end
   end

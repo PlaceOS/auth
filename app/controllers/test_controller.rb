@@ -2,10 +2,10 @@
 
 class TestController < ApplicationController
   def index
-    render json: { hello: 'world' }
+    render json: {hello: "world"}
   end
 
   def show
-    raise 'runtime error :('
+    raise "runtime error :("
   end
 end
