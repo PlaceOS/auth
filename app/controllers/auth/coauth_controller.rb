@@ -27,11 +27,11 @@ module Auth
           id: user.id,
           expires: 1.day.from_now.to_i
         },
+        secure: USE_SSL,
         httponly: true,
         same_site: :none,
         path: "/auth" # only sent to calls at this path
       }
-      value[:secure] = USE_SSL
       cookies.encrypted[:user] = value
     end
 
@@ -42,10 +42,10 @@ module Auth
           provider: provider,
           expires: 1.hour.from_now.to_i
         },
+        secure: USE_SSL,
         httponly: true,
         path: "/auth" # only sent to calls at this path
       }
-      value[:secure] = USE_SSL
       cookies.encrypted[:social] = value
     end
 
@@ -58,9 +58,9 @@ module Auth
       value = {
         value: path,
         httponly: true,
+        secure: USE_SSL,
         path: "/auth" # only sent to calls at this path
       }
-      value[:secure] = USE_SSL
       cookies.encrypted[:continue] = value
     end
   end

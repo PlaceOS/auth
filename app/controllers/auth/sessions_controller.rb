@@ -187,7 +187,7 @@ module Auth
     def login_failure(details)
       path = details[:continue]
       if path
-        # TODO: : need to add query component to indicate that the request was a failure
+        # TODO: need to add query component to indicate that the request was a failure
         redirect_to request.referer || "/" # login failed, reload the page
       else
         head :unauthorized

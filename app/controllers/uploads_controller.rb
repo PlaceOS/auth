@@ -35,7 +35,7 @@ class UploadsController < ApplicationController
   condo_callback :upload_complete do |upload|
     upload.remove_entry
     true
-    # TODO: : We should mark the upload as complete and ready for processing
+    # TODO: We should mark the upload as complete and ready for processing
     # We can time stamp with last processed to ensure processing
 
     # Remove if already converting

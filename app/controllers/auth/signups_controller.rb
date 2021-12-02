@@ -24,8 +24,8 @@ module Auth
           provider = social["provider"]
 
           # Create the user
-          # TODO:: in case of crash, we need to check if user can't be created due to
-          #        existing user account with no authentications
+          # TODO: in case of crash, we need to check if user can't be created due to
+          #       existing user account with no authentications
           user = User.new(safe_params)
 
           unless Authority.nil?

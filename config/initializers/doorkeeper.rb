@@ -109,7 +109,7 @@ Doorkeeper::JWT.configure do
       jti: SecureRandom.uuid,
 
       # The domain on which the token is valid (Audience)
-      # TODO:: change this to `authority.id`
+      # TODO: change this to `authority.id`
       aud: user.authority.domain,
       scope: Array(opts[:scopes]),
 
