@@ -71,7 +71,6 @@ class User
 
   # PASSWORD ENCRYPTION::
   # ---------------------
-  attr_reader :password
 
   validates_confirmation_of :password
 
@@ -97,14 +96,14 @@ class User
   end
 
   def password=(new_password)
-    unless new_password.present?
+    if new_password.present?
+      self.password_digest = Password.create(new_password)
+      @password = new_password
+    else
       @password = nil
       self.password_digest = ""
-      return new_password
+      new_password
     end
-
-    self.password_digest = Password.create(new_password)
-    @password = new_password
   end
   # --------------------
   # END PASSWORD METHODS

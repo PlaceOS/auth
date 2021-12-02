@@ -121,13 +121,16 @@ Rails.application.configure do
       user_id: (user || "anonymous")
     }
   end
+
   config.lograge.formatter = Lograge::Formatters::Logstash.new
 
   # Ensures only our lograge error is logged
+  # standard:disable Lint/ConstantDefinitionInBlock
   module ActionDispatch
     class DebugExceptions
       def log_error(request, wrapper)
       end
     end
   end
+  # standard:enable Lint/ConstantDefinitionInBlock
 end

@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
       req = Net::HTTP::Get.new(uri.request_uri)
       req["Host"] = request.headers["Host"]
       req["Accept"] = "application/json"
-      req["X-API-Key"] = request.headers["X-API-Key"]
+      req["X-API-Key"] = token
 
       # check API key
       res = http.request(req)

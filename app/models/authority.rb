@@ -38,7 +38,8 @@ class Authority
   # ==========================
   # Uploads controller helpers:
   # ==========================
-  DEFAULT_BUCKET ||= ENV["DEFAULT_BUCKET"]
+
+  DEFAULT_BUCKET = ENV["DEFAULT_BUCKET"]
 
   def get_bucket
     internals["storage_bucket"] || DEFAULT_BUCKET

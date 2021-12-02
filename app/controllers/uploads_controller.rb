@@ -13,7 +13,7 @@ class UploadsController < ApplicationController
   # before filter auth checks
   # See ./config/initializers/doorkeeper for JWT format
   def check_authenticated
-    payload, header = get_jwt
+    payload, _header = get_jwt
     if payload
       head(:forbidden) if (request.host != payload["aud"]) && Rails.env.production?
     else
@@ -25,7 +25,7 @@ class UploadsController < ApplicationController
   # This is a request for the current user_id
   # We forward it to our current user method
   condo_callback :resident_id do
-    payload, header = get_jwt
+    payload, _header = get_jwt
     payload["sub"]
   end
 
