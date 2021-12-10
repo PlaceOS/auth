@@ -7,7 +7,7 @@ module Auth
     include UserHelper
     include CurrentAuthorityHelper
 
-    Rails.application.config.force_ssl = Rails.env.production? && (ENV["COAUTH_NO_SSL"].nil? || ENV["COAUTH_NO_SSL"] == "false")
+    Rails.application.config.force_ssl = true
     USE_SSL = Rails.application.config.force_ssl
 
     def success_path
