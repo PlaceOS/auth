@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "jwt"
-require "net/http"
+require "net/https"
 
 class ApplicationController < ActionController::Base
   skip_before_action :verify_authenticity_token
@@ -22,7 +22,10 @@ class ApplicationController < ActionController::Base
       uri = URI(PLACE_URI)
       uri.path = "/api/engine/v2/api_keys/inspect"
       http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = uri.instance_of? URI::HTTPS
+      if uri.instance_of? URI::HTTPS
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
 
       # build request
       req = Net::HTTP::Get.new(uri.request_uri)
