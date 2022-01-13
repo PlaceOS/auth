@@ -76,8 +76,34 @@ Doorkeeper.configure do
 
   # Define access token scopes for your provider
   # For more information go to https://github.com/applicake/doorkeeper/wiki/Using-Scopes
+  all_scopes = [
+    "public",
+
+    # these can be found via: GET /api/engine/v2/scopes
+    "api_keys",
+    "asset_instances",
+    "assets",
+    "ldap_authentications",
+    "saml_authentications",
+    "o_auth_authentications",
+    "brokers",
+    "cluster",
+    "domains",
+    "drivers",
+    "settings",
+    "modules",
+    "systems",
+    "guest",
+    "control",
+    "edges",
+    "metadata",
+    "mqtt",
+    "o_auth_applications",
+    "repositories"
+  ].map { |scope| [scope, "#{scope}.read", "#{scope}.write"] }.flatten
+
   default_scopes :public
-  optional_scopes :admin
+  optional_scopes(*all_scopes)
 
   access_token_generator "::Doorkeeper::JWT"
 
