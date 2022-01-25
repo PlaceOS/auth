@@ -1,4 +1,4 @@
-ARG RUBY_VER="2.7"
+ARG RUBY_VER="3.0"
 FROM ruby:$RUBY_VER-alpine AS build-env
 
 ARG PACKAGES="git libxml2 libxslt build-base curl-dev libxml2-dev libxslt-dev zlib-dev tzdata"
@@ -21,9 +21,9 @@ RUN bundle config --global frozen 1 \
     && bundle install -j4 --retry 3 --path=vendor/bundle \
     && bundle binstubs puma --force \
     # Remove unneeded files (cached *.gem, *.o, *.c)
-    && rm -rf vendor/bundle/ruby/2.7.0/cache/*.gem \
-    && find vendor/bundle/ruby/2.7.0/gems/ -name "*.c" -delete \
-    && find vendor/bundle/ruby/2.7.0/gems/ -name "*.o" -delete
+    && rm -rf vendor/bundle/ruby/3.0.0/cache/*.gem \
+    && find vendor/bundle/ruby/3.0.0/gems/ -name "*.c" -delete \
+    && find vendor/bundle/ruby/3.0.0/gems/ -name "*.o" -delete
 
 COPY . .
 
