@@ -19,7 +19,6 @@ COPY Gemfile* $APP_DIR/
 RUN bundle config set without 'test:assets'
 RUN bundle config --global frozen 1 \
     && bundle install -j4 --retry 3 --path=vendor/bundle \
-    && bundle binstubs puma --force \
     # Remove unneeded files (cached *.gem, *.o, *.c)
     && rm -rf vendor/bundle/ruby/3.0.0/cache/*.gem \
     && find vendor/bundle/ruby/3.0.0/gems/ -name "*.c" -delete \
@@ -62,4 +61,4 @@ USER appuser:appuser
 
 EXPOSE 8080
 HEALTHCHECK CMD wget --no-verbose -q --spider http://0.0.0.0:8080/auth/authority?health=true
-ENTRYPOINT ./bin/puma -b tcp://0.0.0.0:8080
+ENTRYPOINT ./bin/rails server -u agoo -b 0.0.0.0 -p 8080 -e production

@@ -5,7 +5,7 @@ source "https://rubygems.org"
 gem "rails", "~> 6.0", ">= 6.0.0.1"
 
 # High performance web server
-gem "puma"
+gem "agoo"
 
 # Database
 gem "nobrainer"
