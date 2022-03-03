@@ -62,4 +62,4 @@ USER appuser:appuser
 
 EXPOSE 8080
 HEALTHCHECK CMD wget --no-verbose -q --spider http://0.0.0.0:8080/auth/authority?health=true
-ENTRYPOINT ./bin/agoo -b tcp://0.0.0.0 -p 8080 -w 4 -t 32
+ENTRYPOINT ./bin/agoo -p 8080 -t 64
