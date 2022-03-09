@@ -8,7 +8,7 @@ gem "rails", "~> 6.0", ">= 6.0.0.1"
 gem "puma"
 
 # Database
-gem "nobrainer"
+gem "nobrainer", "~> 0.41"
 gem "redis"
 
 # Authentication
