@@ -116,7 +116,7 @@ GEM
     email_validator (2.2.3)
       activemodel
     erubi (1.10.0)
-    excon (0.91.0)
+    excon (0.92.0)
     faraday (0.17.5)
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.14.0)
@@ -343,7 +343,7 @@ GEM
     uber (0.1.0)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.8)
+    unf_ext (0.0.8.1)
     web-console (4.2.0)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
