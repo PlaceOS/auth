@@ -66,8 +66,15 @@ Doorkeeper.configure do
 
   # username and password authentication for local auth
   resource_owner_from_credentials do |_routes|
-    user = User.find_by_email(Authority.find_by_domain(request.host)&.id, params[:username])
-    user if user&.authenticate(params[:password])
+    username = params[:username]
+    user = User.find_by_email(Authority.find_by_domain(request.host)&.id, username)
+    if !user&.deleted && user&.authenticate(params[:password])
+      logger.info "authenticating #{username} on #{request.host} [success]"
+      user
+    else
+      logger.info "authenticating #{username} on #{request.host} [failed]"
+      nil
+    end
   end
 
   # Issue access tokens with refresh token (disabled by default)
@@ -98,6 +105,7 @@ Doorkeeper.configure do
     "edges",
     "metadata",
     "mqtt",
+    "flux",
     "o_auth_applications",
     "repositories"
   ].map { |scope| [scope, "#{scope}.read", "#{scope}.write"] }.flatten
