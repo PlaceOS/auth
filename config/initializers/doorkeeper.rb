@@ -68,7 +68,7 @@ Doorkeeper.configure do
   resource_owner_from_credentials do |_routes|
     username = params[:username]
     user = User.find_by_email(Authority.find_by_domain(request.host)&.id, username)
-    if !user&.deleted && user&.authenticate(params[:password])
+    if user && !user.deleted && user.authenticate(params[:password])
       logger.info "authenticating #{username} on #{request.host} [success]"
       user
     else
