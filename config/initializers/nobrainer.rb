@@ -7,6 +7,7 @@ NoBrainer.configure do |config|
 
   # 64kb
   config.max_string_length = 65_536
+  config.per_thread_connection = true
 end
 
 # NoBrainer.sync_indexes
