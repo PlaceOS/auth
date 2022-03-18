@@ -62,6 +62,7 @@ module Auth
       # adding a new auth to existing user
       if auth_model.nil? && signed_in?
         user = current_user
+        user.deleted = false
         user.assign_attributes(args)
         user.save
 
