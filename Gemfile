@@ -8,7 +8,7 @@ gem "rails", "~> 6.0", ">= 6.0.0.1"
 gem "puma"
 
 # Database
-gem "nobrainer", "~> 0.41"
+gem "nobrainer", git: "https://github.com/place-labs/nobrainer.git", branch: "fix/ensure-fix-table-duplicate"
 gem "redis"
 
 # Authentication
