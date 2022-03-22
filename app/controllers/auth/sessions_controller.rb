@@ -34,7 +34,7 @@ module Auth
 
         # If there is a path we are using an inline login form
         if path
-          redirect_to path
+          redirect_continue(path) { "/" }
         else
           head :accepted
         end
@@ -67,7 +67,7 @@ module Auth
         user.save
 
         Authentication.create_with_omniauth(authority.id, auth, user.id)
-        redirect_to path
+        redirect_continue(path) { success_path }
         instance_exec user, auth["provider"], auth, &Authentication.after_login_block
 
       # new auth and new user
@@ -104,7 +104,7 @@ module Auth
 
           # redirect the user to the page they were trying to access and
           # run any custom post-login actions
-          redirect_to path
+          redirect_continue(path) { success_path }
           instance_exec user, auth["provider"], auth, &Authentication.after_login_block
         else
           info = "User creation failed with #{auth.inspect}"
@@ -138,7 +138,7 @@ module Auth
           user.assign_attributes(args)
           user.save
           new_session(user)
-          redirect_to path
+          redirect_continue(path) { success_path }
           instance_exec user, auth["provider"], auth, &Authentication.after_login_block
         rescue => e
           logger.error "Error with user account. Possibly due to a database failure:\nAuth model: #{auth_model.inspect}\n#{e.inspect}"
@@ -151,22 +151,12 @@ module Auth
     def destroy
       remove_session
 
-      # do we want to redirect externally?
-      path = params.permit(:continue)[:continue] || "/"
-
-      if !path.start_with?("/") || path.include?("//")
-        authority = current_authority
-        uri = Addressable::URI.parse(path)
-
-        if uri.domain == authority.domain
-          path = "#{uri.request_uri}#{uri.fragment ? "##{uri.fragment}" : nil}"
-        else
-          path = authority.logout_url
-          path = URI.decode_www_form_component(path.split("continue=", 2)[-1]) if path.include?("continue=")
-        end
+      # Only whitelisted URLs can redirect externally
+      redirect_continue(params.permit(:continue)[:continue] || "/") do
+        uri = authority.logout_url
+        uri = URI.decode_www_form_component(uri.split("continue=", 2)[-1]) if uri.include?("continue=")
+        uri
       end
-
-      redirect_to path
     end
 
     protected
