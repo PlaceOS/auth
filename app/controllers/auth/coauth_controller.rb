@@ -25,11 +25,11 @@ module Auth
         authority = current_authority
         uri = Addressable::URI.parse(path)
 
-        if uri.domain == authority.domain
-          path = "#{uri.request_uri}#{uri.fragment ? "##{uri.fragment}" : nil}"
-        else
-          path = yield
-        end
+        path = if uri.domain == authority.domain
+                 "#{uri.request_uri}#{uri.fragment ? "##{uri.fragment}" : nil}"
+               else
+                 yield
+               end
       end
 
       redirect_to path
