@@ -21,6 +21,8 @@ module Auth
     protected
 
     def redirect_continue(path)
+      # checking for `.attacker.com` OR `//<external_domain>`
+      # no internal paths use `//`
       if !path.start_with?("/") || path.include?("//")
         authority = current_authority
         uri = Addressable::URI.parse(path)
