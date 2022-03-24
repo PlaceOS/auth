@@ -20,6 +20,23 @@ module Auth
 
     protected
 
+    def redirect_continue(path)
+      # checking for `.attacker.com` OR `//<external_domain>`
+      # no internal paths use `//`
+      if !path.start_with?("/") || path.include?("//")
+        authority = current_authority
+        uri = Addressable::URI.parse(path)
+
+        path = if uri.domain == authority.domain
+          "#{uri.request_uri}#{uri.fragment ? "##{uri.fragment}" : nil}"
+        else
+          yield
+        end
+      end
+
+      redirect_to path
+    end
+
     def new_session(user)
       @current_user = user
       value = {
@@ -50,7 +67,7 @@ module Auth
     end
 
     def set_continue(path)
-      if path.include?("://")
+      if !path.start_with?("/") || path.include?("//")
         uri = Addressable::URI.parse(path)
         path = "#{uri.request_uri}#{uri.fragment ? "##{uri.fragment}" : nil}"
       end

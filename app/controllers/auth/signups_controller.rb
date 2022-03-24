@@ -43,7 +43,7 @@ module Auth
             new_session(user)
 
             # we're in a pop-up so redirect to a page that can communicate to the main page
-            redirect_to path
+            redirect_continue(path) { success_path }
           else
             # Email address taken (all other validation can be checked on the client)
             head :conflict
