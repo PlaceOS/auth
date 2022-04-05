@@ -26,6 +26,7 @@ module Auth
       authority = current_authority
 
       user = User.find_by_email(authority.id, details[:email])
+      return head(:unauthorized) if user.deleted
 
       if user&.authenticate(details[:password])
         path = details[:continue] || cookies.encrypted[:continue]
