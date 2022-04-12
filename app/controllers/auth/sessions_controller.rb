@@ -136,6 +136,7 @@ module Auth
           end
           remove_session if signed_in?
 
+          user.deleted = false
           user.assign_attributes(args)
           user.save
           new_session(user)
