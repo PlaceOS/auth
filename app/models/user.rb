@@ -16,6 +16,7 @@ class User
     country building created_at
   ]}.freeze
 
+  field :id, type: String, primary_key: true, default: -> { "user-#{::NoBrainer::Document::PrimaryKey::Generator.generate}" }
   field :name, type: String
   field :nickname, type: String
   field :email, type: String, index: true
