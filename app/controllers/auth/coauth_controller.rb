@@ -23,7 +23,7 @@ module Auth
     def redirect_continue(path)
       # checking for `.attacker.com` OR `//<external_domain>`
       # no internal paths use `//`
-      check_path = path.split('?')[0]
+      check_path = path.split("?")[0]
 
       # need to check if redirect is configured in the DB
       if !check_path.start_with?("/") || check_path.include?("//")
