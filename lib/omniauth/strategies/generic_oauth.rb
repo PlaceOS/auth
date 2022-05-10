@@ -17,7 +17,14 @@ module OmniAuth
         creds = credentials
         data = {}
         options.client_options.info_mappings.each do |key, value|
-          data[key] = raw_info[value] || creds[value]
+          value.split(",").each do |info_key|
+            info_key = info_key.strip
+            info_value = raw_info[info_key] || creds[info_key]
+            if info_value
+              data[key] = info_value
+              break
+            end
+          end
         end
         data
       end
