@@ -1,4 +1,4 @@
-ARG RUBY_VER="3.0"
+ARG RUBY_VER="3.1"
 FROM ruby:$RUBY_VER-alpine AS build-env
 
 ARG PACKAGES="git libxml2 libxslt build-base curl-dev libxml2-dev libxslt-dev zlib-dev tzdata"
@@ -16,14 +16,16 @@ WORKDIR $APP_DIR
 ENV BUNDLE_APP_CONFIG="$APP_DIR/.bundle"
 
 COPY Gemfile* $APP_DIR/
+RUN gem install bundler
 RUN bundle config set without 'test:assets'
+RUN bundle config set --local path 'vendor/bundle'
 RUN bundle config --global frozen 1 \
-    && bundle install -j4 --retry 3 --path=vendor/bundle \
+    && bundle install -j4 --retry 3 \
     && bundle binstubs puma --force \
     # Remove unneeded files (cached *.gem, *.o, *.c)
-    && rm -rf vendor/bundle/ruby/3.0.0/cache/*.gem \
-    && find vendor/bundle/ruby/3.0.0/gems/ -name "*.c" -delete \
-    && find vendor/bundle/ruby/3.0.0/gems/ -name "*.o" -delete
+    && rm -rf vendor/bundle/ruby/3.1.0/cache/*.gem \
+    && find vendor/bundle/ruby/3.1.0/gems/ -name "*.c" -delete \
+    && find vendor/bundle/ruby/3.1.0/gems/ -name "*.o" -delete
 
 COPY . .
 
