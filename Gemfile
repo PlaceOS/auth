@@ -35,6 +35,9 @@ gem "lograge"
 gem "logstash-event"
 gem "mono_logger"
 gem "sentry-raven"
+gem 'opentelemetry-sdk'
+gem 'opentelemetry-exporter-otlp'
+gem 'opentelemetry-instrumentation-all'
 
 # Runtime debugging
 gem "rbtrace"
