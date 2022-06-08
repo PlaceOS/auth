@@ -155,7 +155,7 @@ module Auth
 
       # Only whitelisted URLs can redirect externally
       redirect_continue(params.permit(:continue)[:continue] || "/") do
-        uri = authority.logout_url
+        uri = current_authority.logout_url
         uri = URI.decode_www_form_component(uri.split("continue=", 2)[-1]) if uri.include?("continue=")
         uri
       end
