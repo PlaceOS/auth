@@ -4,9 +4,9 @@ source "https://rubygems.org"
 
 gem "rails", "~> 6.0", ">= 6.0.5.1"
 # We don't use the mail gem
-gem 'net-smtp', require: false
-gem 'net-imap', require: false
-gem 'net-pop', require: false
+gem "net-smtp", require: false
+gem "net-imap", require: false
+gem "net-pop", require: false
 
 # High performance web server
 gem "puma"
