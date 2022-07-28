@@ -1,5 +1,4 @@
 module Middleware
-  #
   # Rewrite from:
   # /auth/oauth2/callback/oauth_strat-E0RITSgeC0?code=1234&state=8765
   # to:

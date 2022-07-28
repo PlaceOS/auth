@@ -19,6 +19,8 @@ require_relative "../app/models/concerns/auth_timestamps"
 require_relative "../app/models/authority"
 require_relative "../app/models/user"
 
+require_relative "../app/middleware/rewrite_request"
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -45,6 +47,8 @@ module EngineApp
       # app.config.middleware.insert_after Rack::Runtime, ::Rails.application.config.session_options
       # app.config.middleware.insert_after Rack::Runtime, ::ActionDispatch::Cookies
     end
+
+    app.config.middleware.user Middleware::RewriteRequest
 
     config.after_initialize do |app|
       # Fix 404 routing for logging
