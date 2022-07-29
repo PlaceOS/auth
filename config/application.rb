@@ -48,7 +48,7 @@ module EngineApp
       # app.config.middleware.insert_after Rack::Runtime, ::ActionDispatch::Cookies
     end
 
-    app.config.middleware.user Middleware::RewriteRequest
+    app.config.middleware.use Middleware::RewriteRequest
 
     config.after_initialize do |app|
       # Fix 404 routing for logging
