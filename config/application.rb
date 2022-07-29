@@ -48,7 +48,6 @@ module EngineApp
       # app.config.middleware.insert_after Rack::Runtime, ::ActionDispatch::Cookies
     end
 
-    # app.config.middleware.use RewriteRequest
     # Rails.application.config.middleware.use RewriteRequest
     Rails.application.config.middleware.insert_before 0, RewriteRequest
 
