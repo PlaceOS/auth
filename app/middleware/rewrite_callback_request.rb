@@ -20,33 +20,13 @@ class RewriteCallbackRequest
         "id=#{strategy}&#{env["QUERY_STRING"]}"
       end
 
-      # @app.call(env.merge({
-      #   "REQUEST_PATH" => "/auth/oauth2/callback",
-      #   "PATH_INFO" => "/auth/oauth2/callback",
-      #   "QUERY_STRING" => query,
-      #   "REQUEST_URI" => "/auth/oauth2/callback?#{query}"
-      # }))
-
-      pp "========================================"
-      pp "OLD ENV"
-      pp env
-
-      pp "========================================"
-
-      env = env.merge({
+      @app.call(env.merge({
         "REQUEST_PATH" => "/auth/oauth2/callback",
         "PATH_INFO" => "/auth/oauth2/callback",
         "QUERY_STRING" => query,
         "REQUEST_URI" => "/auth/oauth2/callback?#{query}",
         "ORIGINAL_FULLPATH" => "/auth/oauth2/callback?#{query}",
-      })
-
-      pp "NEW ENV"
-      pp env
-      
-      pp "========================================"
-      @app.call(env)
-
+      }))
     else
       @app.call(env)
     end
