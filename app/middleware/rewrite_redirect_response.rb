@@ -19,8 +19,6 @@ class RewriteRedirectResponse
       uri.query.gsub!("%3Fid%3D", "%2F")
       uri.query.gsub!("?id=", "/")
 
-      pp "Rewrite location header from: #{headers["location"]} to: #{uri}"
-
       headers["location"] = uri
     end
 
