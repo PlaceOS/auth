@@ -25,7 +25,7 @@ class RewriteCallbackRequest
         "PATH_INFO" => "/auth/oauth2/callback",
         "QUERY_STRING" => query,
         "REQUEST_URI" => "/auth/oauth2/callback?#{query}",
-        "ORIGINAL_FULLPATH" => "/auth/oauth2/callback?#{query}",
+        "ORIGINAL_FULLPATH" => "/auth/oauth2/callback?#{query}"
       }))
     else
       @app.call(env)
