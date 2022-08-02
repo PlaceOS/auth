@@ -18,7 +18,7 @@ class RewriteRedirectResponse
     if uri.host =~ /\.b2clogin\.com$/
         uri.query.sub!("%3Fid%3D", "%2F")
 
-        logger.debug "Rewrite location header from: #{headers["location"]} to: #{uri}"
+        # logger.debug "Rewrite location header from: #{headers["location"]} to: #{uri}"
 
         headers["location"] = uri
     end
