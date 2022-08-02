@@ -18,6 +18,8 @@ class RewriteRequest
         "id=#{strategy}&#{env["QUERY_STRING"]}"
       end
 
+      logger.debug "Rewriting from: #{REQUEST_URI} to: /auth/oauth2/callback?#{query}"
+
       @app.call(env.merge({
         "REQUEST_PATH" => "/auth/oauth2/callback",
         "PATH_INFO" => "/auth/oauth2/callback",
