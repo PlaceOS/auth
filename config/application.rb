@@ -19,7 +19,8 @@ require_relative "../app/models/concerns/auth_timestamps"
 require_relative "../app/models/authority"
 require_relative "../app/models/user"
 
-require_relative "../app/middleware/rewrite_request"
+require_relative "../app/middleware/rewrite_callback_request"
+require_relative "../app/middleware/rewrite_redirect_response"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
