@@ -49,7 +49,8 @@ module EngineApp
     end
 
     # Rails.application.config.middleware.use RewriteRequest
-    Rails.application.config.middleware.insert_before 0, RewriteRequest
+    Rails.application.config.middleware.insert_before 0, RewriteCallbackRequest
+    Rails.application.config.middleware.insert_before 0, RewriteRedirectResponse
 
     config.after_initialize do |app|
       # Fix 404 routing for logging

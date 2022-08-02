@@ -1,9 +1,11 @@
 # Rewrite from:
-# /auth/oauth2/callback/oauth_strat-E0RITSgeC0?code=1234&state=8765
+# /auth/oauth2/callback/oauth_strat-QWERTY?code=1234&state=8765
 # to:
-# /auth/oauth2/callback?id=oauth_strat-E0RITSgeC0&?code=1234&state=8765
+# /auth/oauth2/callback?id=oauth_strat-QWERTY&?code=1234&state=8765
 #
-class RewriteRequest
+# That is replace "?id=" with "/"
+#
+class RewriteCallbackRequest
   def initialize(app)
     @app = app
   end
@@ -18,7 +20,7 @@ class RewriteRequest
         "id=#{strategy}&#{env["QUERY_STRING"]}"
       end
 
-      logger.debug "Rewriting from: #{REQUEST_URI} to: /auth/oauth2/callback?#{query}"
+      logger.debug "Rewrite request from: #{REQUEST_URI} to: /auth/oauth2/callback?#{query}"
 
       @app.call(env.merge({
         "REQUEST_PATH" => "/auth/oauth2/callback",
