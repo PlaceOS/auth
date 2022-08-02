@@ -14,12 +14,12 @@ class RewriteRedirectResponse
   def call(env)
     status, headers, body = @app.call(env)
 
-    if if (location = headers.fetch("location", nil)) && (uri = URI::parse(location)) && uri.host =~ /\.b2clogin\.com$/
-        uri.query.sub!("%3Fid%3D", "%2F")
+    if (location = headers.fetch("location", nil)) && (uri = URI.parse(location)) && uri.host =~ /\.b2clogin\.com$/
+      uri.query.sub!("%3Fid%3D", "%2F")
 
-        # logger.debug "Rewrite location header from: #{headers["location"]} to: #{uri}"
+      # logger.debug "Rewrite location header from: #{headers["location"]} to: #{uri}"
 
-        headers["location"] = uri
+      headers["location"] = uri
     end
 
     [status, headers, body]
