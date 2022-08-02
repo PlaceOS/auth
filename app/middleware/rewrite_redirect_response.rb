@@ -13,9 +13,8 @@ class RewriteRedirectResponse
 
   def call(env)
     status, headers, body = @app.call(env)
-    uri = URI::parse(headers["location"])
 
-    if uri.host =~ /\.b2clogin\.com$/
+    if uri = URI::parse(headers["location"]) && uri.host =~ /\.b2clogin\.com$/
         uri.query.sub!("%3Fid%3D", "%2F")
 
         # logger.debug "Rewrite location header from: #{headers["location"]} to: #{uri}"
