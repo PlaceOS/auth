@@ -48,6 +48,11 @@ module Auth
 
     # Run each time a user logs in via social
     def create
+      
+      pp "----------------------------------------"
+      pp request
+      pp "----------------------------------------"
+
       # Where do we want to redirect to with our new session
       path = cookies.encrypted[:continue] || success_path
 
