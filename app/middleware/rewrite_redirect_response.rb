@@ -19,7 +19,7 @@ class RewriteRedirectResponse
       uri.query.sub!("%3Fid%3D", "%2F")
       uri.query.sub!("?id=", "/")
 
-      @app.logger.debug "Rewrite location header from: #{headers["location"]} to: #{uri}"
+      pp "Rewrite location header from: #{headers["location"]} to: #{uri}"
 
       headers["location"] = uri
     end
