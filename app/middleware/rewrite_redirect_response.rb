@@ -15,11 +15,15 @@ class RewriteRedirectResponse
   def call(env)
     status, headers, body = @app.call(env)
 
+    pp headers
+
     if (location = headers.fetch("location", nil)) && (uri = URI.parse(location)) && uri.host =~ /\.b2clogin\.com$/
       uri.query = uri.query.sub("%2Fcallback%3Fid%3D", "%2Fcallback%2F")
       uri.query = uri.query.sub("/callback?id=", "/callback/")
 
       # logger.debug "Rewrite location header from: #{headers["location"]} to: #{uri}"
+
+      pp uri.query
 
       headers["location"] = uri
     end
