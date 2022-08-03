@@ -89,14 +89,14 @@ module OmniAuth
 
       def raw_info
         return @raw_info if @raw_info
-
-        pp "========================================"
-        pp options
-        pp "--------------------"
-        pp access_token
-        pp "========================================"
-
         inf = access_token.get(options.client_options.raw_info_url).parsed
+
+        pp "========================================"
+        pp options.client_options
+        pp "--------------------"
+        pp inf
+        pp "========================================"
+
         required_matches = options.client_options.ensure_matching
         match = true
         required_matches.each do |field, options|
