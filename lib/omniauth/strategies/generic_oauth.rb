@@ -94,8 +94,6 @@ module OmniAuth
         pp "========================================"
         pp options.client_options
         pp "--------------------"
-        pp access_token.get(options.client_options.raw_info_url)
-        pp "--------------------"
         pp inf
         pp "========================================"
 
