@@ -1,16 +1,15 @@
-# frozen_string_literal: true
-
 Rails.application.routes.draw do
   resources :test
 
   scope :auth do
     use_doorkeeper
-    use Middleware::RewriteRequest
 
     get "/login", to: "auth/sessions#new" # for defining continue
     get "/logout", to: "auth/sessions#destroy" # deletes the session
     get "/:provider/callback", to: "auth/sessions#create" # omniauth route
     post "/:provider/callback", to: "auth/sessions#create" # omniauth route
+    get "/:provider/callback/:strategy", to: "auth/sessions#create" # omniauth route
+    post "/:provider/callback/:strategy", to: "auth/sessions#create" # omniauth route
 
     post "/signin", to: "auth/sessions#signin" # local account login
     post "/signup", to: "auth/signups#create" # manual account creation
