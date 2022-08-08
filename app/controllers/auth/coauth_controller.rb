@@ -81,7 +81,8 @@ module Auth
         value: path,
         httponly: true,
         secure: USE_SSL,
-        path: "/auth" # only sent to calls at this path
+        same_site: :none,
+        path: "/auth", # only sent to calls at this path
       }
       cookies.encrypted[:continue] = value
     end
