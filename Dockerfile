@@ -43,7 +43,7 @@ WORKDIR $APP_DIR
 ENV BUNDLE_APP_CONFIG="$APP_DIR/.bundle"
 
 # install packages
-ARG PACKAGES="tzdata libxml2 libxslt"
+ARG PACKAGES="tzdata libxml2 libxslt libc6-compat"
 RUN apk update \
     && apk upgrade \
     && apk add --update --no-cache $PACKAGES
