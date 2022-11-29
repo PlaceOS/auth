@@ -1,51 +1,7 @@
-# frozen_string_literal: true
+require_relative "application_record"
 
-class AdfsStrat
-  include NoBrainer::Document
-  include AuthTimestamps
-
-  table_config name: "adfs_strat"
-
-  field :name, type: String
-  belongs_to :authority, index: true
-
-  field :issuer, type: String, default: :aca
-  field :idp_sso_target_url_runtime_params, type: Hash
-  field :name_identifier_format, type: String, default: -> { "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" }
-  field :uid_attribute, type: String
-
-  field :assertion_consumer_service_url, type: String
-  field :idp_sso_target_url, type: String
-
-  field :idp_cert, type: String
-  field :idp_cert_fingerprint, type: String
-
-  field :attribute_service_name, type: String
-  field :attribute_statements, type: Hash, default: lambda {
-    {
-      name: ["name"],
-      email: %w[email mail],
-      first_name: %w[first_name firstname firstName givenname],
-      last_name: %w[last_name lastname lastName surname]
-    }
-  }
-  field :request_attributes, type: Array, default: lambda {
-    [
-      {name: "ImmutableID", name_format: "urn:oasis:names:tc:SAML:2.0:attrname-format:basic",
-       friendly_name: "Login Name"},
-      {name: "email", name_format: "urn:oasis:names:tc:SAML:2.0:attrname-format:basic",
-       friendly_name: "Email address"},
-      {name: "name", name_format: "urn:oasis:names:tc:SAML:2.0:attrname-format:basic",
-       friendly_name: "Full name"},
-      {name: "first_name", name_format: "urn:oasis:names:tc:SAML:2.0:attrname-format:basic",
-       friendly_name: "Given name"},
-      {name: "last_name", name_format: "urn:oasis:names:tc:SAML:2.0:attrname-format:basic",
-       friendly_name: "Family name"}
-    ]
-  }
-
-  field :idp_slo_target_url, type: String
-  field :slo_default_relay_state, type: String
+class AdfsStrat < ApplicationRecord
+  belongs_to :authority
 
   # Not actually sure what this type stuff is for?
   def type
@@ -65,7 +21,6 @@ class AdfsStrat
 
   validates :authority_id, presence: true
   validates :name, presence: true
-
   validates :issuer, presence: true
   validates :idp_sso_target_url, presence: true
   validates :name_identifier_format, presence: true

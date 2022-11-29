@@ -1,21 +1,7 @@
-# frozen_string_literal: true
-
+require_relative "application_record"
 require "addressable/uri"
 
-class Authority
-  include NoBrainer::Document
-  include AuthTimestamps
-
-  table_config name: "authority"
-
-  field :name, type: String
-  field :domain, type: String, uniq: true, index: true
-  field :description, type: String
-  field :login_url, type: String, default: "/login?continue={{url}}"
-  field :logout_url, type: String, default: "/auth/logout"
-  field :internals, type: Hash, default: -> { {} }
-  field :config, type: Hash, default: -> { {} }
-
+class Authority < ApplicationRecord
   validates :name, presence: true
 
   # Ensure we are only saving the host
@@ -25,7 +11,7 @@ class Authority
   end
 
   def self.find_by_domain(name)
-    Authority.where(domain: name.downcase).first
+    find_by domain: name.downcase
   end
 
   def as_json(options = {})

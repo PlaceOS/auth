@@ -2,7 +2,7 @@
 
 ## ENV VARS
 
-```
+```bash
 # If a sentry Data Source Name is configured
 SENTRY_DSN=https://<key>@<organization>.ingest.sentry.io/<project>
 
@@ -46,7 +46,7 @@ Add these keys to the Authority internals config
 
 ### Amazon
 
-```
+```yaml
 "storage": {
   "name": "AmazonS3",
   "access_id": "",
@@ -57,7 +57,7 @@ Add these keys to the Authority internals config
 
 ### Google
 
-```
+```yaml
 "storage": {
   "name": "GoogleCloudStorage",
   "access_id": "",
@@ -66,21 +66,9 @@ Add these keys to the Authority internals config
 }
 ```
 
-### Microsoft Azure
-
-```
-"storage": {
-  "name": "MicrosoftAzure",
-  "account_name": "",
-  "access_key": "",
-  # optional defaults to {account_name}.blob.core.windows.net
-  "blob_host": nil
-}
-```
-
 ### OpenStack or RackSpace Cloud
 
-```
+```yaml
 "storage": {
   "name": "OpenStackSwift",
   "username": "admin:admin",
@@ -95,6 +83,19 @@ Add these keys to the Authority internals config
 }
 ```
 
+### Microsoft Azure
+
+currently disabled due to gem requirement clashes
+
+```yaml
+"storage": {
+  "name": "MicrosoftAzure",
+  "account_name": "",
+  "access_key": "",
+  # optional defaults to {account_name}.blob.core.windows.net
+  "blob_host": nil
+}
+```
 
 ## Authentication Flow
 
@@ -106,7 +107,7 @@ Use the Client Credentials flow
 
 with body:
 
-```
+```yaml
 {
   "grant_type"    : "password",
   "username"      : "user@example.com",
@@ -116,14 +117,13 @@ with body:
 
 This will return
 
-```
+```yaml
 {
   "access_token": "19adad999683f5b450c460726aa",
   "token_type": "bearer",
   "expires_in": 7200
 }
 ```
-
 
 ### Native App Auth
 
@@ -137,7 +137,7 @@ This will return
 
 This will return
 
- ```
+ ```yaml
  {
    "access_token": "de6780bc506a0446309bd9362820ba8aed28aa506c71eedbe1c5c4f9dd350e54",
    "token_type": "Bearer",
@@ -148,7 +148,7 @@ This will return
 
 ## Revoking Refresh Tokens
 
-```
+```text
 POST /auth/oauth/revoke?client_id=<client_id>&client_secret=<secret>
 token=<refresh-token>
 ```

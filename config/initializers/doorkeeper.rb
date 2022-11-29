@@ -6,10 +6,8 @@ require "base64"
 require "securerandom"
 require "doorkeeper"
 require "doorkeeper/jwt"
-require "doorkeeper-rethinkdb"
 
 Doorkeeper.configure do
-  orm :rethinkdb
   hash_token_secrets
 
   # This block will be called to check whether the
