@@ -1,5 +1,5 @@
 # This migration comes from condo_active_record (originally 20111001022500)
-class Init < ActiveRecord::Migration
+class Init < ActiveRecord::Migration[7.0]
     def change
         #
         # Create the table for storing the uploads currently being processed
