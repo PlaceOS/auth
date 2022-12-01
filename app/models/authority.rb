@@ -2,6 +2,8 @@ require_relative "application_record"
 require "addressable/uri"
 
 class Authority < ApplicationRecord
+  self.table_name = "authority"
+
   validates :name, presence: true
 
   # Ensure we are only saving the host

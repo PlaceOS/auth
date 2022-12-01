@@ -6,6 +6,8 @@ require "bcrypt"
 class User < ApplicationRecord
   include BCrypt
 
+  self.table_name = "user"
+
   PUBLIC_DATA = {only: %i[
     id email_digest nickname name first_name last_name
     country building created_at

@@ -1,6 +1,8 @@
 require_relative "application_record"
 
 class LdapStrat < ApplicationRecord
+  self.table_name = "ldap_strat"
+
   belongs_to :authority
 
   def type

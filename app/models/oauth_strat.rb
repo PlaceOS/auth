@@ -1,6 +1,8 @@
 require_relative "application_record"
 
 class OauthStrat < ApplicationRecord
+  self.table_name = "oauth_strat"
+
   belongs_to :authority
 
   def type

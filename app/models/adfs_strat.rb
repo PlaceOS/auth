@@ -1,6 +1,8 @@
 require_relative "application_record"
 
 class AdfsStrat < ApplicationRecord
+  self.table_name = "adfs_strat"
+
   belongs_to :authority
 
   # Not actually sure what this type stuff is for?

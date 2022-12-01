@@ -30,6 +30,7 @@ services:
   # docker-compose exec -it auth2 bundle exec rails test
   auth2:
     build: .
+    user: root
     ports:
       - "3000:8080"
     hostname: auth

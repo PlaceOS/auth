@@ -1,6 +1,8 @@
 require_relative "application_record"
 
 class Authentication < ApplicationRecord
+  self.table_name = "authentication"
+
   belongs_to :user
   belongs_to :authority
 
