@@ -59,7 +59,7 @@ RUN adduser -D -g "" -h "/nonexistent" -s "/sbin/nologin" -H -u "${UID}" "${USER
 RUN chown appuser:appuser -R /app/tmp
 
 # NOTE:: this should not be used, instead use `RAILS_MASTER_KEY` env var
-RUN chown appuser:appuser /app/config/master.key
+RUN chown appuser:appuser -R /app/config/
 RUN bundle binstubs bundler --force
 
 # Use an unprivileged user.
