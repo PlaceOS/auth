@@ -45,4 +45,5 @@ services:
       TZ: $TZ
       PLACE_URI: https://localhost:8443
       RAILS_ENV: ${RAILS_ENV:-test}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE:-7d46ace87401c657323a47690dbe4a4c126e6de5a8de49fa47e92404fd80ba29eaa09f6910fc1ceb8ebb53234670b1870c558dfa3719671c98cf84b195cfc462}
       <<: *postgresdb-client-env
