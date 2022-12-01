@@ -4,7 +4,7 @@ jobs:
   style:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Run StandardRB
         uses: andrewmcodes/standardrb-action@v0.0.2
         env:
@@ -13,8 +13,15 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Run Brakeman Static Analysis
         uses: devmasx/brakeman-linter-action@v1.0.0
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run spec
+        run: sh ./spec

@@ -44,4 +44,5 @@ services:
       COAUTH_NO_SSL: "true"
       TZ: $TZ
       PLACE_URI: https://localhost:8443
+      RAILS_ENV: ${RAILS_ENV:-test}
       <<: *postgresdb-client-env
