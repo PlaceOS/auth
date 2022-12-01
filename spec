@@ -23,7 +23,7 @@ exit_code="0"
 
 # docker-compose exec -it auth2 rake db:create db:migrate
 # docker-compose exec -it auth2 bundle exec rails db:seed
-#docker-compose exec -it auth2 bundle exec rails test
+# docker-compose exec -it auth2 bundle exec rails test
 
 docker-compose run -it --entrypoint="" auth2 bundle exec rails test
 docker-compose down &> /dev/null
