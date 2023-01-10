@@ -127,7 +127,7 @@ module Auth
       else
         begin
           # Log-in the user currently authenticating
-          user = User.find?(auth_model.user_id)
+          user = User.find_by(id: auth_model.user_id)
 
           # There is no user model, so we want to recover from this automatically
           if user.nil?

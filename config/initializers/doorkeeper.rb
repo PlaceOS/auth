@@ -17,7 +17,7 @@ Doorkeeper.configure do
     # the cookie to particular paths (i.e. /auth)
 
     cookie = cookies.encrypted[:user]
-    user = User.find?(cookie["id"]) if cookie && Time.now.to_i < cookie["expires"]
+    user = User.find_by(id: cookie["id"]) if cookie && Time.now.to_i < cookie["expires"]
     unless user
       current_authority = Authority.find_by_domain(request.host)
       login_url = current_authority.login_url
