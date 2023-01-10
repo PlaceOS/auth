@@ -51,15 +51,9 @@ Doorkeeper.configure do
     end
   end
 
-  # Skip authorization only if the app is owned by us
-  if Rails.env.production?
-    skip_authorization do |_resource_owner, client|
-      client.application.skip_authorization
-    end
-  else
-    skip_authorization do |_resource_owner, _client|
-      true
-    end
+  # Skip authorization as we've not implemented it
+  skip_authorization do
+    true
   end
 
   # username and password authentication for local auth
