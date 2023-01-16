@@ -12,8 +12,9 @@ class User
   table_config name: "user"
 
   PUBLIC_DATA = {only: %i[
-    id email_digest nickname name first_name last_name
-    country building created_at
+    id email_digest nickname name first_name last_name groups
+    country building image created_at authority_id deleted
+    department preferred_language staff_id
   ]}.freeze
 
   field :id, type: String, primary_key: true, default: -> { "user-#{::NoBrainer::Document::PrimaryKey::Generator.generate}" }
@@ -31,6 +32,8 @@ class User
   field :first_name, type: String
   field :last_name, type: String
   field :building, type: String
+  field :department, type: String
+  field :preferred_language, type: String
 
   field :password_digest, type: String
   field :email_digest, type: String, index: true
