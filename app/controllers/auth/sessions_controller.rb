@@ -167,7 +167,8 @@ module Auth
       ::ActionController::Parameters.new(authinfo).permit(
         :name, :first_name, :last_name, :email, :password, :password_confirmation, :metadata,
         :login_name, :staff_id, :phone, :country, :nickname, :image, :ui_theme, :building,
-        :card_number, :access_token, :refresh_token, :expires_at, :expires
+        :card_number, :access_token, :refresh_token, :expires_at, :expires, :department,
+        :preferred_language, :misc
       )
     end
 
