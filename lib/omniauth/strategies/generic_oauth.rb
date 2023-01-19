@@ -95,8 +95,21 @@ module OmniAuth
         match = true
         required_matches.each do |field, options|
           checking = Array(inf[field.to_s])
-          matches = checking & options
-          if matches.length.zero?
+          expressions = options.map { |str| Regexp.new(str, Regexp::IGNORECASE) }
+          matches = false
+          checking.each do |check|
+            expressions.each do |regex|
+              matching = regex.match(check)
+              if matching
+                matches = true
+                break
+              end
+            end
+
+            break if matches
+          end
+
+          if !matches
             match = false
             break
           end
