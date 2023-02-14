@@ -34,6 +34,9 @@ end
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # disable host blocking
+  config.hosts.clear
+
   config.active_record.migration_error = false
 
   # Code is not reloaded between requests.
