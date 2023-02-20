@@ -158,8 +158,7 @@ Doorkeeper::JWT.configure do
 
   # Set the encryption secret. This would be shared with any other applications
   # that should be able to read the payload of the token. Defaults to "secret".
-  key = ENV["JWT_SECRET"]
-  key = key.try { |k| Base64.decode64(k) } || <<~KEY
+  DEV_KEY = <<~KEY
     -----BEGIN RSA PRIVATE KEY-----
     MIIEpAIBAAKCAQEAt01C9NBQrA6Y7wyIZtsyur191SwSL3MjR58RIjZ5SEbSyzMG
     3r9v12qka4UtpB2FmON2vwn0fl/7i3Jgh1Xth/s+TqgYXMebdd123wodrbex5pi3
@@ -188,7 +187,11 @@ Doorkeeper::JWT.configure do
     4n455vizig2c4/sxU5yu9AF9Dv+qNsGCx2e9uUOTDUlHM9NXwxU9rQ==
     -----END RSA PRIVATE KEY-----
   KEY
+  key = ENV["JWT_SECRET"]
+  key = key.try { |k| Base64.decode64(k) } || DEV_KEY
   secret_key key
+
+  puts "WARN: insecure development secret in use" if key == DEV_KEY
 
   # Specify encryption type (https://github.com/progrium/ruby-jwt)
   encryption_method :rs256
