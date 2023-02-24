@@ -267,20 +267,21 @@ GEM
       rack (>= 1.2, < 4)
       snaky_hash (~> 2.0)
       version_gem (~> 1.1)
-    omniauth (1.9.2)
+    omniauth (2.0.0)
       hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
+      rack-protection
     omniauth-ldap2 (1.0.4)
       net-ldap
       omniauth
       pyu-ruby-sasl
       rubyntlm
-    omniauth-oauth2 (1.7.3)
+    omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
-      omniauth (>= 1.9, < 3)
-    omniauth-saml (1.10.3)
-      omniauth (~> 1.3, >= 1.3.2)
-      ruby-saml (~> 1.9)
+      omniauth (~> 2.0)
+    omniauth-saml (2.1.0)
+      omniauth (~> 2.0)
+      ruby-saml (~> 1.12)
     opentelemetry-api (1.1.0)
     opentelemetry-common (0.19.6)
       opentelemetry-api (~> 1.0)
@@ -479,6 +480,8 @@ GEM
     pyu-ruby-sasl (0.0.3.3)
     racc (1.6.2)
     rack (2.2.6.2)
+    rack-protection (3.0.5)
+      rack
     rack-test (2.0.2)
       rack (>= 1.3)
     rails (6.0.6.1)
@@ -601,7 +604,7 @@ DEPENDENCIES
   net-pop
   net-smtp
   nobrainer!
-  omniauth (~> 1.9)
+  omniauth (~> 2.0)
   omniauth-ldap2
   omniauth-oauth2
   omniauth-saml
