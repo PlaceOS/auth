@@ -29,6 +29,10 @@ module OmniAuth
         data
       end
 
+      extra do
+        raw_info
+      end
+
       def request_phase
         authid = request.params["id"]
         if authid.nil?
