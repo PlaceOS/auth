@@ -82,11 +82,15 @@ module Auth
         user.authority_id = authority.id
 
         # This fixes issues where users change their UID
-        existing = ::User.find_by_email(authority.id, user.email)
-        if existing
-          user = existing
-          user.deleted = false
-          user.assign_attributes(args)
+        if user.email
+          existing = ::User.find_by_email(authority.id, user.email)
+          if existing
+            user = existing
+            user.deleted = false
+            user.assign_attributes(args)
+          end
+        else
+          logger.warn "User missing email: #{auth.extra.inspect}"
         end
 
         # now the user record is initialised (but not yet saved), give
@@ -108,7 +112,7 @@ module Auth
           redirect_continue(path) { success_path }
           instance_exec user, auth["provider"], auth, &Authentication.after_login_block
         else
-          info = "User creation failed with #{auth.inspect}"
+          info = "User creation failed with #{auth.extra.inspect}"
           errors = "User model errors: #{user.errors.messages}"
           logger.warn info
           logger.info errors
