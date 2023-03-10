@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Error authenticating</title>
+  <meta name="description" content="A simple HTML5 Template for new projects.">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <p>
+    The following error was encountered during the authentication flow:<br />
+  </p>
+  <p id="message"></p>
+  <script type="text/javascript">
+    const urlParams = new URLSearchParams(window.location.search);
+    const myParam = urlParams.get('message');
+    document.getElementById("message").innerHTML = myParam;
+  </script>
+</body>
+</html>
