@@ -8,6 +8,17 @@ class User < ApplicationRecord
 
   self.table_name = "user"
 
+  after_initialize :set_defaults
+
+  # TODO:: this should be configured in the database for cross service consistency
+  def set_defaults
+    deleted = false
+    groups = []
+    expires = true
+    sys_admin = false
+    support = false
+  end
+
   PUBLIC_DATA = {only: %i[
     id email_digest nickname name first_name last_name groups
     country building image created_at authority_id deleted
