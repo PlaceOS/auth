@@ -29,3 +29,9 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Ignore Byebug command history file.
+.byebug_history
+*.DS_Store
+config/master.key
+

@@ -9,8 +9,9 @@ class User < ApplicationRecord
   self.table_name = "user"
 
   PUBLIC_DATA = {only: %i[
-    id email_digest nickname name first_name last_name
-    country building created_at
+    id email_digest nickname name first_name last_name groups
+    country building image created_at authority_id deleted
+    department preferred_language staff_id
   ]}.freeze
 
   belongs_to :authority
