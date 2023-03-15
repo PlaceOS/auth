@@ -6,10 +6,8 @@ require "base64"
 require "securerandom"
 require "doorkeeper"
 require "doorkeeper/jwt"
-require "doorkeeper-rethinkdb"
 
 Doorkeeper.configure do
-  orm :rethinkdb
   hash_token_secrets
 
   # This block will be called to check whether the
@@ -19,7 +17,7 @@ Doorkeeper.configure do
     # the cookie to particular paths (i.e. /auth)
 
     cookie = cookies.encrypted[:user]
-    user = User.find?(cookie["id"]) if cookie && Time.now.to_i < cookie["expires"]
+    user = User.find_by(id: cookie["id"]) if cookie && Time.now.to_i < cookie["expires"]
     unless user
       current_authority = Authority.find_by_domain(request.host)
       login_url = current_authority.login_url
@@ -53,15 +51,9 @@ Doorkeeper.configure do
     end
   end
 
-  # Skip authorization only if the app is owned by us
-  if Rails.env.production?
-    skip_authorization do |_resource_owner, client|
-      client.application.skip_authorization
-    end
-  else
-    skip_authorization do |_resource_owner, _client|
-      true
-    end
+  # Skip authorization as we've not implemented it
+  skip_authorization do
+    true
   end
 
   # username and password authentication for local auth
@@ -166,8 +158,7 @@ Doorkeeper::JWT.configure do
 
   # Set the encryption secret. This would be shared with any other applications
   # that should be able to read the payload of the token. Defaults to "secret".
-  key = ENV["JWT_SECRET"]
-  key = key.try { |k| Base64.decode64(k) } || <<~KEY
+  DEV_KEY = <<~KEY
     -----BEGIN RSA PRIVATE KEY-----
     MIIEpAIBAAKCAQEAt01C9NBQrA6Y7wyIZtsyur191SwSL3MjR58RIjZ5SEbSyzMG
     3r9v12qka4UtpB2FmON2vwn0fl/7i3Jgh1Xth/s+TqgYXMebdd123wodrbex5pi3
@@ -196,7 +187,11 @@ Doorkeeper::JWT.configure do
     4n455vizig2c4/sxU5yu9AF9Dv+qNsGCx2e9uUOTDUlHM9NXwxU9rQ==
     -----END RSA PRIVATE KEY-----
   KEY
+  key = ENV["JWT_SECRET"]
+  key = key.try { |k| Base64.decode64(k) } || DEV_KEY
   secret_key key
+
+  puts "WARN: insecure development secret in use" if key == DEV_KEY
 
   # Specify encryption type (https://github.com/progrium/ruby-jwt)
   encryption_method :rs256

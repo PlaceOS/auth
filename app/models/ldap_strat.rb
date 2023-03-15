@@ -1,23 +1,9 @@
-# frozen_string_literal: true
+require_relative "application_record"
 
-class LdapStrat
-  include NoBrainer::Document
-  include AuthTimestamps
+class LdapStrat < ApplicationRecord
+  self.table_name = "ldap_strat"
 
-  table_config name: "ldap_strat"
-
-  field :name, type: String # (used as title)
-
-  belongs_to :authority, index: true
-
-  field :port, type: Integer, default: 636
-  field :auth_method, type: String, default: :ssl
-  field :uid, type: String, default: -> { "sAMAccountName" }
-  field :host, type: String
-  field :base, type: String
-  field :bind_dn, type: String
-  field :password, type: String # This should not be plain text
-  field :filter
+  belongs_to :authority
 
   def type
     "ldaps"

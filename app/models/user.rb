@@ -1,15 +1,12 @@
-# frozen_string_literal: true
-
+require_relative "application_record"
 require "email_validator"
 require "digest/md5"
 require "bcrypt"
 
-class User
-  include NoBrainer::Document
-  include AuthTimestamps
+class User < ApplicationRecord
   include BCrypt
 
-  table_config name: "user"
+  self.table_name = "user"
 
   PUBLIC_DATA = {only: %i[
     id email_digest nickname name first_name last_name groups
@@ -17,51 +14,15 @@ class User
     department preferred_language staff_id
   ]}.freeze
 
-  field :id, type: String, primary_key: true, default: -> { "user-#{::NoBrainer::Document::PrimaryKey::Generator.generate}" }
-  field :name, type: String
-  field :nickname, type: String
-  field :email, type: String, index: true
-  field :phone, type: String
-  field :country, type: String
-  field :image, type: String
-  field :ui_theme, type: String
-  field :misc, type: String
-
-  field :login_name, type: String, index: true
-  field :staff_id, type: String, index: true
-  field :first_name, type: String
-  field :last_name, type: String
-  field :building, type: String
-  field :department, type: String
-  field :preferred_language, type: String
-
-  field :password_digest, type: String
-  field :email_digest, type: String, index: true
-
-  field :card_number, type: String
-  field :deleted, type: Boolean, default: false
-
-  # typically LDAP groups
-  field :groups, type: Array, default: -> { [] }
-
-  # User credentials
-  field :access_token, type: String
-  field :refresh_token, type: String
-  field :expires_at, type: Integer
-  field :expires, type: Boolean
-
-  belongs_to :authority, index: true
+  belongs_to :authority
   has_many :authentications, dependent: :destroy
   has_many :access_tokens, class_name: "Doorkeeper::AccessToken", dependent: :destroy, foreign_key: :resource_owner_id
   has_many :access_grants, class_name: "Doorkeeper::AccessGrant", dependent: :destroy, foreign_key: :resource_owner_id
 
   def self.find_by_email(authority, email)
     email_digest = Digest::MD5.hexdigest(email.downcase)
-    User.where(authority_id: authority, email_digest: email_digest).first
+    find_by authority_id: authority, email_digest: email_digest
   end
-
-  field :sys_admin, default: false, index: true
-  field :support, default: false
 
   before_save :build_name, if: ->(model) { model.first_name.present? }
   def build_name
@@ -113,13 +74,13 @@ class User
   # END PASSWORD METHODS
 
   # Make reference to the email= function of the model
-  alias_method :assign_email, :email=
   def email=(new_email)
     super(new_email)
 
     # For looking up user pictures without making the email public
     self.email_digest = new_email ? Digest::MD5.hexdigest(new_email.downcase) : nil
   end
+  alias_method :assign_email, :email=
 
   # Validations
   validates :email, email: true

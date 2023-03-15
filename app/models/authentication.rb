@@ -1,28 +1,17 @@
-# frozen_string_literal: true
+require_relative "application_record"
 
-class Authentication
-  include NoBrainer::Document
-  include AuthTimestamps
+class Authentication < ApplicationRecord
+  self.table_name = "authentication"
 
-  table_config name: "authentication"
+  belongs_to :user
+  belongs_to :authority
 
-  field :uid, type: String
-  field :provider, type: String
-
-  belongs_to :user, index: true
-  belongs_to :authority, index: true
-
-  def self.by_user(user)
-    Authentication.where(user_id: user.id).to_a
-  end
-
-  def self.for_user(user_id)
-    Authentication.where(user_id: user_id).to_a
-  end
+  scope :for_user, ->(user_id) { where(user_id: user_id) }
+  scope :by_user, ->(user_id) { where(user_id: user_id) }
 
   # Where auth is https://github.com/omniauth/omniauth/wiki/Auth-Hash-Schema
   def self.from_omniauth(authority_id, auth)
-    find?("auth-#{authority_id}-#{auth["provider"]}-#{auth["uid"]}")
+    find_by id: "auth-#{authority_id}-#{auth["provider"]}-#{auth["uid"]}"
   end
 
   def self.create_with_omniauth(authority_id, auth, user_id)

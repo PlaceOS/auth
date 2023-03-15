@@ -9,13 +9,15 @@ Thread.new do
     begin
       expired = 10.minutes.ago.to_i
 
-      NoBrainer.run(db: "rethinkdb") do |r|
-        r.table("table_config").filter { |sys| sys["indexes"].contains("ttl") }
-      end.map { |table| table["name"] }.each do |table|
-        NoBrainer.run do |r|
-          r.table(table).between(past, expired, index: "ttl").delete
-        end
-      end
+      # TODO:: need to implement this for PostgreSQL, probably should live in a different service
+
+      #NoBrainer.run(db: "rethinkdb") do |r|
+      #  r.table("table_config").filter { |sys| sys["indexes"].contains("ttl") }
+      #end.map { |table| table["name"] }.each do |table|
+      #  NoBrainer.run do |r|
+      #    r.table(table).between(past, expired, index: "ttl").delete
+      #  end
+      #end
     rescue => e
       puts "error clearing expired ttl: #{e.message}"
     end

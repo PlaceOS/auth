@@ -1,7 +1,7 @@
 ARG RUBY_VER="3.1"
 FROM ruby:$RUBY_VER-alpine AS build-env
 
-ARG PACKAGES="git libxml2 libxslt build-base curl-dev libxml2-dev libxslt-dev zlib-dev tzdata"
+ARG PACKAGES="git libxml2 libxslt build-base curl-dev libxml2-dev libxslt-dev zlib-dev tzdata libpq-dev"
 
 RUN apk update && \
     apk upgrade && \
@@ -43,7 +43,7 @@ WORKDIR $APP_DIR
 ENV BUNDLE_APP_CONFIG="$APP_DIR/.bundle"
 
 # install packages
-ARG PACKAGES="tzdata libxml2 libxslt libc6-compat"
+ARG PACKAGES="tzdata libxml2 libxslt libc6-compat libpq-dev"
 RUN apk update \
     && apk upgrade \
     && apk add --update --no-cache $PACKAGES
@@ -57,6 +57,9 @@ ENV USER=appuser
 # See https://stackoverflow.com/a/55757473/12429735RUN
 RUN adduser -D -g "" -h "/nonexistent" -s "/sbin/nologin" -H -u "${UID}" "${USER}"
 RUN chown appuser:appuser -R /app/tmp
+
+# NOTE:: this should not be used, instead use `RAILS_MASTER_KEY` env var
+RUN chown appuser:appuser -R /app/config/
 RUN bundle binstubs bundler --force
 
 # Use an unprivileged user.

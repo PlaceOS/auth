@@ -1,33 +1,34 @@
-# frozen_string_literal: true
-
 source "https://rubygems.org"
 
-gem "rails", "~> 6.0", ">= 6.0.5.1"
+gem "rails", "~> 7.0.4"
+
 # We don't use the mail gem
 gem "net-smtp", require: false
 gem "net-imap", require: false
 gem "net-pop", require: false
 
+# Reduces boot times through caching; required in config/boot.rb
+gem "bootsnap", require: false
+
 # High performance web server
 gem "puma"
 
 # Database
-gem "nobrainer", git: "https://github.com/place-labs/nobrainer.git", branch: "fix/ensure-fix-table-duplicate"
+gem "pg"
 gem "redis"
 
 # Authentication
-gem "doorkeeper", "~> 5.4"
+gem "doorkeeper", "~> 5.6"
 gem "doorkeeper-jwt"
-gem "doorkeeper-rethinkdb", git: "https://github.com/place-labs/doorkeeper-rethinkdb.git"
 gem "jwt"
 gem "omniauth", "~> 1.9"
 gem "omniauth-ldap2"
 gem "omniauth-oauth2"
 gem "omniauth-saml"
 
-# Uploads
-gem "condo", git: "https://github.com/cotag/Condominios.git", branch: "rethink-update"
-gem "condo-rethinkdb", git: "https://github.com/place-labs/condo-rethinkdb.git"
+# Uploads (rethink update looks like a rails compatibility update)
+gem "condo", git: "https://github.com/cotag/Condominios.git", branch: "rails7"
+gem "condo_active_record", git: "https://github.com/cotag/condo_active_record.git"
 
 # Model support
 gem "addressable"
@@ -38,7 +39,7 @@ gem "email_validator"
 gem "lograge"
 gem "logstash-event"
 gem "mono_logger"
-gem "sentry-raven"
+gem "sentry-ruby"
 gem "opentelemetry-sdk"
 gem "opentelemetry-exporter-otlp"
 gem "opentelemetry-instrumentation-all"
@@ -50,19 +51,22 @@ gem "rbtrace"
 gem "yajl-ruby"
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem "byebug", platform: :mri
-  gem "pry-rails", platform: :mri
-  gem "web-console", platform: :mri
+  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  gem "debug", platforms: %i[ mri mingw x64_mingw ]
 end
 
 group :development do
-  gem "listen", "~> 3.0"
+  # Use console on exceptions pages [https://github.com/rails/web-console]
+  gem "web-console"
+  gem "pry-rails"
+end
 
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  # gem 'spring'
-  # gem 'spring-watcher-listen', '~> 2.0.0'
+group :test do
+  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  gem "capybara"
+  gem "selenium-webdriver"
+  gem "webdrivers"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data" # , platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
