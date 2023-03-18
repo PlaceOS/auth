@@ -182,8 +182,7 @@ GEM
       google-apis-core (>= 0.11.0, < 2.a)
     google-cloud-env (1.6.0)
       faraday (>= 0.17.3, < 3.0)
-    google-protobuf (3.22.2-aarch64-linux)
-    google-protobuf (3.22.2-x86_64-linux)
+    google-protobuf (3.21.12)
     googleapis-common-protos-types (1.5.0)
       google-protobuf (~> 3.14)
     googleauth (1.3.0)
@@ -603,4 +602,4 @@ DEPENDENCIES
   yajl-ruby
 
 BUNDLED WITH
-   2.3.13
+   2.4.8
