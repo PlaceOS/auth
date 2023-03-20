@@ -12,11 +12,11 @@ class User < ApplicationRecord
 
   # TODO:: this should be configured in the database for cross service consistency
   def set_defaults
-    self.deleted = false
-    self.groups = []
-    self.expires = true
-    self.sys_admin = false
-    self.support = false
+    self.deleted ||= false
+    self.groups ||= []
+    self.expires ||= false
+    self.sys_admin ||= false
+    self.support ||= false
   end
 
   PUBLIC_DATA = {only: %i[
