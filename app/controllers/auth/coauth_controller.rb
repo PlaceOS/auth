@@ -37,7 +37,7 @@ module Auth
         end
       end
 
-      redirect_to path
+      redirect_to path, allow_other_host: true
     end
 
     def new_session(user)
