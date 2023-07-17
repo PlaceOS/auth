@@ -2,9 +2,6 @@ require_relative "boot"
 
 require "rails/all"
 
-require_relative "../app/middleware/rewrite_callback_request"
-require_relative "../app/middleware/rewrite_redirect_response"
-
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
