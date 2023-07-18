@@ -45,7 +45,7 @@ module OmniAuth
       end
 
       def callback_phase
-        authid = request.params["id"]
+        authid = request.params["id"] || (Authority.find_by_domain(request.host).get_callback_uri || OauthStrat.first.try(:id))
 
         # Set out details once again
         if authid.nil?
