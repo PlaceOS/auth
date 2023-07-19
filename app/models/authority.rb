@@ -44,4 +44,8 @@ class Authority < ApplicationRecord
       config.residencies[0]
     end
   end
+
+  def get_callback_uri
+    internals["default_callback_uri"]
+  end
 end
