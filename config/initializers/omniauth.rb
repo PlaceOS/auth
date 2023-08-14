@@ -2,7 +2,9 @@
 
 require "omniauth"
 
-Rails.application.config.session_store :cookie_store, key: "_coauth_session"
+Rails.application.config.session_store :cookie_store,
+  key: "_coauth_session",
+  secure: Rails.env.production?
 
 require_relative "../../app/models/authentication"
 require_relative "../../app/models/authority"
