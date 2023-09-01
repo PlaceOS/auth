@@ -10,9 +10,23 @@ module Auth
 
     # Inline login
     def new
-      details = params.permit(:provider, :continue, :id)
+      details = params.permit(:provider, :continue, :id, :api-key, :x-api-key)
       remove_session
-      set_continue(details[:continue])
+      continue_uri = details[:continue]
+
+      # check for x-api-keys
+      # if they exist and are valid (making a request to rest-api to confirm)
+      # then configure a long lasting verified cookie
+      api_key = details[:api-key] || details[:x-api-key]
+      if api_key && api_key_valid? api_key
+        configure_api_key_access
+        redirect_to continue_uri, status: :see_other
+        return
+      end
+
+      # TODO:: configure defaults for provider and auth id as nginx won't know
+      authority = current_authority
+      set_continue(continue_uri)
       uri = "/auth/#{details[:provider]}"
 
       # Support generic auth sources

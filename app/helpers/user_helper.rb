@@ -2,6 +2,7 @@
 
 module UserHelper
   def remove_session
+    cookies.delete(:verified, path: "/")
     cookies.delete(:user, path: "/auth")
     cookies.delete(:social, path: "/auth")
     cookies.delete(:continue, path: "/auth")

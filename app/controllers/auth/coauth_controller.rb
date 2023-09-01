@@ -42,17 +42,50 @@ module Auth
 
     def new_session(user)
       @current_user = user
+
+      # default is 1 day
+      session_valid = (current_authority.internals["session_timeout"] || "24").to_i.hours.from_now
+
       value = {
         value: {
           id: user.id,
-          expires: 1.day.from_now.to_i
+          expires: session_valid.to_i
         },
+        expires: session_valid,
         secure: USE_SSL,
         httponly: true,
         same_site: :none,
         path: "/auth" # only sent to calls at this path
       }
       cookies.encrypted[:user] = value
+
+      # prevent SSO redirect at nginx layer
+      cookies.signed[:verified] = {
+        value: session_valid.to_i.to_s,
+        expires: session_valid,
+        secure: USE_SSL,
+        httponly: true,
+        same_site: :none,
+        path: "/"
+      }
+    end
+
+    # TODO:: complete this
+    def api_key_valid?(api_key)
+      true
+    end
+
+    def configure_api_key_access
+      session_valid = 20.years
+
+      cookies.signed[:verified] = {
+        value: session_valid.to_i.to_s,
+        expires: session_valid,
+        secure: USE_SSL,
+        httponly: true,
+        same_site: :none,
+        path: "/"
+      }
     end
 
     def store_social(uid, provider)
@@ -62,6 +95,7 @@ module Auth
           provider: provider,
           expires: 1.hour.from_now.to_i
         },
+        expires: 1.hour,
         secure: USE_SSL,
         httponly: true,
         path: "/auth" # only sent to calls at this path
