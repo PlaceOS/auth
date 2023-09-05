@@ -3,6 +3,7 @@
 require "net/http"
 require "uri"
 require "set"
+require 'cgi'
 
 module Auth
   class SessionsController < CoauthController
@@ -19,15 +20,24 @@ module Auth
       # then configure a long lasting verified cookie
       api_key = details[:api-key] || details[:x-api-key]
       if api_key && api_key_valid? api_key
-        configure_api_key_access
+        configure_asset_access
         redirect_to continue_uri, status: :see_other
         return
       end
 
-      # TODO:: configure defaults for provider and auth id as nginx won't know
-      authority = current_authority
+      provider = details[:provider]
+      auth_id = details[:id]
+
+      # use default login if URI not provided
+      if !provider.presence || !auth_id.presence
+        authority = current_authority
+        login_uri = authority.login_url
+        redirect_to authority.login_url.gsub("{{url}}", continue_uri), status: :see_other
+        return
+      end
+
       set_continue(continue_uri)
-      uri = "/auth/#{details[:provider]}"
+      uri = "/auth/#{provider}"
 
       # Support generic auth sources
       uri = "#{uri}?id=#{details[:id]}" if details[:id]

@@ -43,8 +43,8 @@ module Auth
     def new_session(user)
       @current_user = user
 
-      # default is 1 day
-      session_valid = (current_authority.internals["session_timeout"] || "24").to_i.hours.from_now
+      # default is 1 day (timeout in minutes)
+      session_valid = (current_authority.internals["session_timeout"] || "1440").to_i.minutes.from_now
 
       value = {
         value: {
@@ -60,24 +60,18 @@ module Auth
       cookies.encrypted[:user] = value
 
       # prevent SSO redirect at nginx layer
-      cookies.signed[:verified] = {
-        value: session_valid.to_i.to_s,
-        expires: session_valid,
-        secure: USE_SSL,
-        httponly: true,
-        same_site: :none,
-        path: "/"
-      }
+      configure_asset_access
     end
 
-    # TODO:: complete this
+    # Is the API key valid?
     def api_key_valid?(api_key)
-      true
+      !!ApiKey.find_key!(api_key)
+    rescue
+      false
     end
 
-    def configure_api_key_access
-      session_valid = 20.years
-
+    def configure_asset_access
+      session_valid = 20.years.from_now
       cookies.signed[:verified] = {
         value: session_valid.to_i.to_s,
         expires: session_valid,
@@ -93,9 +87,9 @@ module Auth
         value: {
           uid: uid,
           provider: provider,
-          expires: 1.hour.from_now.to_i
+          expires: 20.minutes.from_now.to_i
         },
-        expires: 1.hour,
+        expires: 20.minutes,
         secure: USE_SSL,
         httponly: true,
         path: "/auth" # only sent to calls at this path
@@ -113,6 +107,7 @@ module Auth
 
       value = {
         value: path,
+        expires: 20.minutes,
         httponly: true,
         secure: USE_SSL,
         same_site: :none,
