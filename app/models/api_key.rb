@@ -6,7 +6,7 @@ class ApiKey < ApplicationRecord
   def self.find_key!(token)
     id, secret = token.split('.', 2)
 
-    model = Model::ApiKey.find(id)
+    model = self.find(id)
 
     # Same error as being unable to find the model
     digest = OpenSSL::Digest.new('sha512')

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "openssl"
 require "securerandom"
 
 module Auth
@@ -70,10 +71,17 @@ module Auth
       false
     end
 
+    SECRET = Rails.application.secrets.secret_key_base
+
     def configure_asset_access
       session_valid = 20.years.from_now
-      cookies.signed[:verified] = {
-        value: session_valid.to_i.to_s,
+
+      data = SecureRandom.hex(8)
+      digest = OpenSSL::Digest.new('sha256')
+      hmac = OpenSSL::HMAC.hexdigest(digest, SECRET, data)
+
+      cookies[:verified] = {
+        value: "#{data}.#{hmac}",
         expires: session_valid,
         secure: USE_SSL,
         httponly: true,

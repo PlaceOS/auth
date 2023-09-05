@@ -11,15 +11,15 @@ module Auth
 
     # Inline login
     def new
-      details = params.permit(:provider, :continue, :id, :api-key, :x-api-key)
+      details = params.permit(:provider, :continue, :id, :"api-key", :"x-api-key")
       remove_session
       continue_uri = details[:continue]
 
       # check for x-api-keys
       # if they exist and are valid (making a request to rest-api to confirm)
       # then configure a long lasting verified cookie
-      api_key = details[:api-key] || details[:x-api-key]
-      if api_key && api_key_valid? api_key
+      api_key = details[:"api-key"] || details[:"x-api-key"]
+      if api_key && api_key_valid?(api_key)
         configure_asset_access
         redirect_to continue_uri, status: :see_other
         return
