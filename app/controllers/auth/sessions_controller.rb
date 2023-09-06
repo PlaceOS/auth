@@ -20,13 +20,17 @@ module Auth
       # then configure a long lasting verified cookie
       if continue_uri
         parsed_uri = URI.parse(continue_uri)
-        continue_params = URI.decode_www_form(parsed_uri.query).to_h
+        query_params = parsed_uri.query
 
-        api_key = continue_params["api-key"] || continue_params["x-api-key"]
-        if api_key && api_key_valid?(api_key)
-          configure_asset_access
-          redirect_continue(continue_uri) { "/" }
-          return
+        if query_params
+          continue_params = URI.decode_www_form(query_params).to_h
+
+          api_key = continue_params["api-key"] || continue_params["x-api-key"]
+          if api_key && api_key_valid?(api_key)
+            configure_asset_access
+            redirect_continue(continue_uri) { "/" }
+            return
+          end
         end
       end
 
