@@ -10,7 +10,11 @@ module Auth
       if authority
         auth = authority.as_json(except: %i[created_at internals])
         auth[:version] = "v2.0.0"
-        auth[:session] = signed_in?
+
+        has_session = signed_in?
+        auth[:session] = has_session
+        configure_asset_access if has_session
+
         begin
           access_token = doorkeeper_token
           if access_token
