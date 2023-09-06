@@ -9,7 +9,7 @@ module Auth
     include CurrentAuthorityHelper
 
     Rails.application.config.force_ssl = true
-    USE_SSL = Rails.application.config.force_ssl
+    USE_SSL = true
 
     def success_path
       "/login_success.html"
