@@ -105,7 +105,6 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     google-protobuf (3.24.3)
-    google-protobuf (3.24.3-aarch64-linux)
     google-protobuf (3.24.3-x86_64-linux)
     googleapis-common-protos-types (1.8.0)
       google-protobuf (~> 3.18)
@@ -154,8 +153,6 @@ GEM
     nio4r (2.5.9)
     nokogiri (1.15.4)
       mini_portile2 (~> 2.8.2)
-      racc (~> 1.4)
-    nokogiri (1.15.4-aarch64-linux)
       racc (~> 1.4)
     nokogiri (1.15.4-x86_64-linux)
       racc (~> 1.4)
@@ -476,7 +473,6 @@ GEM
     zeitwerk (2.6.11)
 
 PLATFORMS
-  aarch64-linux
   ruby
   x86_64-linux
 
