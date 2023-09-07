@@ -10,16 +10,14 @@ module Auth
       if authority
         auth = authority.as_json(except: %i[created_at internals])
         auth[:version] = "v2.0.0"
-
-        has_session = signed_in?
-        auth[:session] = has_session
-        configure_asset_access if has_session
+        auth[:session] = signed_in?
 
         begin
           access_token = doorkeeper_token
           if access_token
             access_token.revoke_previous_refresh_token!
             auth[:token_valid] = true
+            configure_asset_access
           else
             auth[:token_valid] = false
           end
