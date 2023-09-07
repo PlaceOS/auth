@@ -104,8 +104,9 @@ GEM
     ffi (1.15.5)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-protobuf (3.24.2-aarch64-linux)
-    google-protobuf (3.24.2-x86_64-linux)
+    google-protobuf (3.24.3)
+    google-protobuf (3.24.3-aarch64-linux)
+    google-protobuf (3.24.3-x86_64-linux)
     googleapis-common-protos-types (1.8.0)
       google-protobuf (~> 3.18)
     hashie (5.0.0)
@@ -134,9 +135,11 @@ GEM
     matrix (0.4.2)
     method_source (1.0.0)
     mini_mime (1.1.5)
-    minitest (5.19.0)
+    mini_portile2 (2.8.4)
+    minitest (5.20.0)
     mono_logger (1.1.2)
     msgpack (1.7.2)
+    multi_json (1.15.0)
     multi_xml (0.6.0)
     net-imap (0.3.7)
       date
@@ -149,6 +152,9 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     nio4r (2.5.9)
+    nokogiri (1.15.4)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     nokogiri (1.15.4-aarch64-linux)
       racc (~> 1.4)
     nokogiri (1.15.4-x86_64-linux)
@@ -422,7 +428,7 @@ GEM
       psych (>= 4.0.0)
     redis (5.0.7)
       redis-client (>= 0.9.0)
-    redis-client (0.16.0)
+    redis-client (0.17.0)
       connection_pool
     regexp_parser (2.8.1)
     reline (0.3.8)
@@ -440,7 +446,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    sentry-ruby (5.10.0)
+    sentry-ruby (5.11.0)
       concurrent-ruby (~> 1.0, >= 1.0.2)
     snaky_hash (2.0.1)
       hashie
@@ -471,6 +477,7 @@ GEM
 
 PLATFORMS
   aarch64-linux
+  ruby
   x86_64-linux
 
 DEPENDENCIES
@@ -486,6 +493,7 @@ DEPENDENCIES
   lograge
   logstash-event
   mono_logger
+  multi_json
   net-imap
   net-pop
   net-smtp
