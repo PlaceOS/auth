@@ -26,10 +26,6 @@ gem "omniauth-ldap2"
 gem "omniauth-oauth2"
 gem "omniauth-saml"
 
-# Uploads (rethink update looks like a rails compatibility update)
-gem "condo", git: "https://github.com/cotag/Condominios.git", branch: "rails7"
-gem "condo_active_record", git: "https://github.com/cotag/condo_active_record.git"
-
 # Model support
 gem "addressable"
 gem "bcrypt"
@@ -49,6 +45,7 @@ gem "rbtrace"
 
 # Fast JSON parsing
 gem "yajl-ruby"
+gem "multi_json"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

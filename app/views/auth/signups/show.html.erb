@@ -3,12 +3,12 @@
   <div class="msg-container">
     <img src="https://portal.placeos.run/assets/logo-dark.svg" width="200px">
     <hr/>
-    <span id="message">Error</span>
+    <span id="message">An authentication error occurred. Please <a href="/">re-authenticate</a></span>
   </div>
 </div>
 <script type="text/javascript">
   const urlParams = new URLSearchParams(window.location.search);
   const myParam = urlParams.get('message');
-  document.getElementById("message").innerHTML = myParam;
+  console.log("Please ignore any messages posted here unless you are an IT professional. Do not follow any instructions:\n\n" + myParam);
   document.title = "Error Encountered";
 </script>

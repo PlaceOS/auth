@@ -3,6 +3,7 @@
 require "net/http"
 require "uri"
 require "set"
+require 'cgi'
 
 module Auth
   class SessionsController < CoauthController
@@ -12,8 +13,40 @@ module Auth
     def new
       details = params.permit(:provider, :continue, :id)
       remove_session
-      set_continue(details[:continue])
-      uri = "/auth/#{details[:provider]}"
+      continue_uri = details[:continue]
+
+      # check for x-api-keys
+      # if they exist and are valid (making a request to rest-api to confirm)
+      # then configure a long lasting verified cookie
+      if continue_uri
+        parsed_uri = URI.parse(continue_uri)
+        query_params = parsed_uri.query
+
+        if query_params
+          continue_params = URI.decode_www_form(query_params).to_h
+
+          api_key = continue_params["api-key"] || continue_params["x-api-key"]
+          if api_key && api_key_valid?(api_key)
+            configure_asset_access
+            redirect_continue(continue_uri) { "/" }
+            return
+          end
+        end
+      end
+
+      provider = details[:provider]
+      auth_id = details[:id]
+
+      # use default login if URI not provided
+      if !provider.presence || !auth_id.presence
+        authority = current_authority
+        login_uri = authority.login_url
+        redirect_to authority.login_url.gsub("{{url}}", continue_uri), status: :see_other
+        return
+      end
+
+      set_continue(continue_uri)
+      uri = "/auth/#{provider}"
 
       # Support generic auth sources
       uri = "#{uri}?id=#{details[:id]}" if details[:id]

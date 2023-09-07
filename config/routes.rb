@@ -20,8 +20,4 @@ Rails.application.routes.draw do
 
     get "/authority", to: "auth/authorities#current"
   end
-
-  scope "/api/files/v1/" do
-    resources :uploads, only: %i[index create new update]
-  end
 end
