@@ -12,11 +12,11 @@ module Auth
     USE_SSL = true
 
     def success_path
-      "/login_success.html"
+      "/"
     end
 
     def login_path
-      "/login"
+      "/auth/login"
     end
 
     protected

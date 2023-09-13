@@ -21,9 +21,10 @@ module Auth
       if continue_uri
         parsed_uri = URI.parse(continue_uri)
         query_params = parsed_uri.query
+        query_fragment = parsed_uri.fragment.split("?")[1]
 
-        if query_params
-          continue_params = URI.decode_www_form(query_params).to_h
+        [query_params, query_fragment].compact.each do |raw_continue_params|
+          continue_params = URI.decode_www_form(raw_continue_params).to_h
 
           api_key = continue_params["api-key"] || continue_params["x-api-key"]
           if api_key && api_key_valid?(api_key)
