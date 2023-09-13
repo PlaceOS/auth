@@ -15,7 +15,7 @@ module Auth
       continue_uri = details[:continue]
 
       if continue_uri
-        parsed_uri = URI.parse(continue_uri)
+        parsed_uri = Addressable::URI.parse(continue_uri)
 
         # we won't set continue to files (except html)
         # we 401 here as this redirect is most likely caused by asset protection
