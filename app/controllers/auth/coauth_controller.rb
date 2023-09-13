@@ -88,16 +88,10 @@ module Auth
 
     def set_continue(path)
       path ||= "/"
-      uri = Addressable::URI.parse(path)
-
-      # we won't set continue to files (except html)
-      ext = uri.extname
-      if ext.presence
-        return unless ext.downcase == ".html"
-      end
 
       # prevent adverse behaviour
       if !path.start_with?("/") || path.include?("//")
+        uri = Addressable::URI.parse(path)
         path = "#{uri.request_uri}#{uri.fragment ? "##{uri.fragment}" : nil}"
       end
 

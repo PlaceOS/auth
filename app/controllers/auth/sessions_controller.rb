@@ -12,14 +12,22 @@ module Auth
     # Inline login
     def new
       details = params.permit(:provider, :continue, :id)
-      remove_session
       continue_uri = details[:continue]
 
-      # check for x-api-keys
-      # if they exist and are valid (making a request to rest-api to confirm)
-      # then configure a long lasting verified cookie
       if continue_uri
         parsed_uri = URI.parse(continue_uri)
+
+        # we won't set continue to files (except html)
+        # we 401 here as this redirect is most likely caused by asset protection
+        ext = parsed_uri.extname
+        if ext.presence && ext.downcase != ".html"
+          head :bad_request
+          return
+        end
+
+        # check for x-api-keys
+        # if they exist and are valid (making a request to rest-api to confirm)
+        # then configure a long lasting verified cookie
         query_params = parsed_uri.query
         query_fragment = parsed_uri.fragment
         if query_fragment
@@ -38,6 +46,7 @@ module Auth
         end
       end
 
+      remove_session
       provider = details[:provider]
       auth_id = details[:id]
 
