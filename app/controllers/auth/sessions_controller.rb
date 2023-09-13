@@ -21,7 +21,10 @@ module Auth
       if continue_uri
         parsed_uri = URI.parse(continue_uri)
         query_params = parsed_uri.query
-        query_fragment = parsed_uri.fragment.split("?")[1]
+        query_fragment = parsed_uri.fragment
+        if query_fragment
+          query_fragment = query_fragment.split("?")[1]
+        end
 
         [query_params, query_fragment].compact.each do |raw_continue_params|
           continue_params = URI.decode_www_form(raw_continue_params).to_h
