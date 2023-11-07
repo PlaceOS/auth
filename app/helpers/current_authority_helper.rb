@@ -11,7 +11,7 @@ module CurrentAuthorityHelper
   SECRET = Rails.application.secrets.secret_key_base
 
   def configure_asset_access
-    session_valid = 20.years.from_now
+    session_valid = 19.years
 
     data = SecureRandom.hex(8)
     digest = OpenSSL::Digest.new('sha256')
