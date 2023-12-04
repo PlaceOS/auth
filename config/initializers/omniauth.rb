@@ -53,4 +53,5 @@ Authentication.after_login do |user, provider, _auth|
   else
     puts "\n\nWARN: redis client not configured, login event ignored\n"
   end
+  user.update_columns(login_count: user.login_count + 1, last_login: Time.now)
 end
