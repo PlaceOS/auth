@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", "~> 7.0.4"
+gem "rails", "~> 7.1.3"
 
 # We don't use the mail gem
 gem "net-smtp", require: false

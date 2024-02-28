@@ -38,7 +38,7 @@ module Auth
         end
       end
 
-      redirect_to path, allow_other_host: true
+      redirect_to path.gsub(" ", "%20"), allow_other_host: true
     end
 
     def new_session(user)
