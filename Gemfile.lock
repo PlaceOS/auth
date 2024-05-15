@@ -168,6 +168,7 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
+    nkf (0.2.0)
     nokogiri (1.16.5)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
@@ -527,6 +528,7 @@ DEPENDENCIES
   net-imap
   net-pop
   net-smtp
+  nkf
   omniauth (~> 1.9)
   omniauth-ldap2
   omniauth-oauth2

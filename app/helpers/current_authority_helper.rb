@@ -8,7 +8,7 @@ module CurrentAuthorityHelper
     @current_authority ||= Authority.find_by_domain(request.host)
   end
 
-  SECRET = Rails.application.secrets.secret_key_base
+  SECRET = Rails.application.secret_key_base
 
   def configure_asset_access
     session_valid = 19.years

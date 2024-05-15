@@ -21,6 +21,7 @@ gem "redis"
 gem "doorkeeper", "~> 5.6"
 gem "doorkeeper-jwt"
 gem "jwt"
+gem "nkf" # required for omniauth-oauth2 in Ruby 3.4
 gem "omniauth", "~> 1.9"
 gem "omniauth-ldap2"
 gem "omniauth-oauth2"
