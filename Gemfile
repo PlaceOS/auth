@@ -41,9 +41,6 @@ gem "opentelemetry-sdk"
 gem "opentelemetry-exporter-otlp"
 gem "opentelemetry-instrumentation-all"
 
-# Runtime debugging
-gem "rbtrace"
-
 # Fast JSON parsing
 gem "yajl-ruby"
 gem "multi_json"
