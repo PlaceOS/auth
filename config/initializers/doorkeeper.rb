@@ -194,5 +194,5 @@ Doorkeeper::JWT.configure do
   puts "WARN: insecure development secret in use" if key == DEV_KEY
 
   # Specify encryption type (https://github.com/progrium/ruby-jwt)
-  encryption_method :rs256
+  signing_method :rs256
 end

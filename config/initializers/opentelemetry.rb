@@ -1,3 +1,4 @@
+=begin
 require "opentelemetry/sdk"
 require "opentelemetry/exporter/otlp"
 require "opentelemetry/instrumentation/all"
@@ -9,3 +10,4 @@ if endpoint
     c.use_all # enables all instrumentation!
   end
 end
+=end
