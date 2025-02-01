@@ -33,7 +33,7 @@ RUN bundle config build.nokogiri --use-system-libraries
 RUN gem install bundler --no-document
 
 # Install production gems
-RUN bundle install -j2 --retry 3
+RUN bundle install -j1 --retry 3
 
 # Copy the rest of your Rails code
 COPY . .
