@@ -1,13 +1,10 @@
 ARG RUBY_VER="3.3"
-##############################
-# 1) BUILD STAGE
-##############################
 FROM ruby:$RUBY_VER-alpine AS build-env
 
-# 1a) Packages required to build native extensions + runtime libs
-# Note: Added openssl-dev to BUILD_PACKAGES
+# Include openssl-dev for Puma and gumbo for Nokogiri’s libgumbo support
 ARG BUILD_PACKAGES="build-base curl-dev libxml2-dev libxslt-dev zlib-dev libpq-dev yaml-dev git openssl-dev"
-ARG RUNTIME_PACKAGES="tzdata libxml2 libxslt curl zlib libpq yaml"
+# Add gumbo to runtime packages (if you need it at build time for Nokogiri, you might add it here as well)
+ARG RUNTIME_PACKAGES="tzdata libxml2 libxslt curl zlib libpq yaml gumbo-parser"
 
 ENV RAILS_ENV=production \
     RACK_ENV=production \
@@ -17,25 +14,27 @@ ENV RAILS_ENV=production \
 
 RUN apk add --no-cache $BUILD_PACKAGES $RUNTIME_PACKAGES
 
-# Set timezone if needed
+# Set timezone
 RUN cp /usr/share/zoneinfo/Australia/Sydney /etc/localtime && \
     echo "Australia/Sydney" > /etc/timezone
 
 WORKDIR /app
 
-# Copy Gemfiles first for layer caching
+# Copy Gemfiles for caching
 COPY Gemfile* ./
 
-# (If using Nokogiri, configure it to use system libraries)
+# Tell Nokogiri to use system libraries, including the system libgumbo
 RUN bundle config build.nokogiri --use-system-libraries
+RUN bundle config --global build.nokogiri --use-system-libraries
 
-# Install bundler (no docs)
+# Optionally lower optimization to avoid compiler issues
+ENV CFLAGS="-O0"
+
+# Install bundler and gems
 RUN gem install bundler --no-document
-
-# Install production gems
 RUN bundle install -j1 --retry 3
 
-# Copy the rest of your Rails code
+# Continue with the rest of your build...
 COPY . .
 
 # Remove any stale binstubs referencing dev/test gems
