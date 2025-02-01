@@ -125,7 +125,7 @@ GEM
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     io-console (0.8.0)
-    irb (1.15.0)
+    irb (1.15.1)
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
@@ -155,7 +155,6 @@ GEM
     minitest (5.25.4)
     mono_logger (1.1.2)
     msgpack (1.7.5)
-    multi_json (1.15.0)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
     mutex_m (0.3.0)
@@ -210,7 +209,7 @@ GEM
       date
       stringio
     public_suffix (6.0.1)
-    puma (6.5.0)
+    puma (6.6.0)
       nio4r (~> 2.0)
     pyu-ruby-sasl (0.0.3.3)
     racc (1.8.1)
@@ -302,7 +301,6 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    yajl-ruby (1.4.3)
     zeitwerk (2.6.18)
 
 PLATFORMS
@@ -322,7 +320,6 @@ DEPENDENCIES
   lograge
   logstash-event
   mono_logger
-  multi_json
   net-imap
   net-pop
   net-smtp
@@ -340,7 +337,6 @@ DEPENDENCIES
   tzinfo-data
   web-console
   webdrivers
-  yajl-ruby
 
 BUNDLED WITH
    2.3.15

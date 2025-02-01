@@ -8,7 +8,6 @@ require "socket"
 
 # Replace the default JSON parser
 require "json"
-require "yajl/json_gem"
 
 UDP_LOG_HOST = ENV["UDP_LOG_HOST"] || ENV["LOGSTASH_HOST"]
 UDP_LOG_PORT = ENV["UDP_LOG_PORT"] || ENV["LOGSTASH_PORT"]
