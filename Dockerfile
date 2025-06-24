@@ -1,4 +1,4 @@
-ARG RUBY_VER="3.3"
+ARG RUBY_VER="3.4"
 FROM ruby:$RUBY_VER-alpine AS build-env
 
 # Include openssl-dev for Puma and gumbo for Nokogiri’s libgumbo support
@@ -44,9 +44,9 @@ RUN rm -rf bin/*
 RUN bundle binstubs puma --force
 
 # Clean up gem caches, .o/.c files, leftover test dirs
-RUN rm -rf vendor/bundle/ruby/3.3.0/cache/*.gem && \
-    find vendor/bundle/ruby/3.3.0/gems/ -name "*.c" -delete && \
-    find vendor/bundle/ruby/3.3.0/gems/ -name "*.o" -delete && \
+RUN rm -rf vendor/bundle/ruby/3.4.0/cache/*.gem && \
+    find vendor/bundle/ruby/3.4.0/gems/ -name "*.c" -delete && \
+    find vendor/bundle/ruby/3.4.0/gems/ -name "*.o" -delete && \
     rm -rf tmp/pids spec
 
 ##############################
