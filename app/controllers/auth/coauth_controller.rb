@@ -47,10 +47,15 @@ module Auth
       # default is 1 day (timeout in minutes)
       session_valid = (current_authority.internals["session_timeout"] || "1440").to_i.minutes.from_now
 
+      # this is the issued at time in usec
+      now = Time.current
+      iat = now.to_i * 1_000_000 + now.usec
+
       value = {
         value: {
           id: user.id,
-          expires: session_valid.to_i
+          expires: session_valid.to_i,
+          iat: iat
         },
         expires: session_valid,
         secure: USE_SSL,

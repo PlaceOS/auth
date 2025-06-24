@@ -201,6 +201,9 @@ module Auth
 
     # Log off
     def destroy
+      if user = current_user
+        user.update!(logged_out_at: Time.current)
+      end
       remove_session
 
       # Only whitelisted URLs can redirect externally
