@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", "~> 7.1.3"
+gem "rails", "~> 7.1"
 
 # We don't use the mail gem
 gem "net-smtp", require: false
@@ -18,7 +18,7 @@ gem "pg"
 gem "redis"
 
 # Authentication
-gem "doorkeeper", "~> 5.6"
+gem "doorkeeper", "~> 5.8"
 gem "doorkeeper-jwt"
 gem "jwt"
 gem "nkf" # required for omniauth-oauth2 in Ruby 3.4
