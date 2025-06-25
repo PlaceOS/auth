@@ -206,6 +206,12 @@ module Auth
       end
       remove_session
 
+      token = bearer_token
+      if token.present?
+        access_token = Doorkeeper::AccessToken.by_token(token)
+        access_token&.revoke if access_token && !access_token.revoked?
+      end
+
       # Only whitelisted URLs can redirect externally
       redirect_continue(params.permit(:continue)[:continue] || "/") do
         uri = current_authority.logout_url
@@ -215,6 +221,12 @@ module Auth
     end
 
     protected
+
+    def bearer_token
+      pattern = /^Bearer /
+      header  = request.authorization
+      header.gsub(pattern, '') if header&.match(pattern)
+    end
 
     def safe_params(authinfo)
       ::ActionController::Parameters.new(authinfo).permit(
