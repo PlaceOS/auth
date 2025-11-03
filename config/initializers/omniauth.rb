@@ -13,13 +13,13 @@ require_relative "../../app/models/user"
 require_relative "../../app/helpers/current_authority_helper"
 
 require_relative "../../app/models/oauth_strat"
-require "omniauth/strategies/generic_oauth"
+require_relative "../../lib/omniauth/strategies/generic_oauth"
 
 require_relative "../../app/models/ldap_strat"
-require "omniauth/strategies/generic_ldap"
+require_relative "../../lib/omniauth/strategies/generic_ldap"
 
 require_relative "../../app/models/adfs_strat"
-require "omniauth/strategies/generic_adfs"
+require_relative "../../lib/omniauth/strategies/generic_adfs"
 
 # see /app/middleware/selective_stack.rb for usage
 # This allows us to use omniauth with Rails API stack

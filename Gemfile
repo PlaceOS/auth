@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", "~> 7.1"
+gem "rails", "~> 8.0"
 
 # We don't use the mail gem
 gem "net-smtp", require: false
@@ -26,6 +26,7 @@ gem "omniauth", "~> 1.9"
 gem "omniauth-ldap2"
 gem "omniauth-oauth2"
 gem "omniauth-saml"
+gem "ostruct" # required for ldap2
 
 # Model support
 gem "addressable"
@@ -43,7 +44,7 @@ gem "mono_logger"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem "debug", platforms: %i[ mri windows ]
 end
 
 group :development do
@@ -60,4 +61,4 @@ group :test do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
+gem "tzinfo-data", platforms: %i[ windows ]
