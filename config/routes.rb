@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   scope :auth do
     use_doorkeeper
+    use_doorkeeper_openid_connect
 
     get "/login", to: "auth/sessions#new" # for defining continue
     get "/logout", to: "auth/sessions#destroy" # deletes the session
