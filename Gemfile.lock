@@ -105,6 +105,10 @@ GEM
       railties (>= 5)
     doorkeeper-jwt (0.4.2)
       jwt (>= 2.1)
+    doorkeeper-openid_connect (1.8.11)
+      doorkeeper (>= 5.5, < 5.9)
+      jwt (>= 2.5)
+      ostruct (>= 0.5)
     drb (2.2.3)
     email_validator (2.2.4)
       activemodel
@@ -322,6 +326,7 @@ DEPENDENCIES
   debug
   doorkeeper (~> 5.8)
   doorkeeper-jwt
+  doorkeeper-openid_connect
   email_validator
   jwt
   lograge

@@ -56,9 +56,6 @@ Rails.application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
 
-  # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
-
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   # config.assume_ssl = true
 
@@ -156,6 +153,24 @@ Rails.application.configure do
   end
 
   config.lograge.formatter = Lograge::Formatters::Logstash.new
+
+  # NEW: event-scoped options so we can access the exception object + backtrace
+  config.lograge.custom_options = lambda do |event|
+    ex = event.payload[:exception_object]
+    next {} unless ex
+
+    # Optional: cleaner to strip framework noise from the backtrace
+    cleaned = Rails.backtrace_cleaner.clean(Array(ex.backtrace))
+
+    {
+      error: {
+        class: ex.class.name,
+        message: ex.message,
+        # Keep payloads safe for UDP/ingest by truncating if huge
+        backtrace: cleaned.first(200) # or fewer if you ship via UDP
+      }
+    }
+  end
 
   # Ensures only our lograge error is logged
   # standard:disable Lint/ConstantDefinitionInBlock

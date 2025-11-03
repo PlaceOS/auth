@@ -19,6 +19,7 @@ gem "redis"
 
 # Authentication
 gem "doorkeeper", "~> 5.8"
+gem "doorkeeper-openid_connect"
 gem "doorkeeper-jwt"
 gem "jwt"
 gem "nkf" # required for omniauth-oauth2 in Ruby 3.4

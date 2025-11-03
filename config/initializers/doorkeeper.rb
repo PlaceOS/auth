@@ -79,13 +79,20 @@ Doorkeeper.configure do
     "public",
 
     # these can be found via: GET /api/engine/v2/scopes
+    "alert_dashboards",
+    "alerts",
     "api_keys",
+    "asset_categories",
+    "asset_purchase_orders",
+    "asset_types",
     "asset_instances",
     "assets",
     "ldap_authentications",
     "saml_authentications",
     "o_auth_authentications",
     "brokers",
+    "build_monitor",
+    "chat_gpt",
     "cluster",
     "domains",
     "drivers",
@@ -95,12 +102,16 @@ Doorkeeper.configure do
     "guest",
     "control",
     "edges",
+    "edge-control",
     "metadata",
     "mqtt",
     "flux",
     "o_auth_applications",
-    "repositories"
-  ].map { |scope| [scope, "#{scope}.read", "#{scope}.write"] }.flatten
+    "repositories",
+  ].map { |scope| [scope, "#{scope}.read", "#{scope}.write"] }.flatten + [
+    # this is required for OpenID connect
+    "openid"
+  ]
 
   default_scopes :public
   optional_scopes(*all_scopes)
@@ -108,7 +119,7 @@ Doorkeeper.configure do
   access_token_generator "::Doorkeeper::JWT"
 
   force_ssl_in_redirect_uri false
-  grant_flows %w[authorization_code client_credentials implicit password]
+  grant_flows %w[authorization_code client_credentials implicit password implicit_oidc]
 end
 
 Doorkeeper::JWT.configure do
