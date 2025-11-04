@@ -3,8 +3,15 @@
 require "uri"
 
 Doorkeeper::OpenidConnect.configure do
-  issuer do |request|
-    "https://#{request.host}"
+  # I assume this should really be just passing the request
+  # but these seem to be the values coming through
+  issuer do |request_or_user, application|
+    if application
+      # if application is presence then we have a user
+      "https://#{URI.parse(application.redirect_uri).host}"
+    else # we have the request here
+      "https://#{request_or_user.host}"
+    end
   end
 
   # Set the encryption secret. This would be shared with any other applications
