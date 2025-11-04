@@ -8,7 +8,7 @@ Doorkeeper::OpenidConnect.configure do
   issuer do |request_or_user, application|
     if application
       # if application is presence then we have a user
-      "https://#{URI.parse(application.redirect_uri).host}"
+      "https://#{request_or_user.authority.domain}"
     else # we have the request here
       "https://#{request_or_user.host}"
     end
