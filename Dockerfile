@@ -54,6 +54,8 @@ RUN rm -rf vendor/bundle/ruby/3.4.0/cache/*.gem && \
 ##############################
 FROM ruby:$RUBY_VER-alpine
 
+RUN apk update && apk --no-cache --quiet upgrade
+
 ARG RUNTIME_PACKAGES="libxml2 libxslt curl zlib libpq yaml tzdata"
 RUN apk add --no-cache $RUNTIME_PACKAGES
 
