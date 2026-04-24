@@ -59,7 +59,6 @@ RUN rm -rf vendor/bundle/ruby/*/cache/*.gem && \
     find vendor/bundle/ruby/*/gems/ -name "*.md" -delete 2>/dev/null || true && \
     find vendor/bundle/ruby/*/gems/ -name "CHANGELOG*" -delete 2>/dev/null || true && \
     find vendor/bundle/ruby/*/gems/ -name "README*" -delete 2>/dev/null || true && \
-    rm -rf /usr/local/lib/ruby/gems/*/specifications/default/json-* \
     rm -rf tmp/pids spec test .git .github
 
 ##############################
@@ -112,6 +111,7 @@ RUN rm -rf /usr/local/bin/erb \
            /usr/local/lib/ruby/gems/*/specifications/rbs-* \
            /usr/local/lib/ruby/gems/*/specifications/debug-* \
            /usr/local/lib/ruby/gems/*/specifications/racc-* \
+           /usr/local/lib/ruby/gems/*/specifications/default/json-* \
            /usr/local/lib/ruby/*/rdoc* \
            /usr/local/lib/ruby/*/irb* \
            /usr/local/share/ri \
