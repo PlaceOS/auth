@@ -36,7 +36,12 @@ require "redis"
 # Allows drivers to implement custom `after_login` actions like obtaining LDAP groups etc
 AUTH_REDIS_URL = ENV["REDIS_URL"]
 REDIS_CLIENT = if AUTH_REDIS_URL
-  Redis.new(url: AUTH_REDIS_URL)
+  Redis.new(
+    url: AUTH_REDIS_URL,
+    connect_timeout: 2.0,
+    timeout : 2.0,
+    reconnect_attempts: [0.1, 0.5]
+  )
 else
   puts "WARN: redis client not configured, login events will not be sent"
   nil
@@ -53,5 +58,5 @@ Authentication.after_login do |user, provider, _auth|
   else
     puts "\n\nWARN: redis client not configured, login event ignored\n"
   end
-  user.update_columns(login_count: user.login_count + 1, last_login: Time.now)
+  user.update_columns(login_count: user.login_count + 1, last_login: Time.now) rescue nil
 end
