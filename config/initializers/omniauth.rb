@@ -39,7 +39,7 @@ REDIS_CLIENT = if AUTH_REDIS_URL
   Redis.new(
     url: AUTH_REDIS_URL,
     connect_timeout: 2.0,
-    timeout : 2.0,
+    timeout: 2.0,
     reconnect_attempts: [0.1, 0.5]
   )
 else
