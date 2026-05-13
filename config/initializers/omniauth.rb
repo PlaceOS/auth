@@ -30,6 +30,49 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   provider :generic_oauth, name: "oauth2"
 end
 
+require "singleton"
+require "thread"
+
+class LoginEvent
+  include Singleton
+
+  QUEUE_SIZE = 500
+
+   def configure(redis:)
+    return self if @configured || redis.nil?
+
+    @redis = redis
+    @queue = SizedQueue.new(QUEUE_SIZE)
+    @configured = true
+    @thread = Thread.new { run }
+
+    self
+  end
+
+  def push(user, provider)
+    @queue << [user.id, provider]
+  end
+
+  private
+
+  def initialize
+    @configured = false
+  end
+
+  def run
+    loop do
+      process(*@queue.pop)
+    end
+  end
+
+  def process(user_id, provider)
+    puts "INFO: sending login event"
+    @redis.publish("placeos/auth/login", {user_id: user_id, provider: provider}.to_json)
+  rescue => e
+    puts "error signalling login: #{e.class} #{e.message}"
+  end
+end
+
 require "redis"
 
 # Notify PlaceOS of the recent authentication
@@ -47,13 +90,14 @@ else
   nil
 end
 
+LOGIN_EVENTS = LoginEvent.instance.configure(redis: REDIS_CLIENT)
+
 Authentication.after_login do |user, provider, _auth|
   if REDIS_CLIENT
     begin
-      puts "INFO: sending login event"
-      REDIS_CLIENT.publish("placeos/auth/login", {user_id: user.id, provider: provider}.to_json)
+      LOGIN_EVENTS.push(user, provider)
     rescue => e
-      puts "error signalling login: #{e.message}"
+      puts "error queueing login event: #{e.class} #{e.message}"
     end
   else
     puts "\n\nWARN: redis client not configured, login event ignored\n"
