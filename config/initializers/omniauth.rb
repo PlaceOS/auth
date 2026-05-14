@@ -50,7 +50,9 @@ class LoginEvent
   end
 
   def push(user, provider)
-    @queue << [user.id, provider]
+    @queue.push([user.id, provider], true)
+  rescue
+    puts "WARN: login event queue full, dropping event"
   end
 
   private
