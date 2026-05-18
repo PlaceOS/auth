@@ -119,7 +119,17 @@ Doorkeeper.configure do
   access_token_generator "::Doorkeeper::JWT"
 
   force_ssl_in_redirect_uri false
-  grant_flows %w[authorization_code client_credentials implicit password implicit_oidc]
+
+  # Require non-confidential clients to use PKCE (RFC 7636) on
+  # authorization_code grants. Public clients without a code_verifier are
+  # rejected by Doorkeeper at the /oauth/token exchange.
+  force_pkce
+
+  # Drop the implicit grant. OAuth 2.1 §2.1.2 removes the implicit flow;
+  # clients should use authorization_code with PKCE instead. `implicit_oidc`
+  # (OpenID Connect implicit) is retained — it's defined by a different spec
+  # and is still in use by some identity-token consumers.
+  grant_flows %w[authorization_code client_credentials password implicit_oidc]
 end
 
 Doorkeeper::JWT.configure do
