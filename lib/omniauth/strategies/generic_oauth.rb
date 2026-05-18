@@ -77,8 +77,11 @@ module OmniAuth
         options.client_id = strat.client_id
         options.client_secret = strat.client_secret
 
-        # prevent csrf errors
-        options.provider_ignores_state = true
+        # Validate the OAuth2 `state` parameter on callback (OmniAuth default).
+        # Some legacy providers mishandle `state` during multi-factor or
+        # cross-domain flows; operators can opt out by setting the env var
+        # `OAUTH_PROVIDER_IGNORES_STATE=true`.
+        options.provider_ignores_state = ENV["OAUTH_PROVIDER_IGNORES_STATE"] == "true"
       end
 
       def access_token_options
