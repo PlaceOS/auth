@@ -15,7 +15,6 @@ module Auth
         begin
           access_token = doorkeeper_token
           if access_token
-            access_token.revoke_previous_refresh_token!
             auth[:token_valid] = true
             configure_asset_access
           else
