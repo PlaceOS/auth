@@ -76,16 +76,28 @@ class LoginEvent
 end
 
 require "redis"
+require "openssl"
 
 # Notify PlaceOS of the recent authentication
 # Allows drivers to implement custom `after_login` actions like obtaining LDAP groups etc
 AUTH_REDIS_URL = ENV["REDIS_URL"]
 REDIS_CLIENT = if AUTH_REDIS_URL
+  # Self-signed TLS certs are common for internal `rediss://` connections.
+  # Trust an explicit CA when provided, otherwise allow verification to be
+  # skipped via env var. Only applied for TLS connections.
+  ssl_params = {}
+  if ENV["REDIS_CA_FILE"]
+    ssl_params[:ca_file] = ENV["REDIS_CA_FILE"]
+  elsif ENV["REDIS_SSL_VERIFY_NONE"] == "true"
+    ssl_params[:verify_mode] = OpenSSL::SSL::VERIFY_NONE
+  end
+
   Redis.new(
     url: AUTH_REDIS_URL,
     connect_timeout: 2.0,
     timeout: 2.0,
-    reconnect_attempts: [0.1, 0.5]
+    reconnect_attempts: [0.1, 0.5],
+    **(ssl_params.empty? ? {} : {ssl_params: ssl_params})
   )
 else
   puts "WARN: redis client not configured, login events will not be sent"
